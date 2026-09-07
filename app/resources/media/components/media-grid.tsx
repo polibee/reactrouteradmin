@@ -211,7 +211,7 @@ export function MediaGrid({
               <div className="text-muted-foreground flex items-center justify-between pt-1 font-mono text-xs">
                 <span>{formatSize(item.size)}</span>
                 <span className="max-w-[70px] truncate">
-                  {item.folder || t('common.labels.default')}
+                  {item.folder || t('resources.media.folders.ungrouped')}
                 </span>
               </div>
             </div>

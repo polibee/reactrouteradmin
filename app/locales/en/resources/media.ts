@@ -75,6 +75,13 @@ export const mediaResources = {
     rename: 'Rename',
     urlLabel: 'File URL',
     copyLink: 'Copy link',
+    linkFormats: {
+      title: 'Link formats',
+      direct: 'Direct link',
+      markdown: 'Markdown',
+      html: 'HTML',
+      bbcode: 'BBCode',
+    },
     sizeLabel: 'File size',
     mimeLabel: 'MIME type',
     dimensionsLabel: 'Dimensions',

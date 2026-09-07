@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  AdminConfirmDialog,
   AdminLoading,
   AdminPage,
   AdminPageContent,
@@ -50,6 +51,7 @@ export default function MediaAdminRoute() {
   const [inspectItem, setInspectItem] = useState<MediaItem | null>(null)
   const [uploadOpen, setUploadOpen] = useState(false)
   const [categoryManagerOpen, setCategoryManagerOpen] = useState(false)
+  const [batchConfirmOpen, setBatchConfirmOpen] = useState(false)
 
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -113,13 +115,6 @@ export default function MediaAdminRoute() {
 
   const handleBatchDelete = async () => {
     if (selectedIds.length === 0) return
-    if (
-      !window.confirm(
-        t('common.confirm.bulkDeleteTitle', { count: selectedIds.length }),
-      )
-    ) {
-      return
-    }
 
     try {
       const count = await mediaService.deleteBatch(selectedIds)
@@ -145,17 +140,34 @@ export default function MediaAdminRoute() {
     }
   }
 
+  const resolveFullUrl = (url: string) => {
+    if (
+      url.startsWith('http') ||
+      url.startsWith('data:') ||
+      url.startsWith('blob:')
+    ) {
+      return url
+    }
+    return `${window.location.origin}${url}`
+  }
+
   const handleCopyUrl = (url: string) => {
-    const fullUrl =
-      url.startsWith('http') || url.startsWith('data:')
-        ? url
-        : `${window.location.origin}${url}`
+    const fullUrl = resolveFullUrl(url)
 
     if (navigator.clipboard) {
       navigator.clipboard.writeText(fullUrl)
       notify.success(t('pages.admin.media.copySuccess'))
     } else {
       notify.info(t('pages.admin.media.linkInfo', { url: fullUrl }))
+    }
+  }
+
+  const handleCopyText = (text: string) => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text)
+      notify.success(t('pages.admin.media.copySuccess'))
+    } else {
+      notify.info(t('pages.admin.media.linkInfo', { url: text }))
     }
   }
 
@@ -210,7 +222,7 @@ export default function MediaAdminRoute() {
           onFolderChange={setFolder}
           onOpenCategoryManager={() => setCategoryManagerOpen(true)}
           selectedCount={selectedIds.length}
-          onBatchDelete={handleBatchDelete}
+          onBatchDelete={() => setBatchConfirmOpen(true)}
           onOpenUpload={() => setUploadOpen(true)}
         />
 
@@ -246,6 +258,8 @@ export default function MediaAdminRoute() {
           onUpdate={handleUpdate}
           onDelete={handleDelete}
           onCopyUrl={handleCopyUrl}
+          fullUrl={inspectItem ? resolveFullUrl(inspectItem.url) : undefined}
+          onCopyText={handleCopyText}
         />
 
         {/* 5. 拖拽批量上传弹窗 */}
@@ -264,6 +278,18 @@ export default function MediaAdminRoute() {
           itemCounts={itemCounts}
           onSave={handleCategorySave}
           onDelete={handleCategoryDelete}
+        />
+
+        {/* 7. 批量删除确认框 */}
+        <AdminConfirmDialog
+          open={batchConfirmOpen}
+          onOpenChange={setBatchConfirmOpen}
+          title={t('common.confirm.bulkDeleteTitle', {
+            count: selectedIds.length,
+          })}
+          description={t('common.confirm.bulkDeleteDescription')}
+          variant="destructive"
+          onConfirm={handleBatchDelete}
         />
       </AdminPageContent>
     </AdminPage>

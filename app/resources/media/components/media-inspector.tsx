@@ -19,6 +19,38 @@ import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import type { MediaItem } from '../types'
 
+export interface MediaLinkFormat {
+  key: 'direct' | 'markdown' | 'html' | 'bbcode'
+  text: string
+}
+
+export function buildLinkFormats(
+  item: MediaItem,
+  fullUrl: string,
+): MediaLinkFormat[] {
+  if (item.type === 'image') {
+    return [
+      { key: 'direct', text: fullUrl },
+      { key: 'markdown', text: `![${item.name}](${fullUrl})` },
+      { key: 'html', text: `<img src="${fullUrl}" alt="${item.name}" />` },
+      { key: 'bbcode', text: `[img]${fullUrl}[/img]` },
+    ]
+  }
+  return [
+    { key: 'direct', text: fullUrl },
+    { key: 'markdown', text: `[${item.name}](${fullUrl})` },
+    { key: 'html', text: `<a href="${fullUrl}">${item.name}</a>` },
+    { key: 'bbcode', text: `[url=${fullUrl}]${item.name}[/url]` },
+  ]
+}
+
+const FORMAT_LABEL_KEYS = {
+  direct: 'resources.media.inspector.linkFormats.direct',
+  markdown: 'resources.media.inspector.linkFormats.markdown',
+  html: 'resources.media.inspector.linkFormats.html',
+  bbcode: 'resources.media.inspector.linkFormats.bbcode',
+} as const
+
 export interface MediaInspectorProps {
   item: MediaItem | null
   open: boolean
@@ -26,6 +58,8 @@ export interface MediaInspectorProps {
   onUpdate: (id: string, patch: Partial<MediaItem>) => void
   onDelete: (item: MediaItem) => void
   onCopyUrl: (url: string) => void
+  fullUrl?: string
+  onCopyText: (text: string) => void
 }
 
 export function MediaInspector({
@@ -35,13 +69,17 @@ export function MediaInspector({
   onUpdate,
   onDelete,
   onCopyUrl,
+  fullUrl,
+  onCopyText,
 }: MediaInspectorProps) {
   const { t } = useTranslation()
-  const [copied, setCopied] = useState(false)
+  const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const [editingName, setEditingName] = useState(false)
   const [nameVal, setNameVal] = useState('')
 
   if (!open || !item) return null
+
+  const resolvedFullUrl = fullUrl || item.url
 
   const formatSize = (bytes: number): string => {
     if (bytes === 0) return '0 B'
@@ -51,10 +89,23 @@ export function MediaInspector({
     return `${(bytes / k ** i).toFixed(1)} ${sizes[i]}`
   }
 
+  const flashCopied = (key: string) => {
+    setCopiedKey(key)
+    setTimeout(() => setCopiedKey(null), 1500)
+  }
+
   const handleCopy = () => {
     onCopyUrl(item.url)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
+    flashCopied('url')
+  }
+
+  const handleCopyFormat = (format: MediaLinkFormat) => {
+    if (format.key === 'direct') {
+      onCopyUrl(item.url)
+    } else {
+      onCopyText(format.text)
+    }
+    flashCopied(format.key)
   }
 
   const handleStartRename = () => {
@@ -189,13 +240,48 @@ export function MediaInspector({
               onClick={handleCopy}
               title={t('resources.media.inspector.copyLink')}
             >
-              {copied ? (
+              {copiedKey === 'url' ? (
                 <Check className="size-3.5 text-emerald-500" />
               ) : (
                 <Copy className="size-3.5" />
               )}
             </Button>
           </div>
+        </div>
+
+        {/* 多格式链接复制 (Markdown / HTML / BBCode) */}
+        <div className="space-y-1.5 border-t pt-2">
+          <div className="text-muted-foreground font-medium">
+            {t('resources.media.inspector.linkFormats.title')}
+          </div>
+          {buildLinkFormats(item, resolvedFullUrl).map((format) => (
+            <div key={format.key} className="space-y-0.5">
+              <div className="text-muted-foreground/80 text-xs">
+                {t(FORMAT_LABEL_KEYS[format.key])}
+              </div>
+              <div className="flex items-center gap-1">
+                <Input
+                  value={format.text}
+                  readOnly
+                  className="bg-muted/40 h-8 truncate font-mono text-xs select-all"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-8 shrink-0 px-2.5"
+                  onClick={() => handleCopyFormat(format)}
+                  title={t('resources.media.inspector.copyLink')}
+                >
+                  {copiedKey === format.key ? (
+                    <Check className="size-3.5 text-emerald-500" />
+                  ) : (
+                    <Copy className="size-3.5" />
+                  )}
+                </Button>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* 属性元信息网格 */}
