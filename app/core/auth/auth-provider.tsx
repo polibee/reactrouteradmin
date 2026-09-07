@@ -1,6 +1,6 @@
 import type React from 'react'
 import { createContext, useMemo, useState } from 'react'
-import { hasPermission } from '~/admin/core/permissions/permission'
+import { hasPermission } from '~/core/permissions/permission.service'
 import { mockAuthUser } from './auth.service'
 import { createAuthStore, useAuthStore } from './auth.store'
 import type { AuthContextValue, AuthUser } from './auth.types'

@@ -1,24 +1,23 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useAuth } from '~/core/auth'
-import { hasPermission } from './permission'
+import { usePermission } from './use-permission'
 
-export interface ProtectedActionProps {
+export interface CanProps {
   permission?: string
   fallback?: React.ReactNode
   children: React.ReactNode
   disableOnly?: boolean
 }
 
-export function ProtectedAction({
+export function Can({
   permission,
   fallback = null,
   children,
   disableOnly = false,
-}: ProtectedActionProps) {
+}: CanProps) {
   const { t } = useTranslation()
-  const { user } = useAuth()
-  const allowed = hasPermission(user, permission)
+  const { hasPermission } = usePermission()
+  const allowed = hasPermission(permission)
 
   if (!allowed) {
     if (disableOnly && React.isValidElement(children)) {

@@ -3,6 +3,7 @@ import { ThemeProvider } from '~/components/theme-provider'
 import { AdminProvider } from '~/core/admin'
 import { AuthProvider } from '~/core/auth'
 import { I18nProvider } from '~/core/i18n'
+import { PermissionProvider } from '~/core/permissions'
 import { QueryProvider } from './query-provider'
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
@@ -11,7 +12,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       <I18nProvider>
         <ThemeProvider attribute="class">
           <AuthProvider>
-            <AdminProvider>{children}</AdminProvider>
+            <PermissionProvider>
+              <AdminProvider>{children}</AdminProvider>
+            </PermissionProvider>
           </AuthProvider>
         </ThemeProvider>
       </I18nProvider>

@@ -1,5 +1,5 @@
 import type { AuthUser } from '~/core/auth/auth.types'
-import { hasPermission } from '../permissions/permission'
+import { hasPermission } from '~/core/permissions/permission.service'
 import { resourceRegistry } from '../resource/registry'
 import { navigationRegistry } from './registry'
 import type { NavGroup, NavItem } from './types'
