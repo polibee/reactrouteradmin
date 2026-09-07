@@ -13,7 +13,9 @@ import type {
   SiteWidgetGlobalSettings,
 } from './types'
 
-const SEED_PAGES: SitePage[] = [
+// Legacy Chinese seed values, kept only so migrateLegacySeeds() can upgrade
+// untouched localStorage data once; user-modified fields are never overwritten.
+const LEGACY_SEED_PAGES: SitePage[] = [
   {
     id: 'about',
     title: '关于我们',
@@ -80,7 +82,78 @@ const SEED_PAGES: SitePage[] = [
   },
 ]
 
-const SEED_NAV_GROUPS: SiteNavGroup[] = [
+const SEED_PAGES: SitePage[] = [
+  {
+    id: 'about',
+    title: 'About Us',
+    slug: 'about',
+    content: `<p class="lead">Welcome to our full-stack admin platform! We build the most efficient and elegant admin systems and interaction experiences for developers and enterprises.</p>
+<h2>Our Mission</h2>
+<p>Craft a sustainable, cohesive, loosely coupled full-stack foundation.</p>
+<h2>Core Architecture Advantages</h2>
+<ul>
+  <li><strong>Latest framework base</strong>: React Router 8.3.1 + React 19 + Tailwind v4</li>
+  <li><strong>Full component coverage</strong>: all 47 official shadcn/ui components implemented natively, with no redundant third-party dependencies</li>
+  <li><strong>Domain-module autonomy</strong>: inspired by Filament's Resource / Panel philosophy — business features as plug-and-play modules</li>
+  <li><strong>Universal component reuse</strong>: controlled forms and data tables reusable across /admin, /portal, and any public or private surface</li>
+</ul>`,
+    seoTitle: 'About Us - Full-Stack Application Platform',
+    seoDescription:
+      'Learn about our team mission, vision, and core architecture.',
+    seoKeywords: 'ReactRouter8, shadcn, AdminFramework, About Us',
+    status: 'published',
+    views: 128,
+    createdAt: '2025-01-01T00:00:00.000Z',
+    updatedAt: '2025-01-01T00:00:00.000Z',
+  },
+  {
+    id: 'privacy',
+    title: 'Privacy Policy',
+    slug: 'privacy',
+    content: `<p>This privacy policy explains how we collect, use, store, and protect your personal information when you use this platform.</p>
+<h3>1. Information We Collect</h3>
+<p>We follow the principles of lawfulness, legitimacy, and necessity, collecting only the data required to deliver our services:</p>
+<ul>
+  <li><strong>Account information</strong>: email address, login name, and security credentials</li>
+  <li><strong>Audit logs</strong>: login IP, operation timestamps, and system exception tracking</li>
+</ul>
+<h3>2. Data Security</h3>
+<p>We apply industry-standard security technologies (including TLS 1.3 transport encryption and strict RBAC access control) to prevent data leaks.</p>
+<h3>3. Your Rights and Controls</h3>
+<p>You may sign in at any time to review or edit your profile, or close your account.</p>`,
+    seoTitle:
+      'Privacy Policy & Data Protection - Full-Stack Application Platform',
+    seoDescription:
+      'We respect and strictly protect the privacy and data security of every user.',
+    seoKeywords: 'privacy policy, data security, user rights',
+    status: 'published',
+    views: 356,
+    createdAt: '2025-01-02T00:00:00.000Z',
+    updatedAt: '2025-01-02T00:00:00.000Z',
+  },
+  {
+    id: 'terms',
+    title: 'Terms of Service',
+    slug: 'terms',
+    content: `<p>Please read these Terms of Service carefully before using the features provided by this platform.</p>
+<h3>1. Account Use</h3>
+<p>Users are responsible for all activity under their account. Publishing or transmitting unlawful content, or conducting malicious attacks, is strictly prohibited.</p>
+<h3>2. Intellectual Property</h3>
+<p>The platform's code structure, UI design, trademarks, and patents belong to our team and may not be commercially redistributed without permission.</p>
+<h3>3. Disclaimer and Limited Warranty</h3>
+<p>To the maximum extent permitted by law, the platform is provided "as is" and is not liable for indirect losses caused by force majeure or short network interruptions.</p>`,
+    seoTitle: 'Terms of Service - Full-Stack Application Platform',
+    seoDescription:
+      'Please read our user agreement and terms of service carefully.',
+    seoKeywords: 'terms of service, user agreement, acceptable use',
+    status: 'published',
+    views: 242,
+    createdAt: '2025-01-03T00:00:00.000Z',
+    updatedAt: '2025-01-03T00:00:00.000Z',
+  },
+]
+
+const LEGACY_SEED_NAV_GROUPS: SiteNavGroup[] = [
   // Header 导航分类
   {
     id: 'grp-h-main',
@@ -134,7 +207,61 @@ const SEED_NAV_GROUPS: SiteNavGroup[] = [
   },
 ]
 
-const SEED_NAVS: SiteNavItem[] = [
+const SEED_NAV_GROUPS: SiteNavGroup[] = [
+  // Header 导航分类
+  {
+    id: 'grp-h-main',
+    name: 'Main Navigation',
+    location: 'header',
+    sort: 10,
+    enabled: true,
+    description: 'Core quick links for the public portal',
+  },
+  {
+    id: 'grp-h-prod',
+    name: 'Products & Services',
+    location: 'header',
+    sort: 20,
+    enabled: true,
+    description: 'Full-stack admin capabilities and the core matrix',
+  },
+  {
+    id: 'grp-h-about',
+    name: 'About & Support',
+    location: 'header',
+    sort: 30,
+    enabled: true,
+    description: 'Company background, policies, and ecosystem',
+  },
+
+  // Footer 导航分类 (支持自由添加、修改名字、删除)
+  {
+    id: 'grp-f-core',
+    name: 'Core Products',
+    location: 'footer',
+    sort: 10,
+    enabled: true,
+    description: 'Platform products and admin matrix',
+  },
+  {
+    id: 'grp-f-legal',
+    name: 'Legal & Compliance',
+    location: 'footer',
+    sort: 20,
+    enabled: true,
+    description: 'Privacy policy and terms of service',
+  },
+  {
+    id: 'grp-f-support',
+    name: 'About & Support',
+    location: 'footer',
+    sort: 30,
+    enabled: true,
+    description: 'Team intro, ecosystem links, and official docs',
+  },
+]
+
+const LEGACY_SEED_NAVS: SiteNavItem[] = [
   // ----------------------------------------
   // Header 导航：原生直连 + 带子菜单的下拉项
   // ----------------------------------------
@@ -364,7 +491,237 @@ const SEED_NAVS: SiteNavItem[] = [
   },
 ]
 
-const SEED_WIDGETS: SiteWidgetConfig[] = [
+const SEED_NAVS: SiteNavItem[] = [
+  // ----------------------------------------
+  // Header navigation: direct links + dropdown items with submenus
+  // ----------------------------------------
+  {
+    id: 'nav-h1',
+    location: 'header',
+    groupId: 'grp-h-main',
+    title: 'Portal Home',
+    url: '/',
+    target: '_self',
+    sort: 10,
+    enabled: true,
+  },
+  {
+    id: 'nav-h-prod',
+    location: 'header',
+    groupId: 'grp-h-prod',
+    title: 'Products & Features',
+    url: '#',
+    target: '_self',
+    sort: 20,
+    enabled: true,
+    description: 'Full-stack admin and permission management',
+  },
+  // Products & Features -> submenus
+  {
+    id: 'nav-h-sub-users',
+    location: 'header',
+    groupId: 'grp-h-prod',
+    parentId: 'nav-h-prod',
+    title: 'Users & Members',
+    url: '/admin/users',
+    target: '_self',
+    sort: 10,
+    enabled: true,
+    description: 'Team structure and account management',
+  },
+  {
+    id: 'nav-h-sub-roles',
+    location: 'header',
+    groupId: 'grp-h-prod',
+    parentId: 'nav-h-prod',
+    title: 'Roles & Permissions',
+    url: '/admin/roles',
+    target: '_self',
+    sort: 20,
+    enabled: true,
+    description: 'Fine-grained RBAC control and assignment',
+  },
+  {
+    id: 'nav-h-sub-widgets',
+    location: 'header',
+    groupId: 'grp-h-prod',
+    parentId: 'nav-h-prod',
+    title: 'Widget Center',
+    url: '/admin/widgets',
+    target: '_self',
+    sort: 30,
+    enabled: true,
+    description: 'Low-code assembleable sidebar cards',
+  },
+  {
+    id: 'nav-h-sub-media',
+    location: 'header',
+    groupId: 'grp-h-prod',
+    parentId: 'nav-h-prod',
+    title: 'Media Library',
+    url: '/admin/media',
+    target: '_self',
+    sort: 40,
+    enabled: true,
+    description: 'Centralized media assets and file management',
+  },
+
+  // Header top-level item - About & Support (with submenus)
+  {
+    id: 'nav-h-about',
+    location: 'header',
+    groupId: 'grp-h-about',
+    title: 'About & Support',
+    url: '#',
+    target: '_self',
+    sort: 30,
+    enabled: true,
+    description: 'Team vision, compliance, and partner ecosystem',
+  },
+  // About & Support -> submenus
+  {
+    id: 'nav-h-sub-about',
+    location: 'header',
+    groupId: 'grp-h-about',
+    parentId: 'nav-h-about',
+    title: 'About the Team',
+    url: '/about',
+    target: '_self',
+    sort: 10,
+    enabled: true,
+    description: 'Platform background, mission, and vision',
+  },
+  {
+    id: 'nav-h-sub-terms',
+    location: 'header',
+    groupId: 'grp-h-about',
+    parentId: 'nav-h-about',
+    title: 'Terms of Service',
+    url: '/terms',
+    target: '_self',
+    sort: 20,
+    enabled: true,
+    description: 'Usage agreement and disclaimer',
+  },
+  {
+    id: 'nav-h-sub-privacy',
+    location: 'header',
+    groupId: 'grp-h-about',
+    parentId: 'nav-h-about',
+    title: 'Privacy Policy',
+    url: '/privacy',
+    target: '_self',
+    sort: 30,
+    enabled: true,
+    description: 'User data privacy and compliance',
+  },
+  {
+    id: 'nav-h-sub-links',
+    location: 'header',
+    groupId: 'grp-h-about',
+    parentId: 'nav-h-about',
+    title: 'Friend Links',
+    url: '/links',
+    target: '_self',
+    sort: 40,
+    enabled: true,
+    description: 'Join our open tech partner network',
+  },
+
+  // ----------------------------------------
+  // Footer navigation, grouped
+  // ----------------------------------------
+  {
+    id: 'nav-f1',
+    location: 'footer',
+    groupId: 'grp-f-core',
+    group: 'Core Products',
+    title: 'Users & Members',
+    url: '/admin/users',
+    target: '_self',
+    sort: 10,
+    enabled: true,
+  },
+  {
+    id: 'nav-f2',
+    location: 'footer',
+    groupId: 'grp-f-core',
+    group: 'Core Products',
+    title: 'Roles & Permissions',
+    url: '/admin/roles',
+    target: '_self',
+    sort: 20,
+    enabled: true,
+  },
+  {
+    id: 'nav-f-media',
+    location: 'footer',
+    groupId: 'grp-f-core',
+    group: 'Core Products',
+    title: 'Media Library',
+    url: '/admin/media',
+    target: '_self',
+    sort: 30,
+    enabled: true,
+  },
+  {
+    id: 'nav-f3',
+    location: 'footer',
+    groupId: 'grp-f-legal',
+    group: 'Legal & Compliance',
+    title: 'Privacy Policy',
+    url: '/privacy',
+    target: '_self',
+    sort: 10,
+    enabled: true,
+  },
+  {
+    id: 'nav-f4',
+    location: 'footer',
+    groupId: 'grp-f-legal',
+    group: 'Legal & Compliance',
+    title: 'Terms of Service',
+    url: '/terms',
+    target: '_self',
+    sort: 20,
+    enabled: true,
+  },
+  {
+    id: 'nav-f5',
+    location: 'footer',
+    groupId: 'grp-f-support',
+    group: 'About & Support',
+    title: 'About the Team',
+    url: '/about',
+    target: '_self',
+    sort: 10,
+    enabled: true,
+  },
+  {
+    id: 'nav-f-links',
+    location: 'footer',
+    groupId: 'grp-f-support',
+    group: 'About & Support',
+    title: 'Friend Links',
+    url: '/links',
+    target: '_self',
+    sort: 15,
+    enabled: true,
+  },
+  {
+    id: 'nav-f6',
+    location: 'footer',
+    groupId: 'grp-f-support',
+    group: 'About & Support',
+    title: 'shadcn/ui Documentation',
+    url: 'https://ui.shadcn.com',
+    target: '_blank',
+    sort: 20,
+    enabled: true,
+  },
+]
+
+const LEGACY_SEED_WIDGETS: SiteWidgetConfig[] = [
   {
     id: 'w-1',
     key: 'quick_links',
@@ -413,7 +770,56 @@ const SEED_WIDGETS: SiteWidgetConfig[] = [
   },
 ]
 
-const SEED_ANNOUNCEMENTS: SiteAnnouncement[] = [
+const SEED_WIDGETS: SiteWidgetConfig[] = [
+  {
+    id: 'w-1',
+    key: 'quick_links',
+    title: 'Quick Links',
+    description: 'Jump to frequently used system pages',
+    placement: 'both',
+    enabled: true,
+    sort: 10,
+  },
+  {
+    id: 'w-2',
+    key: 'stats_metric',
+    title: 'Core Metrics',
+    description: 'Key business data and total user statistics',
+    placement: 'dashboard',
+    enabled: true,
+    sort: 20,
+  },
+  {
+    id: 'w-3',
+    key: 'announcements',
+    title: 'Latest Announcements',
+    description: 'Pull the latest operations notices on the fly',
+    placement: 'both',
+    enabled: true,
+    sort: 30,
+  },
+  {
+    id: 'w-4',
+    key: 'contact_info',
+    title: 'Contact & Support',
+    description: 'Contact info, support channels, and service hours',
+    placement: 'site_sidebar',
+    enabled: true,
+    sort: 40,
+  },
+  {
+    id: 'w-sponsor',
+    key: 'sponsor_ad',
+    title: 'Featured · Sponsors',
+    description: 'Curated tech columns and partner promo cards',
+    placement: 'site_sidebar',
+    cardType: 'preset',
+    enabled: true,
+    sort: 15,
+  },
+]
+
+const LEGACY_SEED_ANNOUNCEMENTS: SiteAnnouncement[] = [
   {
     id: 'ann-banner',
     type: 'banner',
@@ -463,7 +869,58 @@ const SEED_ANNOUNCEMENTS: SiteAnnouncement[] = [
   },
 ]
 
-const SEED_ADS: SiteAdSlot[] = [
+const SEED_ANNOUNCEMENTS: SiteAnnouncement[] = [
+  {
+    id: 'ann-banner',
+    type: 'banner',
+    title: 'Full-Stack Architecture Upgrade',
+    content:
+      '🎉 This platform has been smoothly upgraded to React Router 8.3 + React 19, with all 47 shadcn components built in-house!',
+    linkText: 'View the tech report',
+    linkUrl: '/about',
+    enabled: true,
+    style: 'info',
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'ann-modal',
+    type: 'modal',
+    title: 'Welcome to the Portal & Site System',
+    content:
+      'Single-page management, header/footer navigation editing, widget cards, and operations notices are now live. Configure everything in the admin panel and see the public site update instantly!',
+    linkText: 'Learn more',
+    linkUrl: '/about',
+    enabled: true,
+    showOnce: true,
+    style: 'default',
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'ann-corner',
+    type: 'corner',
+    title: 'Need support or want to share feedback?',
+    content:
+      'If you have any suggestions while exploring the platform, check the terms of service or reach out to platform support.',
+    linkText: 'Read the terms',
+    linkUrl: '/terms',
+    enabled: true,
+    style: 'default',
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'ann-marquee',
+    type: 'marquee',
+    title: 'Quick updates',
+    content:
+      '🚀 React Router 8 Admin released · RBAC permission matrix · Low-code widget assembly · Operations notices now live',
+    linkText: 'Check it out',
+    linkUrl: '/about',
+    enabled: true,
+    updatedAt: new Date().toISOString(),
+  },
+]
+
+const LEGACY_SEED_ADS: SiteAdSlot[] = [
   {
     id: 'ad-header',
     slotKey: 'header_banner',
@@ -486,7 +943,30 @@ const SEED_ADS: SiteAdSlot[] = [
   },
 ]
 
-const SEED_LINKS: FriendLink[] = [
+const SEED_ADS: SiteAdSlot[] = [
+  {
+    id: 'ad-header',
+    slotKey: 'header_banner',
+    title: 'Header banner slot',
+    adType: 'text',
+    text: '⚡ Try the next-gen React Admin Framework for a blazing-fast build experience!',
+    targetUrl: '/about',
+    enabled: true,
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'ad-sidebar',
+    slotKey: 'sidebar_card',
+    title: 'Sidebar slot',
+    adType: 'text',
+    text: '🎯 Modular architecture · Zero bloat · Extend freely to CMS/Blog/SaaS',
+    targetUrl: '/',
+    enabled: true,
+    updatedAt: new Date().toISOString(),
+  },
+]
+
+const LEGACY_SEED_LINKS: FriendLink[] = [
   {
     id: 'link-1',
     name: 'React 官方网站',
@@ -562,7 +1042,88 @@ const SEED_LINKS: FriendLink[] = [
   },
 ]
 
-const SEED_FRIEND_LINK_GUIDELINES: FriendLinkGuidelines = {
+const SEED_LINKS: FriendLink[] = [
+  {
+    id: 'link-1',
+    name: 'React Official Site',
+    url: 'https://react.dev',
+    logo: 'https://react.dev/favicon.ico',
+    description: 'The library for building web and native user interfaces',
+    email: 'admin@react.dev',
+    status: 'approved',
+    sort: 10,
+    backlinkStatus: 'verified',
+    lastCheckedAt: '2025-01-01T00:00:00.000Z',
+    backlinkDetails:
+      'Backlink check passed (authoritative partner link registered)',
+    createdAt: '2025-01-01T00:00:00.000Z',
+    updatedAt: '2025-01-01T00:00:00.000Z',
+  },
+  {
+    id: 'link-2',
+    name: 'React Router Guide',
+    url: 'https://reactrouter.com',
+    logo: 'https://reactrouter.com/favicon.ico',
+    description: 'Full-stack web framework and standard server-side routing',
+    email: 'team@remix.run',
+    status: 'approved',
+    sort: 20,
+    backlinkStatus: 'verified',
+    lastCheckedAt: '2025-01-02T00:00:00.000Z',
+    backlinkDetails: 'Backlink check passed (tech ecosystem hub verified)',
+    createdAt: '2025-01-02T00:00:00.000Z',
+    updatedAt: '2025-01-02T00:00:00.000Z',
+  },
+  {
+    id: 'link-3',
+    name: 'shadcn/ui Design System',
+    url: 'https://ui.shadcn.com',
+    logo: 'https://ui.shadcn.com/favicon.ico',
+    description:
+      'Beautifully designed reusable UI components, exquisitely crafted',
+    email: 'shadcn@example.com',
+    status: 'approved',
+    sort: 30,
+    backlinkStatus: 'verified',
+    lastCheckedAt: '2025-01-03T00:00:00.000Z',
+    backlinkDetails: 'Backlink check passed (UI component library partner)',
+    createdAt: '2025-01-03T00:00:00.000Z',
+    updatedAt: '2025-01-03T00:00:00.000Z',
+  },
+  {
+    id: 'link-4',
+    name: 'Tailwind CSS',
+    url: 'https://tailwindcss.com',
+    logo: 'https://tailwindcss.com/favicons/favicon.ico',
+    description:
+      'A utility-first CSS framework for rapidly building modern websites',
+    email: 'adam@tailwindcss.com',
+    status: 'approved',
+    sort: 40,
+    backlinkStatus: 'missing',
+    lastCheckedAt: '2025-01-04T00:00:00.000Z',
+    backlinkDetails:
+      'No backlink to this site found in the partner homepage source',
+    createdAt: '2025-01-04T00:00:00.000Z',
+    updatedAt: '2025-01-04T00:00:00.000Z',
+  },
+  {
+    id: 'link-5',
+    name: 'Geek Developer Weekly',
+    url: 'https://geekweekly.dev',
+    logo: '',
+    description:
+      'Weekly digest of full-stack news and quality open-source projects',
+    email: 'editor@geekweekly.dev',
+    status: 'pending',
+    sort: 50,
+    backlinkStatus: 'unverified',
+    createdAt: '2025-01-05T00:00:00.000Z',
+    updatedAt: '2025-01-05T00:00:00.000Z',
+  },
+]
+
+const LEGACY_SEED_FRIEND_LINK_GUIDELINES: FriendLinkGuidelines = {
   title: '友情链接互换说明与准则',
   rule1Title: '1. 优先提前添加本站',
   rule1Desc:
@@ -578,6 +1139,22 @@ const SEED_FRIEND_LINK_GUIDELINES: FriendLinkGuidelines = {
   updatedAt: new Date().toISOString(),
 }
 
+const SEED_FRIEND_LINK_GUIDELINES: FriendLinkGuidelines = {
+  title: 'Friend Link Exchange Guidelines',
+  rule1Title: '1. Add us first',
+  rule1Desc:
+    'Before applying, please add our site to your links section (name: React Admin Framework, linking to our homepage).',
+  rule2Title: '2. Healthy, stable content',
+  rule2Desc:
+    'Content must be legal and regularly maintained — no ad-only, mirror, or unlawful sites, and an independent domain is required.',
+  rule3Title: '3. Review & inspection',
+  rule3Desc:
+    'Admins will verify within 48 hours. Indexed links are periodically checked for availability; long-unreachable ones may be temporarily delisted.',
+  customNotice:
+    'Full-stack tech teams, open-source projects, and developer blogs are welcome to exchange links and build an open tech partner network!',
+  updatedAt: new Date().toISOString(),
+}
+
 const STORAGE_KEYS = {
   PAGES: 'admin_site_pages',
   NAV_GROUPS: 'admin_site_nav_groups',
@@ -588,6 +1165,7 @@ const STORAGE_KEYS = {
   LINKS: 'admin_site_links',
   FRIEND_LINK_GUIDELINES: 'admin_site_friend_link_guidelines',
   WIDGET_GLOBAL_SETTINGS: 'admin_site_widget_global_settings',
+  META: 'admin_site_meta_v1',
 }
 
 const DEFAULT_WIDGET_GLOBAL_SETTINGS: SiteWidgetGlobalSettings = {
@@ -643,8 +1221,150 @@ export class SiteRepository {
     }
   }
 
+  private readRawStorage<T>(key: string): T | null {
+    if (typeof window === 'undefined') return null
+    try {
+      const stored = localStorage.getItem(key)
+      return stored ? (JSON.parse(stored) as T) : null
+    } catch {
+      return null
+    }
+  }
+
+  // One-shot migration: swap Chinese seed values for the English seeds, but
+  // only where the stored value still equals the legacy seed (user edits stay).
+  private migrateFields<T extends object>(
+    stored: T,
+    legacy: Partial<T>,
+    fresh: Partial<T>,
+    fields: ReadonlyArray<keyof T>,
+  ): { next: T; changed: boolean } {
+    let changed = false
+    const next = { ...stored }
+    for (const field of fields) {
+      const legacyValue = legacy[field]
+      const freshValue = fresh[field]
+      if (legacyValue === undefined || freshValue === undefined) continue
+      if (stored[field] === legacyValue && freshValue !== stored[field]) {
+        ;(next as Record<string, unknown>)[field as string] = freshValue
+        changed = true
+      }
+    }
+    return { next, changed }
+  }
+
+  private migrateSeededArray<T extends { id: string }>(
+    raw: T[],
+    legacy: T[],
+    fresh: T[],
+    fields: ReadonlyArray<keyof T>,
+  ): { items: T[]; changed: boolean } {
+    const legacyById = new Map(legacy.map((item) => [item.id, item]))
+    const freshById = new Map(fresh.map((item) => [item.id, item]))
+    let changed = false
+    const items = raw.map((item) => {
+      const legacyItem = legacyById.get(item.id)
+      const freshItem = freshById.get(item.id)
+      if (!legacyItem || !freshItem) return item
+      const result = this.migrateFields(item, legacyItem, freshItem, fields)
+      if (result.changed) changed = true
+      return result.next
+    })
+    return { items, changed }
+  }
+
+  private migrateLegacySeeds(): void {
+    if (typeof window === 'undefined') return
+    try {
+      if (localStorage.getItem(STORAGE_KEYS.META)) return
+      localStorage.setItem(
+        STORAGE_KEYS.META,
+        JSON.stringify({ legacyChineseSeedsMigrated: true }),
+      )
+
+      const runArray = <T extends { id: string }>(
+        key: string,
+        legacy: T[],
+        fresh: T[],
+        fields: ReadonlyArray<keyof T>,
+      ) => {
+        const raw = this.readRawStorage<T[]>(key)
+        if (!raw) return
+        const { items, changed } = this.migrateSeededArray(
+          raw,
+          legacy,
+          fresh,
+          fields,
+        )
+        if (changed) this.setStorage(key, items)
+      }
+
+      runArray(STORAGE_KEYS.PAGES, LEGACY_SEED_PAGES, SEED_PAGES, [
+        'title',
+        'seoTitle',
+        'seoDescription',
+        'seoKeywords',
+        'content',
+      ])
+      runArray(
+        STORAGE_KEYS.NAV_GROUPS,
+        LEGACY_SEED_NAV_GROUPS,
+        SEED_NAV_GROUPS,
+        ['name', 'description'],
+      )
+      runArray(STORAGE_KEYS.NAVS, LEGACY_SEED_NAVS, SEED_NAVS, [
+        'title',
+        'description',
+        'group',
+      ])
+      runArray(STORAGE_KEYS.WIDGETS, LEGACY_SEED_WIDGETS, SEED_WIDGETS, [
+        'title',
+        'description',
+      ])
+      runArray(
+        STORAGE_KEYS.ANNOUNCEMENTS,
+        LEGACY_SEED_ANNOUNCEMENTS,
+        SEED_ANNOUNCEMENTS,
+        ['title', 'content', 'linkText'],
+      )
+      runArray(STORAGE_KEYS.ADS, LEGACY_SEED_ADS, SEED_ADS, ['title', 'text'])
+      runArray(STORAGE_KEYS.LINKS, LEGACY_SEED_LINKS, SEED_LINKS, [
+        'name',
+        'description',
+        'backlinkDetails',
+      ])
+
+      const rawGuidelines = this.readRawStorage<FriendLinkGuidelines>(
+        STORAGE_KEYS.FRIEND_LINK_GUIDELINES,
+      )
+      if (rawGuidelines) {
+        const { next, changed } = this.migrateFields(
+          rawGuidelines,
+          LEGACY_SEED_FRIEND_LINK_GUIDELINES,
+          SEED_FRIEND_LINK_GUIDELINES,
+          [
+            'title',
+            'rule1Title',
+            'rule1Desc',
+            'rule2Title',
+            'rule2Desc',
+            'rule3Title',
+            'rule3Desc',
+            'customNotice',
+          ],
+        )
+        if (changed) {
+          this.setObjectStorage(STORAGE_KEYS.FRIEND_LINK_GUIDELINES, next)
+        }
+      }
+    } catch {
+      // corrupted storage: leave data as-is and skip migration
+    }
+  }
+
   // --- Pages ---
   async getPages(): Promise<SitePage[]> {
+    this.migrateLegacySeeds()
     const rawPages = this.getStorage(STORAGE_KEYS.PAGES, SEED_PAGES)
     let dirty = false
     const pages = rawPages.map((p) => {
@@ -744,6 +1464,7 @@ export class SiteRepository {
 
   // --- Nav Groups (分类名字管理) ---
   async getNavGroups(location?: 'header' | 'footer'): Promise<SiteNavGroup[]> {
+    this.migrateLegacySeeds()
     const rawGroups = this.getStorage<SiteNavGroup>(
       STORAGE_KEYS.NAV_GROUPS,
       SEED_NAV_GROUPS,
@@ -866,6 +1587,7 @@ export class SiteRepository {
 
   // --- Nav Items (菜单项与多级子菜单) ---
   async getNavItems(location?: 'header' | 'footer'): Promise<SiteNavItem[]> {
+    this.migrateLegacySeeds()
     const rawItems = this.getStorage<SiteNavItem>(STORAGE_KEYS.NAVS, SEED_NAVS)
     let dirty = false
     const items = rawItems.map((item) => {
@@ -962,6 +1684,7 @@ export class SiteRepository {
 
   // --- Widgets ---
   async getWidgets(): Promise<SiteWidgetConfig[]> {
+    this.migrateLegacySeeds()
     const widgets = this.getStorage(STORAGE_KEYS.WIDGETS, SEED_WIDGETS)
     return widgets.sort((a, b) => a.sort - b.sort)
   }
@@ -1052,6 +1775,7 @@ export class SiteRepository {
 
   // --- Announcements ---
   async getAnnouncements(): Promise<SiteAnnouncement[]> {
+    this.migrateLegacySeeds()
     const list = this.getStorage(STORAGE_KEYS.ANNOUNCEMENTS, SEED_ANNOUNCEMENTS)
     let hasChanges = false
     const sanitized = list.map((a) => {
@@ -1127,6 +1851,7 @@ export class SiteRepository {
 
   // --- Ads ---
   async getAdSlots(): Promise<SiteAdSlot[]> {
+    this.migrateLegacySeeds()
     return this.getStorage(STORAGE_KEYS.ADS, SEED_ADS)
   }
 
@@ -1185,6 +1910,7 @@ export class SiteRepository {
 
   // --- Friend Links (友情链接) ---
   async getFriendLinks(status?: FriendLinkStatus): Promise<FriendLink[]> {
+    this.migrateLegacySeeds()
     const links = this.getStorage(STORAGE_KEYS.LINKS, SEED_LINKS)
     if (status) {
       return links
@@ -1378,6 +2104,7 @@ export class SiteRepository {
 
   // --- Friend Link Guidelines (互换准则) ---
   async getFriendLinkGuidelines(): Promise<FriendLinkGuidelines> {
+    this.migrateLegacySeeds()
     return this.getObjectStorage(
       STORAGE_KEYS.FRIEND_LINK_GUIDELINES,
       SEED_FRIEND_LINK_GUIDELINES,
