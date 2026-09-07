@@ -1,4 +1,3 @@
-import { useAuth } from '~/admin/core/auth/auth-context'
 import { buildNavigation } from '~/admin/core/navigation/navigation-builder'
 import { navigationRegistry } from '~/admin/core/navigation/registry'
 import type { NavItem as RegistryNavItem } from '~/admin/core/navigation/types'
@@ -9,6 +8,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '~/components/ui/sidebar'
+import { useAuth } from '~/core/auth'
 import { sidebarData } from '~/data/sidebar-data'
 import '~/modules'
 import { NavGroup } from './nav-group'

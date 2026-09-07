@@ -1,8 +1,8 @@
 import type React from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useAuth } from '~/admin/core/auth/auth-context'
 import { adminConfig, type AdminConfig } from '~/config/admin.config'
+import { useAuth } from '~/core/auth'
 import { AdminContext } from './admin-context'
 import type { AdminContextValue } from './admin.types'
 

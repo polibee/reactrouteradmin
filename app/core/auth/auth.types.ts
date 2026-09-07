@@ -12,3 +12,10 @@ export interface AuthState {
   isAuthenticated: boolean
   isLoading: boolean
 }
+
+export interface AuthContextValue extends AuthState {
+  login: (user: AuthUser) => void
+  logout: () => void
+  hasPermission: (permission: string) => boolean
+  hasRole: (role: string) => boolean
+}

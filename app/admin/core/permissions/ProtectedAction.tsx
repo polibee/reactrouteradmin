@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useAuth } from '../auth/auth-context'
+import { useAuth } from '~/core/auth'
 import { hasPermission } from './permission'
 
 export interface ProtectedActionProps {

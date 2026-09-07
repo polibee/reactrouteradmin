@@ -1,4 +1,4 @@
-import type { AuthUser } from '../auth/types'
+import type { AuthUser } from '~/core/auth/auth.types'
 
 export function hasPermission(
   user: AuthUser | null,

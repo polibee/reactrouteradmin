@@ -1,7 +1,7 @@
 import type React from 'react'
-import { AuthProvider } from '~/admin/core/auth/auth-context'
 import { ThemeProvider } from '~/components/theme-provider'
 import { AdminProvider } from '~/core/admin'
+import { AuthProvider } from '~/core/auth'
 import { I18nProvider } from '~/core/i18n'
 import { QueryProvider } from './query-provider'
 

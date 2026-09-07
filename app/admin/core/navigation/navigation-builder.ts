@@ -1,4 +1,4 @@
-import type { AuthUser } from '../auth/types'
+import type { AuthUser } from '~/core/auth/auth.types'
 import { hasPermission } from '../permissions/permission'
 import { resourceRegistry } from '../resource/registry'
 import { navigationRegistry } from './registry'

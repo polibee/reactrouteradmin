@@ -1,5 +1,5 @@
-import type { AuthUser } from '~/admin/core/auth/types'
 import type { AdminConfig } from '~/config/admin.config'
+import type { AuthUser } from '~/core/auth'
 
 export interface AdminContextValue {
   config: AdminConfig

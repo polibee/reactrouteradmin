@@ -1,8 +1,8 @@
 import { Loader2 } from 'lucide-react'
 import * as React from 'react'
-import { useAuth } from '~/admin/core/auth/auth-context'
 import { hasPermission } from '~/admin/core/permissions/permission'
 import { Button } from '~/components/ui/button'
+import { useAuth } from '~/core/auth'
 
 export type AdminButtonProps = React.ComponentProps<typeof Button> & {
   loading?: boolean
