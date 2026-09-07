@@ -12,8 +12,8 @@ import {
 import { getToast } from 'remix-toast'
 import { toast } from 'sonner'
 import { Toaster } from '~/components/ui/sonner'
+import { AppProvider } from '~/providers/app-provider'
 import type { Route } from './+types/root'
-import { ThemeProvider } from './components/theme-provider'
 import './index.css'
 
 export const meta: Route.MetaFunction = () => {
@@ -36,7 +36,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       </head>
       <body className="group/body scroll-smooth">
         <Toaster closeButton richColors />
-        <ThemeProvider attribute="class">{children}</ThemeProvider>
+        {children}
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -63,7 +63,11 @@ export default function App({
     })
   }, [toastData])
 
-  return <Outlet />
+  return (
+    <AppProvider>
+      <Outlet />
+    </AppProvider>
+  )
 }
 
 export function ErrorBoundary() {

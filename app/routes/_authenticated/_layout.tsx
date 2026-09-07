@@ -1,5 +1,4 @@
 import { Outlet, useMatches } from 'react-router'
-import { AuthProvider } from '~/admin/core/auth/auth-context'
 import { PanelProvider } from '~/admin/core/panel/panel-provider'
 import { PresetSelector } from '~/admin/ui/themes/preset-selector'
 import { ThemePresetProvider } from '~/admin/ui/themes/theme-context'
@@ -29,41 +28,39 @@ export default function DashboardLayout() {
   }, {}) as RouteHandle
 
   return (
-    <AuthProvider>
-      <PanelProvider>
-        <ThemePresetProvider>
-          <SearchProvider>
-            <SidebarProvider>
-              <AppSidebar />
-              <div
-                id="content"
-                className={cn(
-                  'ml-auto w-full max-w-full',
-                  'peer-data-[state=collapsed]:w-[calc(100%-var(--sidebar-width-icon)-1rem)]',
-                  'peer-data-[state=expanded]:w-[calc(100%-var(--sidebar-width))]',
-                  'transition-[width] duration-200 ease-linear',
-                  'flex h-svh flex-col',
-                  'group-data-[scroll-locked=1]/body:h-full',
-                  'has-[main.fixed-main]:group-data-[scroll-locked=1]/body:h-svh',
-                )}
-              >
-                <Header fixed={handle.headerFixed}>
-                  <Search />
-                  <div className="ml-auto flex items-center gap-2 sm:gap-4">
-                    <PresetSelector />
-                    <ThemeSwitch />
-                    <ProfileDropdown />
-                  </div>
-                </Header>
-                <Breadcrumbs />
-                <Main fixed={handle.mainFixed}>
-                  <Outlet />
-                </Main>
-              </div>
-            </SidebarProvider>
-          </SearchProvider>
-        </ThemePresetProvider>
-      </PanelProvider>
-    </AuthProvider>
+    <PanelProvider>
+      <ThemePresetProvider>
+        <SearchProvider>
+          <SidebarProvider>
+            <AppSidebar />
+            <div
+              id="content"
+              className={cn(
+                'ml-auto w-full max-w-full',
+                'peer-data-[state=collapsed]:w-[calc(100%-var(--sidebar-width-icon)-1rem)]',
+                'peer-data-[state=expanded]:w-[calc(100%-var(--sidebar-width))]',
+                'transition-[width] duration-200 ease-linear',
+                'flex h-svh flex-col',
+                'group-data-[scroll-locked=1]/body:h-full',
+                'has-[main.fixed-main]:group-data-[scroll-locked=1]/body:h-svh',
+              )}
+            >
+              <Header fixed={handle.headerFixed}>
+                <Search />
+                <div className="ml-auto flex items-center gap-2 sm:gap-4">
+                  <PresetSelector />
+                  <ThemeSwitch />
+                  <ProfileDropdown />
+                </div>
+              </Header>
+              <Breadcrumbs />
+              <Main fixed={handle.mainFixed}>
+                <Outlet />
+              </Main>
+            </div>
+          </SidebarProvider>
+        </SearchProvider>
+      </ThemePresetProvider>
+    </PanelProvider>
   )
 }
