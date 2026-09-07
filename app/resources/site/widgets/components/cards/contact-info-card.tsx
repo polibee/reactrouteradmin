@@ -19,7 +19,7 @@ export function ContactInfoCard() {
         </CardTitle>
       </CardHeader>
       <CardContent
-        className={`${isCompact ? 'space-y-1 p-2 px-2.5' : 'space-y-1.5 p-2.5'} text-[10px] sm:text-[11px]`}
+        className={`${isCompact ? 'space-y-1 p-2 px-2.5' : 'space-y-1.5 p-2.5'} text-xs sm:text-xs`}
       >
         <div className="text-muted-foreground flex items-center gap-1.5">
           <Mail className="text-primary size-2.5 shrink-0" />

@@ -382,7 +382,7 @@ export function NavigationEditor() {
                         {/* 顶级菜单行 */}
                         <div className="bg-muted/20 flex flex-col justify-between gap-2 p-3 sm:flex-row sm:items-center">
                           <div className="flex items-center gap-3">
-                            <span className="text-muted-foreground bg-background flex items-center gap-1 rounded border px-1.5 py-0.5 font-mono text-[11px]">
+                            <span className="text-muted-foreground bg-background flex items-center gap-1 rounded border px-1.5 py-0.5 font-mono text-xs">
                               <ArrowUpDown className="size-3" />
                               {parent.sort}
                             </span>
@@ -392,7 +392,7 @@ export function NavigationEditor() {
                                 {childItems.length > 0 ? (
                                   <Badge
                                     variant="default"
-                                    className="h-4 px-1.5 py-0 text-[10px] font-normal"
+                                    className="h-4 px-1.5 py-0 text-xs font-normal"
                                   >
                                     {t(
                                       'resources.site.navigation.badges.withChildren',
@@ -402,7 +402,7 @@ export function NavigationEditor() {
                                 ) : (
                                   <Badge
                                     variant="outline"
-                                    className="text-muted-foreground h-4 px-1 py-0 text-[10px] font-normal"
+                                    className="text-muted-foreground h-4 px-1 py-0 text-xs font-normal"
                                   >
                                     {t(
                                       'resources.site.navigation.badges.directLink',
@@ -410,7 +410,7 @@ export function NavigationEditor() {
                                   </Badge>
                                 )}
                                 {parent.group && (
-                                  <span className="text-muted-foreground bg-muted rounded px-1.5 py-0.5 text-[10px]">
+                                  <span className="text-muted-foreground bg-muted rounded px-1.5 py-0.5 text-xs">
                                     {t(
                                       'resources.site.navigation.badges.group',
                                       {
@@ -423,7 +423,7 @@ export function NavigationEditor() {
                               <div className="text-muted-foreground mt-0.5 flex items-center gap-2 font-mono text-xs">
                                 <span>{parent.url}</span>
                                 {parent.description && (
-                                  <span className="text-muted-foreground/80 text-[11px] italic">
+                                  <span className="text-muted-foreground/80 text-xs italic">
                                     · {parent.description}
                                   </span>
                                 )}
@@ -494,7 +494,7 @@ export function NavigationEditor() {
                               >
                                 <div className="flex items-center gap-2.5">
                                   <CornerDownRight className="text-muted-foreground/60 size-3.5 shrink-0" />
-                                  <span className="text-muted-foreground bg-muted py-0.2 rounded px-1 font-mono text-[10px]">
+                                  <span className="text-muted-foreground bg-muted py-0.2 rounded px-1 font-mono text-xs">
                                     {child.sort}
                                   </span>
                                   <div>
@@ -512,7 +512,7 @@ export function NavigationEditor() {
                                         </Badge>
                                       )}
                                     </div>
-                                    <div className="text-muted-foreground flex items-center gap-2 font-mono text-[11px]">
+                                    <div className="text-muted-foreground flex items-center gap-2 font-mono text-xs">
                                       <span>{child.url}</span>
                                       {child.description && (
                                         <span className="text-muted-foreground/70">
@@ -570,7 +570,7 @@ export function NavigationEditor() {
               <span className="text-foreground font-semibold">
                 {t('resources.site.navigation.footerTitle')}
               </span>
-              <p className="text-muted-foreground mt-0.5 text-[11px]">
+              <p className="text-muted-foreground mt-0.5 text-xs">
                 {t('resources.site.navigation.footerDescription')}
               </p>
             </div>
@@ -603,7 +603,7 @@ export function NavigationEditor() {
                         <CardTitle className="text-sm font-semibold">
                           {group.name}
                         </CardTitle>
-                        <span className="text-muted-foreground bg-background rounded border px-1 font-mono text-[10px]">
+                        <span className="text-muted-foreground bg-background rounded border px-1 font-mono text-xs">
                           {t('resources.site.navigation.badges.sort', {
                             sort: group.sort,
                           })}
@@ -645,7 +645,7 @@ export function NavigationEditor() {
                       </div>
                     </div>
                     {group.description && (
-                      <CardDescription className="line-clamp-1 pt-0.5 text-[11px]">
+                      <CardDescription className="line-clamp-1 pt-0.5 text-xs">
                         {group.description}
                       </CardDescription>
                     )}
@@ -654,7 +654,7 @@ export function NavigationEditor() {
                   <CardContent className="flex flex-1 flex-col justify-between space-y-3 p-3">
                     <div className="divide-border/60 space-y-1.5 divide-y">
                       {groupItems.length === 0 ? (
-                        <div className="text-muted-foreground py-6 text-center text-[11px]">
+                        <div className="text-muted-foreground py-6 text-center text-xs">
                           {t('resources.site.navigation.noGroupLinks')}
                         </div>
                       ) : (
@@ -670,7 +670,7 @@ export function NavigationEditor() {
                                   <ExternalLink className="size-2.5 shrink-0 opacity-60" />
                                 )}
                               </div>
-                              <div className="text-muted-foreground truncate font-mono text-[10px]">
+                              <div className="text-muted-foreground truncate font-mono text-xs">
                                 {item.url}
                               </div>
                             </div>
@@ -751,7 +751,7 @@ export function NavigationEditor() {
                           <div className="text-foreground font-medium">
                             {item.title}
                           </div>
-                          <div className="text-muted-foreground font-mono text-[11px]">
+                          <div className="text-muted-foreground font-mono text-xs">
                             {item.url}
                           </div>
                         </div>

@@ -245,7 +245,7 @@ export function NavItemDialog({
                 <button
                   type="button"
                   onClick={() => onOpenCreateGroup(location)}
-                  className="text-primary flex items-center gap-0.5 text-[11px] hover:underline"
+                  className="text-primary flex items-center gap-0.5 text-xs hover:underline"
                 >
                   <Plus className="size-3" />
                   {t('resources.site.navigation.actions.newGroup')}
@@ -320,7 +320,7 @@ export function NavItemDialog({
               <Label htmlFor="nav-url" className="text-xs">
                 {t('resources.site.navigation.itemDialog.urlLabel')}
               </Label>
-              <span className="text-muted-foreground text-[10px]">
+              <span className="text-muted-foreground text-xs">
                 {t('resources.site.navigation.itemDialog.urlHint')}
               </span>
             </div>
@@ -335,7 +335,7 @@ export function NavItemDialog({
               required
             />
             <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-              <span className="text-muted-foreground text-[10px]">
+              <span className="text-muted-foreground text-xs">
                 {t('resources.site.navigation.itemDialog.quickFillLabel')}
               </span>
               {QUICK_URLS.map((q) => (
@@ -346,7 +346,7 @@ export function NavItemDialog({
                     setUrl(q.url)
                     if (!title) setTitle(q.label)
                   }}
-                  className="bg-muted hover:bg-muted/80 text-foreground rounded px-1.5 py-0.5 text-[10px] transition-colors"
+                  className="bg-muted hover:bg-muted/80 text-foreground rounded px-1.5 py-0.5 text-xs transition-colors"
                 >
                   {q.label}
                 </button>

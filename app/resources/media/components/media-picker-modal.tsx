@@ -152,7 +152,7 @@ export function MediaPickerModal({
             ) : filteredItems.length === 0 ? (
               <div className="text-muted-foreground flex h-48 flex-col items-center justify-center gap-1 text-xs">
                 <span>{t('resources.media.picker.emptyTitle')}</span>
-                <span className="text-[11px] opacity-75">
+                <span className="text-xs opacity-75">
                   {t('resources.media.picker.emptyHint')}
                 </span>
               </div>
@@ -197,12 +197,12 @@ export function MediaPickerModal({
                       </div>
                       <div className="p-1.5">
                         <div
-                          className="text-foreground truncate text-[11px] font-medium"
+                          className="text-foreground truncate text-xs font-medium"
                           title={item.name}
                         >
                           {item.name}
                         </div>
-                        <div className="text-muted-foreground font-mono text-[10px]">
+                        <div className="text-muted-foreground font-mono text-xs">
                           {item.dimensions
                             ? `${item.dimensions.width}×${item.dimensions.height}`
                             : `${Math.round(item.size / 1024)} KB`}
@@ -241,7 +241,7 @@ export function MediaPickerModal({
                   <div className="text-foreground text-xs font-semibold">
                     {t('resources.media.picker.dropzoneTitle')}
                   </div>
-                  <div className="text-muted-foreground text-[11px]">
+                  <div className="text-muted-foreground text-xs">
                     {t('resources.media.picker.dropzoneHint')}
                   </div>
                 </div>
@@ -258,7 +258,7 @@ export function MediaPickerModal({
         )}
 
         <DialogFooter className="flex items-center justify-between border-t pt-2 sm:justify-between">
-          <div className="text-muted-foreground text-[11px]">
+          <div className="text-muted-foreground text-xs">
             {selectedItem ? (
               <span className="text-foreground inline-block max-w-[240px] truncate font-medium">
                 {t('resources.media.picker.selected', {

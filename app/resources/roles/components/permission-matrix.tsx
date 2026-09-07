@@ -189,12 +189,12 @@ export function PermissionMatrix({
                           className="cursor-pointer text-xs font-medium"
                         >
                           {t(perm.name)}
-                          <span className="text-muted-foreground ml-1.5 font-mono text-[11px] font-normal">
+                          <span className="text-muted-foreground ml-1.5 font-mono text-xs font-normal">
                             ({perm.code})
                           </span>
                         </Label>
                         {perm.description && (
-                          <p className="text-muted-foreground line-clamp-1 text-[11px]">
+                          <p className="text-muted-foreground line-clamp-1 text-xs">
                             {t(perm.description)}
                           </p>
                         )}

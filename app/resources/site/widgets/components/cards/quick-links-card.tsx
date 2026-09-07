@@ -50,7 +50,7 @@ export function QuickLinksCard() {
       >
         <CardTitle className="flex items-center justify-between text-xs font-semibold">
           <span>{t('resources.site.widgets.cards.quickLinks.title')}</span>
-          <span className="text-muted-foreground text-[10px] font-normal">
+          <span className="text-muted-foreground text-xs font-normal">
             {t('resources.site.widgets.cards.quickLinks.subtitle')}
           </span>
         </CardTitle>
@@ -75,7 +75,7 @@ export function QuickLinksCard() {
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between">
-                <span className="text-foreground truncate text-[11px] font-medium">
+                <span className="text-foreground truncate text-xs font-medium">
                   {link.title}
                 </span>
                 {link.external && (

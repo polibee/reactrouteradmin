@@ -135,7 +135,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
                                 )}
                               </div>
                               {child.description && (
-                                <span className="text-muted-foreground line-clamp-1 text-[11px]">
+                                <span className="text-muted-foreground line-clamp-1 text-xs">
                                   {child.description}
                                 </span>
                               )}
@@ -200,7 +200,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
                 </div>
                 <div className="flex flex-col">
                   <span className="leading-tight">React Admin Platform</span>
-                  <span className="text-muted-foreground text-[10px] font-normal tracking-normal">
+                  <span className="text-muted-foreground text-xs font-normal tracking-normal">
                     Enterprise Portal & Admin Engine
                   </span>
                 </div>
@@ -213,11 +213,11 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
                 </span>
-                <span className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+                <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
                   {t('pages.layout.footer.statusOk')}
                 </span>
                 <span className="text-muted-foreground/40">·</span>
-                <span className="text-muted-foreground font-mono text-[11px]">
+                <span className="text-muted-foreground font-mono text-xs">
                   v1.1.0
                 </span>
               </div>
@@ -231,7 +231,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
                 </h4>
                 <ul className="text-muted-foreground space-y-2 text-xs">
                   {section.items.length === 0 ? (
-                    <li className="text-muted-foreground/50 text-[11px]">
+                    <li className="text-muted-foreground/50 text-xs">
                       {t('pages.layout.footer.noLinks')}
                     </li>
                   ) : (
@@ -265,7 +265,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
               reserved.
             </div>
             <div className="flex items-center gap-4 sm:gap-6">
-              <span className="text-muted-foreground/60 text-[11px]">
+              <span className="text-muted-foreground/60 text-xs">
                 Powered by React Router 8 &amp; Tailwind CSS
               </span>
               <button

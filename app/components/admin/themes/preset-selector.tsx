@@ -43,7 +43,7 @@ export function PresetSelector() {
             >
               <div>
                 <div className="text-xs font-medium">{t(item.name)}</div>
-                <div className="text-muted-foreground text-[10px]">
+                <div className="text-muted-foreground text-xs">
                   {item.density === 'compact'
                     ? t('common.presets.densityCompact')
                     : t('common.presets.densityComfortable')}

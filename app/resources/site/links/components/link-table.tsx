@@ -293,10 +293,7 @@ export function LinkTable() {
               {t('common.status.rejected')}
             </Badge>
             {reason && (
-              <span
-                className="text-muted-foreground text-[11px]"
-                title={reason}
-              >
+              <span className="text-muted-foreground text-xs" title={reason}>
                 ({reason})
               </span>
             )}
@@ -334,7 +331,7 @@ export function LinkTable() {
               {t('resources.site.links.backlink.verified')}
             </Badge>
             {item.lastCheckedAt && (
-              <div className="text-muted-foreground font-mono text-[10px]">
+              <div className="text-muted-foreground font-mono text-xs">
                 {item.lastCheckedAt.slice(0, 10)}
               </div>
             )}
@@ -355,7 +352,7 @@ export function LinkTable() {
               {t('resources.site.links.backlink.missing')}
             </Badge>
             {item.lastCheckedAt && (
-              <div className="text-muted-foreground font-mono text-[10px]">
+              <div className="text-muted-foreground font-mono text-xs">
                 {item.lastCheckedAt.slice(0, 10)}
               </div>
             )}
@@ -465,7 +462,7 @@ export function LinkTable() {
                   {pendingCount > 0 && (
                     <Badge
                       variant="secondary"
-                      className="ml-1.5 bg-amber-500/20 px-1.5 py-0 text-[10px] text-amber-700 dark:text-amber-400"
+                      className="ml-1.5 bg-amber-500/20 px-1.5 py-0 text-xs text-amber-700 dark:text-amber-400"
                     >
                       {pendingCount}
                     </Badge>
@@ -500,7 +497,7 @@ export function LinkTable() {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-muted/40 text-muted-foreground border-b text-[11px] font-medium tracking-wider uppercase">
+                <thead className="bg-muted/40 text-muted-foreground border-b text-xs font-medium tracking-wider uppercase">
                   <tr>
                     <th className="px-4 py-3">
                       {t('resources.site.links.columns.site')}
@@ -559,7 +556,7 @@ export function LinkTable() {
                         </div>
                       </td>
 
-                      <td className="px-4 py-3 font-mono text-[11px]">
+                      <td className="px-4 py-3 font-mono text-xs">
                         <a
                           href={item.url}
                           target="_blank"
@@ -579,7 +576,7 @@ export function LinkTable() {
                           {item.description || '-'}
                         </div>
                         {item.email && (
-                          <div className="text-muted-foreground mt-0.5 flex items-center gap-1 text-[11px]">
+                          <div className="text-muted-foreground mt-0.5 flex items-center gap-1 text-xs">
                             <Mail className="size-3" />
                             <span>{item.email}</span>
                           </div>
@@ -596,7 +593,7 @@ export function LinkTable() {
 
                       <td className="px-4 py-3">{getBacklinkBadge(item)}</td>
 
-                      <td className="text-muted-foreground px-4 py-3 text-[11px]">
+                      <td className="text-muted-foreground px-4 py-3 text-xs">
                         {new Date(item.createdAt).toLocaleDateString()}
                       </td>
 
@@ -636,7 +633,7 @@ export function LinkTable() {
                             <ShieldCheck
                               className={`size-3.5 ${checkingMap[item.id] ? 'animate-spin' : ''}`}
                             />
-                            <span className="hidden text-[11px] xl:inline">
+                            <span className="hidden text-xs xl:inline">
                               {t('resources.site.links.actions.check')}
                             </span>
                           </Button>

@@ -53,7 +53,7 @@ export function MediaStorageStatsCard({
           <div>
             <div className="text-foreground flex items-center gap-1.5 text-xs font-semibold">
               <span>{t('resources.media.stats.quotaTitle')}</span>
-              <span className="text-muted-foreground text-[10px] font-normal">
+              <span className="text-muted-foreground text-xs font-normal">
                 (
                 {t('resources.media.stats.usedPercent', {
                   percent: percentUsed,

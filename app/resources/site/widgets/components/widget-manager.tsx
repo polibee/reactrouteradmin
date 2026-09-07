@@ -202,7 +202,7 @@ export function WidgetManager() {
         return (
           <Badge
             variant="outline"
-            className="border-amber-300 bg-amber-500/10 text-[10px] text-amber-700 dark:border-amber-800 dark:text-amber-400"
+            className="border-amber-300 bg-amber-500/10 text-xs text-amber-700 dark:border-amber-800 dark:text-amber-400"
           >
             {t('resources.site.widgets.placements.home_sidebar')}
           </Badge>
@@ -211,7 +211,7 @@ export function WidgetManager() {
         return (
           <Badge
             variant="outline"
-            className="border-teal-300 bg-teal-500/10 text-[10px] text-teal-700 dark:border-teal-800 dark:text-teal-400"
+            className="border-teal-300 bg-teal-500/10 text-xs text-teal-700 dark:border-teal-800 dark:text-teal-400"
           >
             {t('resources.site.widgets.placements.page_sidebar')}
           </Badge>
@@ -220,20 +220,20 @@ export function WidgetManager() {
         return (
           <Badge
             variant="outline"
-            className="border-sky-300 bg-sky-500/10 text-[10px] text-sky-700 dark:border-sky-800 dark:text-sky-400"
+            className="border-sky-300 bg-sky-500/10 text-xs text-sky-700 dark:border-sky-800 dark:text-sky-400"
           >
             {t('resources.site.widgets.placements.site_sidebar')}
           </Badge>
         )
       case 'dashboard':
         return (
-          <Badge variant="secondary" className="text-[10px]">
+          <Badge variant="secondary" className="text-xs">
             {t('resources.site.widgets.placements.dashboard')}
           </Badge>
         )
       case 'both':
         return (
-          <Badge variant="default" className="bg-primary/85 text-[10px]">
+          <Badge variant="default" className="bg-primary/85 text-xs">
             {t('resources.site.widgets.placements.both')}
           </Badge>
         )
@@ -248,7 +248,7 @@ export function WidgetManager() {
         return (
           <Badge
             variant="outline"
-            className="border-purple-200 text-[10px] text-purple-600 dark:border-purple-800 dark:text-purple-400"
+            className="border-purple-200 text-xs text-purple-600 dark:border-purple-800 dark:text-purple-400"
           >
             {t('resources.site.widgets.cardTypes.image_banner')}
           </Badge>
@@ -257,7 +257,7 @@ export function WidgetManager() {
         return (
           <Badge
             variant="outline"
-            className="border-emerald-200 text-[10px] text-emerald-600 dark:border-emerald-800 dark:text-emerald-400"
+            className="border-emerald-200 text-xs text-emerald-600 dark:border-emerald-800 dark:text-emerald-400"
           >
             {t('resources.site.widgets.cardTypes.link_list')}
           </Badge>
@@ -266,7 +266,7 @@ export function WidgetManager() {
         return (
           <Badge
             variant="outline"
-            className="border-amber-200 text-[10px] text-amber-600 dark:border-amber-800 dark:text-amber-400"
+            className="border-amber-200 text-xs text-amber-600 dark:border-amber-800 dark:text-amber-400"
           >
             {t('resources.site.widgets.cardTypes.custom_html')}
           </Badge>
@@ -275,7 +275,7 @@ export function WidgetManager() {
         return (
           <Badge
             variant="outline"
-            className="border-indigo-200 text-[10px] text-indigo-600 dark:border-indigo-800 dark:text-indigo-400"
+            className="border-indigo-200 text-xs text-indigo-600 dark:border-indigo-800 dark:text-indigo-400"
           >
             {t('resources.site.widgets.cardTypes.custom_js')}
           </Badge>
@@ -284,17 +284,14 @@ export function WidgetManager() {
         return (
           <Badge
             variant="outline"
-            className="border-blue-200 text-[10px] text-blue-600 dark:border-blue-800 dark:text-blue-400"
+            className="border-blue-200 text-xs text-blue-600 dark:border-blue-800 dark:text-blue-400"
           >
             {t('resources.site.widgets.cardTypes.custom_text')}
           </Badge>
         )
       default:
         return (
-          <Badge
-            variant="outline"
-            className="text-muted-foreground text-[10px]"
-          >
+          <Badge variant="outline" className="text-muted-foreground text-xs">
             {t('resources.site.widgets.cardTypes.preset')}
           </Badge>
         )
@@ -321,14 +318,14 @@ export function WidgetManager() {
                       ? 'default'
                       : 'secondary'
                   }
-                  className="h-4.5 text-[10px]"
+                  className="h-4.5 text-xs"
                 >
                   {globalSettings.density === 'compact'
                     ? t('resources.site.widgets.densityCompactBadge')
                     : t('resources.site.widgets.densityStandardBadge')}
                 </Badge>
               </div>
-              <p className="text-muted-foreground mt-0.5 text-[11px]">
+              <p className="text-muted-foreground mt-0.5 text-xs">
                 {t('resources.site.widgets.settingsDescription')}
               </p>
             </div>
@@ -435,7 +432,7 @@ export function WidgetManager() {
 
           {/* 筛选标签页 */}
           <div className="flex flex-wrap items-center gap-1.5 pt-3 text-xs">
-            <span className="text-muted-foreground mr-1 text-[11px]">
+            <span className="text-muted-foreground mr-1 text-xs">
               {t('resources.site.widgets.filterLabel')}
             </span>
             {[

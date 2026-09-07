@@ -291,15 +291,15 @@ export function MarkdownEditor({
           className="h-7"
         >
           <TabsList className="h-7 p-0.5">
-            <TabsTrigger value="edit" className="h-6 gap-1 px-2 text-[11px]">
+            <TabsTrigger value="edit" className="h-6 gap-1 px-2 text-xs">
               <Edit3 className="size-3" />
               {t('common.editor.edit')}
             </TabsTrigger>
-            <TabsTrigger value="preview" className="h-6 gap-1 px-2 text-[11px]">
+            <TabsTrigger value="preview" className="h-6 gap-1 px-2 text-xs">
               <Eye className="size-3" />
               {t('common.editor.preview')}
             </TabsTrigger>
-            <TabsTrigger value="split" className="h-6 gap-1 px-2 text-[11px]">
+            <TabsTrigger value="split" className="h-6 gap-1 px-2 text-xs">
               <Columns2 className="size-3" />
               {t('common.editor.split')}
             </TabsTrigger>

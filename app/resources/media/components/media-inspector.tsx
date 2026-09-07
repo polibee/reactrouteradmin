@@ -77,7 +77,7 @@ export function MediaInspector({
           <span className="text-foreground text-sm font-semibold">
             {t('resources.media.inspector.title')}
           </span>
-          <span className="bg-muted text-muted-foreground rounded px-2 py-0.5 font-mono text-[10px] uppercase">
+          <span className="bg-muted text-muted-foreground rounded px-2 py-0.5 font-mono text-xs uppercase">
             {item.type}
           </span>
         </div>
@@ -140,7 +140,7 @@ export function MediaInspector({
               <button
                 type="button"
                 onClick={handleStartRename}
-                className="text-primary cursor-pointer text-[11px] hover:underline"
+                className="text-primary cursor-pointer text-xs hover:underline"
               >
                 {t('resources.media.inspector.rename')}
               </button>
@@ -201,7 +201,7 @@ export function MediaInspector({
         {/* 属性元信息网格 */}
         <div className="text-muted-foreground grid grid-cols-2 gap-3 border-t pt-2">
           <div className="space-y-0.5">
-            <div className="flex items-center gap-1 text-[11px]">
+            <div className="flex items-center gap-1 text-xs">
               <HardDrive className="size-3" />
               <span>{t('resources.media.inspector.sizeLabel')}</span>
             </div>
@@ -211,7 +211,7 @@ export function MediaInspector({
           </div>
 
           <div className="space-y-0.5">
-            <div className="flex items-center gap-1 text-[11px]">
+            <div className="flex items-center gap-1 text-xs">
               <Layers className="size-3" />
               <span>{t('resources.media.inspector.mimeLabel')}</span>
             </div>
@@ -225,7 +225,7 @@ export function MediaInspector({
 
           {item.dimensions && (
             <div className="space-y-0.5">
-              <div className="flex items-center gap-1 text-[11px]">
+              <div className="flex items-center gap-1 text-xs">
                 <Maximize2 className="size-3" />
                 <span>{t('resources.media.inspector.dimensionsLabel')}</span>
               </div>
@@ -236,7 +236,7 @@ export function MediaInspector({
           )}
 
           <div className="space-y-0.5">
-            <div className="flex items-center gap-1 text-[11px]">
+            <div className="flex items-center gap-1 text-xs">
               <Calendar className="size-3" />
               <span>{t('resources.media.inspector.uploadedAtLabel')}</span>
             </div>
@@ -256,7 +256,7 @@ export function MediaInspector({
               {item.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-[10px] font-medium"
+                  className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-xs font-medium"
                 >
                   #{tag}
                 </span>

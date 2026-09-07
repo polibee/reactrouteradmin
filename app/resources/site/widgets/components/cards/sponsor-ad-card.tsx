@@ -66,7 +66,7 @@ export function SponsorAdCard({ widget }: SponsorAdCardProps) {
             className={`w-full rounded-md border object-cover ${isCompact ? 'h-16' : 'h-20'}`}
           />
         )}
-        <p className="text-foreground/90 line-clamp-2 text-[11px] leading-snug font-medium">
+        <p className="text-foreground/90 line-clamp-2 text-xs leading-snug font-medium">
           {text}
         </p>
         <div className="pt-0.2">
@@ -75,7 +75,7 @@ export function SponsorAdCard({ widget }: SponsorAdCardProps) {
               href={targetUrl}
               target="_blank"
               rel="noreferrer"
-              className="text-primary inline-flex items-center gap-1 text-[10px] font-medium hover:underline"
+              className="text-primary inline-flex items-center gap-1 text-xs font-medium hover:underline"
             >
               {t('resources.site.widgets.cards.sponsor.learnMore')}{' '}
               <ExternalLink className="size-2" />
@@ -85,7 +85,7 @@ export function SponsorAdCard({ widget }: SponsorAdCardProps) {
               size="sm"
               variant="link"
               asChild
-              className="text-primary h-auto p-0 text-[10px] font-medium"
+              className="text-primary h-auto p-0 text-xs font-medium"
             >
               <Link to={targetUrl} target={targetWindow}>
                 {t('resources.site.widgets.cards.sponsor.learnMore')}{' '}

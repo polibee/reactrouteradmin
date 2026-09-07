@@ -140,10 +140,7 @@ export function SinglePageView({ slug }: SinglePageViewProps) {
                         <Eye className="size-3" />
                         {t('pages.singlePage.views', { views: page.views })}
                       </span>
-                      <Badge
-                        variant="outline"
-                        className="text-[10px] font-normal"
-                      >
+                      <Badge variant="outline" className="text-xs font-normal">
                         {t('pages.singlePage.slugLabel', { slug: page.slug })}
                       </Badge>
                     </div>

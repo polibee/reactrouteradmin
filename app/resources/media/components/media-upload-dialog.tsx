@@ -174,7 +174,7 @@ export function MediaUploadDialog({
               <div className="text-foreground text-xs font-semibold">
                 {t('resources.media.upload.dropzoneTitle')}
               </div>
-              <div className="text-muted-foreground text-[11px]">
+              <div className="text-muted-foreground text-xs">
                 {t('resources.media.upload.dropzoneDescription')}
               </div>
             </div>
@@ -232,7 +232,7 @@ export function MediaUploadDialog({
                 <button
                   type="button"
                   onClick={() => setSelectedFiles([])}
-                  className="text-destructive cursor-pointer text-[11px] hover:underline"
+                  className="text-destructive cursor-pointer text-xs hover:underline"
                 >
                   {t('resources.media.upload.clearAll')}
                 </button>
@@ -249,7 +249,7 @@ export function MediaUploadDialog({
                       <span className="text-foreground truncate font-medium">
                         {file.name}
                       </span>
-                      <span className="text-muted-foreground shrink-0 font-mono text-[11px]">
+                      <span className="text-muted-foreground shrink-0 font-mono text-xs">
                         ({formatSize(file.size)})
                       </span>
                     </div>
@@ -269,7 +269,7 @@ export function MediaUploadDialog({
           {/* 上传进度条 */}
           {uploading && (
             <div className="space-y-1.5 pt-1">
-              <div className="text-muted-foreground flex items-center justify-between text-[11px]">
+              <div className="text-muted-foreground flex items-center justify-between text-xs">
                 <span>{t('resources.media.upload.uploading')}</span>
                 <span>{progress}%</span>
               </div>

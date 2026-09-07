@@ -77,7 +77,7 @@ export default function HomePage() {
         {headerAd && (
           <div className="from-primary/10 via-primary/5 to-accent flex flex-col justify-between gap-3 rounded-lg border bg-linear-to-r p-3.5 shadow-xs sm:flex-row sm:items-center">
             <div className="flex items-center gap-2 text-xs">
-              <span className="bg-primary/20 text-primary rounded px-1.5 py-0.5 text-[10px] font-bold">
+              <span className="bg-primary/20 text-primary rounded px-1.5 py-0.5 text-xs font-bold">
                 {t('pages.home.ad.badge')}
               </span>
               <span className="text-foreground font-medium">
@@ -168,11 +168,11 @@ export default function HomePage() {
                       <div className="text-foreground group-hover:text-primary flex items-center justify-between text-xs font-medium transition-colors">
                         <span>{page.title}</span>
                       </div>
-                      <div className="text-muted-foreground mt-1 font-mono text-[11px]">
+                      <div className="text-muted-foreground mt-1 font-mono text-xs">
                         /{page.slug}
                       </div>
                     </div>
-                    <div className="text-primary mt-3 flex items-center gap-0.5 border-t pt-2 text-[10px] font-medium">
+                    <div className="text-primary mt-3 flex items-center gap-0.5 border-t pt-2 text-xs font-medium">
                       {t('pages.home.singlePages.readMore')}{' '}
                       <ArrowRight className="size-2.5" />
                     </div>
@@ -190,7 +190,7 @@ export default function HomePage() {
                 <h3 className="text-xs font-semibold">
                   {t('pages.home.features.rbacTitle')}
                 </h3>
-                <p className="text-muted-foreground text-[11px] leading-normal">
+                <p className="text-muted-foreground text-xs leading-normal">
                   {t('pages.home.features.rbacDescription')}
                 </p>
               </div>
@@ -202,7 +202,7 @@ export default function HomePage() {
                 <h3 className="text-xs font-semibold">
                   {t('pages.home.features.componentsTitle')}
                 </h3>
-                <p className="text-muted-foreground text-[11px] leading-normal">
+                <p className="text-muted-foreground text-xs leading-normal">
                   {t('pages.home.features.componentsDescription')}
                 </p>
               </div>
@@ -214,7 +214,7 @@ export default function HomePage() {
                 <h3 className="text-xs font-semibold">
                   {t('pages.home.features.widgetsTitle')}
                 </h3>
-                <p className="text-muted-foreground text-[11px] leading-normal">
+                <p className="text-muted-foreground text-xs leading-normal">
                   {t('pages.home.features.widgetsDescription')}
                 </p>
               </div>

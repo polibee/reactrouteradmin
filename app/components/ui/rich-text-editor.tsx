@@ -868,7 +868,7 @@ export function RichTextEditor({
       </div>
 
       {/* 底部状态栏 */}
-      <div className="bg-muted/20 text-muted-foreground flex items-center justify-between border-t px-3 py-1.5 text-[11px]">
+      <div className="bg-muted/20 text-muted-foreground flex items-center justify-between border-t px-3 py-1.5 text-xs">
         <div className="flex items-center gap-2">
           <span className="text-foreground font-semibold">TipTap</span>
           <span>·</span>
@@ -885,7 +885,7 @@ export function RichTextEditor({
             })}
           </span>
         </div>
-        <div className="text-[10px] opacity-75">
+        <div className="text-xs opacity-75">
           {isMarkdownMode
             ? t('common.editor.markdownHint')
             : t('common.editor.visualHint')}
@@ -992,7 +992,7 @@ export function RichTextEditor({
                 <div className="text-foreground text-xs font-medium">
                   {t('common.editor.fromMediaLibrary')}
                 </div>
-                <div className="text-muted-foreground text-[11px]">
+                <div className="text-muted-foreground text-xs">
                   {t('common.editor.mediaLibraryHint')}
                 </div>
               </div>
@@ -1010,7 +1010,7 @@ export function RichTextEditor({
 
             <div className="relative flex items-center py-0.5">
               <div className="border-border/60 flex-grow border-t"></div>
-              <span className="text-muted-foreground mx-2 flex-shrink text-[10px]">
+              <span className="text-muted-foreground mx-2 flex-shrink text-xs">
                 {t('common.editor.orEnterUrl')}
               </span>
               <div className="border-border/60 flex-grow border-t"></div>

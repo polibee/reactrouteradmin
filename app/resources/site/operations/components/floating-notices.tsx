@@ -156,7 +156,7 @@ export function FloatingNotices({ placement = 'all' }: FloatingNoticesProps) {
               {bannerAnn.linkUrl && (
                 <Link
                   to={cleanUrl(bannerAnn.linkUrl)}
-                  className="bg-primary-foreground/15 hover:bg-primary-foreground/25 inline-flex items-center gap-1 rounded px-2 py-0.5 text-[11px] font-medium transition-colors"
+                  className="bg-primary-foreground/15 hover:bg-primary-foreground/25 inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs font-medium transition-colors"
                 >
                   {bannerAnn.linkText ||
                     t('resources.site.operations.notices.viewLink')}
@@ -225,7 +225,7 @@ export function FloatingNotices({ placement = 'all' }: FloatingNoticesProps) {
             >
               <BellRing className="size-3.5 animate-pulse text-amber-300" />
               <span className="max-w-[150px] truncate">{cornerAnn.title}</span>
-              <span className="bg-primary-foreground/20 rounded-full px-1.5 py-0.5 text-[10px]">
+              <span className="bg-primary-foreground/20 rounded-full px-1.5 py-0.5 text-xs">
                 {t('resources.site.operations.notices.expand')}
               </span>
             </button>
@@ -262,7 +262,7 @@ export function FloatingNotices({ placement = 'all' }: FloatingNoticesProps) {
                 </div>
               </CardHeader>
               <CardContent className="space-y-2 p-2.5 px-3 pt-2">
-                <p className="text-muted-foreground text-[11px] leading-relaxed">
+                <p className="text-muted-foreground text-xs leading-relaxed">
                   {cornerAnn.content}
                 </p>
                 {cornerAnn.linkUrl && (
@@ -285,13 +285,13 @@ export function FloatingNotices({ placement = 'all' }: FloatingNoticesProps) {
       {/* 4. 底部信息流动跑马灯 Marquee (嵌入在页脚导航的最下方，流式排列，通知在下方显示) */}
       {showMarquee && marqueeAnn && (
         <div className="flex h-8 w-full items-center border-t border-zinc-800 bg-zinc-900 px-4 text-xs text-zinc-100 shadow-sm transition-all dark:bg-zinc-950">
-          <div className="text-primary flex shrink-0 items-center gap-1.5 border-r border-zinc-700/80 pr-3 text-[11px] font-semibold">
+          <div className="text-primary flex shrink-0 items-center gap-1.5 border-r border-zinc-700/80 pr-3 text-xs font-semibold">
             <Volume2 className="size-3.5 animate-pulse" />
             <span>{marqueeAnn.title}</span>
           </div>
 
           <div className="flex-1 overflow-hidden pl-3 whitespace-nowrap">
-            <div className="inline-block animate-[marquee_25s_linear_infinite] text-[11px] opacity-90">
+            <div className="inline-block animate-[marquee_25s_linear_infinite] text-xs opacity-90">
               <span>{marqueeAnn.content}</span>
               {marqueeAnn.linkUrl && (
                 <Link

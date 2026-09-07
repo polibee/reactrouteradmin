@@ -169,7 +169,7 @@ export function ApplyLinkDialog({
                   className="h-8 text-xs"
                 />
                 {errors.name && (
-                  <p className="text-destructive text-[11px]">
+                  <p className="text-destructive text-xs">
                     {errors.name.message}
                   </p>
                 )}
@@ -187,7 +187,7 @@ export function ApplyLinkDialog({
                   className="h-8 font-mono text-xs"
                 />
                 {errors.url && (
-                  <p className="text-destructive text-[11px]">
+                  <p className="text-destructive text-xs">
                     {errors.url.message}
                   </p>
                 )}
@@ -205,7 +205,7 @@ export function ApplyLinkDialog({
                     className="h-8 font-mono text-xs"
                   />
                   {errors.logo && (
-                    <p className="text-destructive text-[11px]">
+                    <p className="text-destructive text-xs">
                       {errors.logo.message}
                     </p>
                   )}
@@ -226,7 +226,7 @@ export function ApplyLinkDialog({
                     className="h-8 text-xs"
                   />
                   {errors.email && (
-                    <p className="text-destructive text-[11px]">
+                    <p className="text-destructive text-xs">
                       {errors.email.message}
                     </p>
                   )}
@@ -247,7 +247,7 @@ export function ApplyLinkDialog({
                   className="resize-none text-xs"
                 />
                 {errors.description && (
-                  <p className="text-destructive text-[11px]">
+                  <p className="text-destructive text-xs">
                     {errors.description.message}
                   </p>
                 )}
@@ -282,7 +282,7 @@ export function ApplyLinkDialog({
                         : t('resources.site.links.apply.captchaClick')}
                   </span>
                 </div>
-                <div className="text-muted-foreground flex items-center gap-1 font-mono text-[10px]">
+                <div className="text-muted-foreground flex items-center gap-1 font-mono text-xs">
                   <ShieldCheck className="size-3 text-orange-500" />
                   <span>Cloudflare Turnstile</span>
                 </div>

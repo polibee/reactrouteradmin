@@ -105,7 +105,7 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
               )}
             </div>
             {widget.description && (
-              <p className="mt-0.5 line-clamp-1 text-[10px] text-white/80">
+              <p className="mt-0.5 line-clamp-1 text-xs text-white/80">
                 {widget.description}
               </p>
             )}
@@ -136,7 +136,7 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
         </CardHeader>
         <CardContent className={isCompact ? 'p-2 px-2.5' : 'p-3 pt-2'}>
           {parsedLinks.length === 0 ? (
-            <p className="text-muted-foreground py-2 text-center text-[10px]">
+            <p className="text-muted-foreground py-2 text-center text-xs">
               {t('resources.site.widgets.cards.custom.noLinks')}
             </p>
           ) : (
@@ -153,7 +153,7 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
                     isCompact ? 'py-1' : 'py-1.5'
                   }`}
                 >
-                  <span className="group-hover:text-foreground truncate pr-2 text-[11px] font-medium">
+                  <span className="group-hover:text-foreground truncate pr-2 text-xs font-medium">
                     {item.title}
                   </span>
                   <div className="flex shrink-0 items-center gap-1.5">
@@ -195,7 +195,7 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
         </CardHeader>
         <CardContent className={isCompact ? 'p-2 px-2.5 pt-1.5' : 'p-3 pt-2'}>
           <div
-            className="overflow-hidden text-[11px] leading-relaxed"
+            className="overflow-hidden text-xs leading-relaxed"
             // biome-ignore lint/security/noDangerouslySetInnerHtml: renders admin-authored custom widget HTML
             dangerouslySetInnerHTML={{ __html: widget.customContent || '' }}
           />
@@ -229,7 +229,7 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
           />
           {widget.customContent && (
             <div
-              className="mt-1.5 text-[11px] leading-relaxed"
+              className="mt-1.5 text-xs leading-relaxed"
               // biome-ignore lint/security/noDangerouslySetInnerHtml: renders admin-authored custom widget HTML
               dangerouslySetInnerHTML={{ __html: widget.customContent }}
             />
@@ -256,7 +256,7 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
         )}
       </CardHeader>
       <CardContent className={isCompact ? 'p-2 px-2.5 pt-1.5' : 'p-3 pt-2'}>
-        <div className="text-muted-foreground text-[11px] leading-relaxed whitespace-pre-wrap">
+        <div className="text-muted-foreground text-xs leading-relaxed whitespace-pre-wrap">
           {widget.customContent ||
             t('resources.site.widgets.cards.custom.noContent')}
         </div>

@@ -80,7 +80,7 @@ export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
               <div className="text-foreground flex items-center gap-1.5 font-medium">
                 {role.name}
                 {role.isSystem && (
-                  <span className="rounded-xs bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                  <span className="rounded-xs bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-950 dark:text-amber-300">
                     {t('resources.roles.table.systemBadge')}
                   </span>
                 )}

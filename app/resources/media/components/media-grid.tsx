@@ -79,7 +79,7 @@ export function MediaGrid({
       return (
         <div className="flex h-full w-full flex-col items-center justify-center gap-1.5 bg-emerald-500/10 p-2 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400">
           <FileText className="size-8" />
-          <span className="font-mono text-[10px] font-medium tracking-wider uppercase">
+          <span className="font-mono text-xs font-medium tracking-wider uppercase">
             {item.name.split('.').pop() || 'DOC'}
           </span>
         </div>
@@ -90,7 +90,7 @@ export function MediaGrid({
       return (
         <div className="flex h-full w-full flex-col items-center justify-center gap-1.5 bg-purple-500/10 p-2 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400">
           <Film className="size-8" />
-          <span className="font-mono text-[10px] font-medium tracking-wider uppercase">
+          <span className="font-mono text-xs font-medium tracking-wider uppercase">
             VIDEO
           </span>
         </div>
@@ -101,7 +101,7 @@ export function MediaGrid({
       return (
         <div className="flex h-full w-full flex-col items-center justify-center gap-1.5 bg-amber-500/10 p-2 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400">
           <Archive className="size-8" />
-          <span className="font-mono text-[10px] font-medium tracking-wider uppercase">
+          <span className="font-mono text-xs font-medium tracking-wider uppercase">
             {item.name.split('.').pop() || 'ARCHIVE'}
           </span>
         </div>
@@ -111,7 +111,7 @@ export function MediaGrid({
     return (
       <div className="bg-muted text-muted-foreground flex h-full w-full flex-col items-center justify-center gap-1">
         <File className="size-8" />
-        <span className="font-mono text-[10px]">FILE</span>
+        <span className="font-mono text-xs">FILE</span>
       </div>
     )
   }
@@ -157,7 +157,7 @@ export function MediaGrid({
               </div>
 
               {/* 格式微徽标 */}
-              <div className="bg-background/80 text-foreground/80 border-border/40 absolute top-2 right-2 rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold shadow-xs backdrop-blur-xs">
+              <div className="bg-background/80 text-foreground/80 border-border/40 absolute top-2 right-2 rounded border px-1.5 py-0.5 font-mono text-xs font-semibold shadow-xs backdrop-blur-xs">
                 {ext}
               </div>
 
@@ -208,7 +208,7 @@ export function MediaGrid({
               >
                 {item.name}
               </div>
-              <div className="text-muted-foreground flex items-center justify-between pt-1 font-mono text-[11px]">
+              <div className="text-muted-foreground flex items-center justify-between pt-1 font-mono text-xs">
                 <span>{formatSize(item.size)}</span>
                 <span className="max-w-[70px] truncate">
                   {item.folder || t('common.labels.default')}

@@ -130,7 +130,7 @@ export function MediaTable({
               <div className="text-foreground group-hover:text-primary max-w-[240px] truncate font-medium transition-colors">
                 {item.name}
               </div>
-              <div className="text-muted-foreground font-mono text-[11px]">
+              <div className="text-muted-foreground font-mono text-xs">
                 {item.mimeType}
               </div>
             </div>

@@ -46,7 +46,7 @@ export function StatsMetricCard() {
       >
         <CardTitle className="flex items-center justify-between text-xs font-semibold">
           <span>{t('resources.site.widgets.cards.stats.title')}</span>
-          <span className="text-muted-foreground font-mono text-[10px] font-normal">
+          <span className="text-muted-foreground font-mono text-xs font-normal">
             Realtime
           </span>
         </CardTitle>
