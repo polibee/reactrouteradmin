@@ -1,6 +1,5 @@
 import {
   type ColumnDef,
-  type RowData,
   type VisibilityState,
   flexRender,
   getCoreRowModel,
@@ -23,12 +22,6 @@ import {
   type PaginationProps,
 } from './data-table-pagination'
 import { DataTableToolbar, type FacetedCountProps } from './data-table-toolbar'
-
-declare module '@tanstack/react-table' {
-  interface ColumnMeta<TData extends RowData, TValue> {
-    className: string
-  }
-}
 
 interface DataTableProps {
   columns: ColumnDef<User>[]
