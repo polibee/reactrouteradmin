@@ -1,11 +1,6 @@
-export * from './actions'
-export * from './feedback'
-export * from './form'
-export * from './overlay'
-export * from './page'
-export * from './primitives'
-export * from './table'
-export * from './themes'
+// 过渡桥接层：文件已物理迁移至 app/components/admin/（P4）。
+// 消费方将在后续阶段统一翻路径；本 barrel 与下方 @deprecated 别名将在 P20 删除。
+export * from '~/components/admin'
 
 // ============================================================================
 // 渐进式企业级通用语义别名 (Universal Semantic Component Aliases)
@@ -18,66 +13,66 @@ export * from './themes'
 
 // 数据表格类
 /** @deprecated 请使用 AdminBulkActions */
-export { AdminBulkActions as BulkActionsBar } from './table/AdminBulkActions'
+export { AdminBulkActions as BulkActionsBar } from '~/components/admin/table/admin-bulk-actions'
 /** @deprecated 请使用 AdminTable */
 export {
   AdminTable as DataTable,
   type AdminTableProps as DataTableProps,
-} from './table/AdminTable'
+} from '~/components/admin/table/admin-table'
 /** @deprecated 请使用 AdminTablePagination */
-export { AdminTablePagination as DataTablePagination } from './table/AdminTablePagination'
+export { AdminTablePagination as DataTablePagination } from '~/components/admin/table/admin-table-pagination'
 /** @deprecated 请使用 AdminTableToolbar */
-export { AdminTableToolbar as DataTableToolbar } from './table/AdminTableToolbar'
+export { AdminTableToolbar as DataTableToolbar } from '~/components/admin/table/admin-table-toolbar'
 
 // 表单引擎类
 /** @deprecated 请使用 AdminForm */
 export {
   AdminForm as SmartForm,
   type AdminFormProps as SmartFormProps,
-} from './form/AdminForm'
+} from '~/components/admin/form/admin-form'
 export {
   MarkdownField,
   type MarkdownFieldProps,
-} from './form/fields/MarkdownField'
+} from '~/components/admin/form/fields/markdown-field'
 export {
   RichTextField,
   type RichTextFieldProps,
-} from './form/fields/RichTextField'
+} from '~/components/admin/form/fields/rich-text-field'
 
 // 页面骨架类
 /** @deprecated 请使用 AdminPage */
 export {
   AdminPage as DashboardPage,
   type AdminPageProps as DashboardPageProps,
-} from './page/AdminPage'
+} from '~/components/admin/page/admin-page'
 /** @deprecated 请使用 AdminPageActions */
-export { AdminPageActions as DashboardPageActions } from './page/AdminPageActions'
+export { AdminPageActions as DashboardPageActions } from '~/components/admin/page/admin-page-actions'
 /** @deprecated 请使用 AdminPageContent */
-export { AdminPageContent as DashboardPageContent } from './page/AdminPageContent'
+export { AdminPageContent as DashboardPageContent } from '~/components/admin/page/admin-page-content'
 /** @deprecated 请使用 AdminPageHeader */
-export { AdminPageHeader as DashboardPageHeader } from './page/AdminPageHeader'
+export { AdminPageHeader as DashboardPageHeader } from '~/components/admin/page/admin-page-header'
 
 // 按钮与卡片
 /** @deprecated 请使用 AdminButton */
 export {
   AdminButton as ActionButton,
   type AdminButtonProps as ActionButtonProps,
-} from './primitives/AdminButton'
+} from '~/components/admin/primitives/admin-button'
 /** @deprecated 请使用 AdminCard */
 export {
   AdminCard as DashboardCard,
   AdminCard as PageCard,
-} from './primitives/AdminCard'
+} from '~/components/admin/primitives/admin-card'
 
 // 交互浮层与反馈类
 /** @deprecated 请使用 AdminAlert */
-export { AdminAlert as FeedbackAlert } from './feedback/AdminAlert'
+export { AdminAlert as FeedbackAlert } from '~/components/admin/feedback/admin-alert'
 /** @deprecated 请使用 AdminEmpty */
-export { AdminEmpty as EmptyState } from './feedback/AdminEmpty'
+export { AdminEmpty as EmptyState } from '~/components/admin/feedback/admin-empty'
 /** @deprecated 请使用 AdminLoading */
-export { AdminLoading as LoadingState } from './feedback/AdminLoading'
+export { AdminLoading as LoadingState } from '~/components/admin/feedback/admin-loading'
 /** @deprecated 请使用 AdminConfirmDialog */
 export {
   AdminConfirmDialog as ConfirmDialog,
   type AdminConfirmDialogProps as ConfirmDialogProps,
-} from './overlay/AdminConfirmDialog'
+} from '~/components/admin/overlay/admin-confirm-dialog'
