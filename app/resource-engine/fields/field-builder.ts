@@ -121,3 +121,14 @@ export const field = {
   date: (name: string) => new FieldBuilder('date', name),
   file: (name: string) => new FieldBuilder('file', name),
 }
+
+export function buildFieldDefaultValues(
+  fields: ResourceFieldConfig[],
+): Record<string, unknown> {
+  const values: Record<string, unknown> = {}
+  for (const config of fields) {
+    values[config.name] =
+      config.kind === 'switch' || config.kind === 'checkbox' ? false : ''
+  }
+  return values
+}

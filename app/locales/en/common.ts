@@ -40,6 +40,25 @@ export const common = {
     loading: 'Loading...',
     loadingTable: 'Loading table data...',
   },
+  resourceEngine: {
+    notFoundTitle: 'Page not found',
+    notFoundDescription:
+      'This admin page does not exist. Check the URL or go back to the console.',
+    forbiddenTitle: 'No access permission',
+    forbiddenDescription:
+      'You do not have permission to view this resource. Contact your administrator for access.',
+    backToConsole: 'Back to console',
+    noDataSourceTitle: 'No data source configured',
+    noDataSourceDescription:
+      'This resource does not define a data adapter, so there is nothing to load yet.',
+    noColumnsTitle: 'No columns configured',
+    noColumnsDescription:
+      'Define columns for this resource to render its list view.',
+    noFieldsTitle: 'No form fields configured',
+    noFieldsDescription: 'Define fields for this resource to render its form.',
+    recordMissingDescription: 'The requested record no longer exists.',
+    detailTitle: 'Details',
+  },
   confirm: {
     defaultTitle: 'Confirm this action?',
     defaultDescription:
