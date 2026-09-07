@@ -16,6 +16,8 @@ export interface SitePage {
   views: number
   createdAt: string
   updatedAt: string
+  // Per-locale display-title overrides; falls back to `title` for missing locales
+  nameTranslations?: Record<string, string>
 }
 
 export const sitePageFormSchema = z.object({
@@ -33,6 +35,7 @@ export const sitePageFormSchema = z.object({
   seoDescription: z.string().optional(),
   seoKeywords: z.string().optional(),
   status: z.enum(['published', 'draft']).default('published'),
+  nameTranslations: z.record(z.string(), z.string()).optional(),
 })
 
 export type SitePageFormValues = z.infer<typeof sitePageFormSchema>
@@ -49,6 +52,7 @@ export interface SiteNavGroup {
   sort: number // 排序权重
   enabled: boolean // 启用状态
   description?: string // 分组描述
+  nameTranslations?: Record<string, string> // 各语言显示名覆盖，缺省回落 name
 }
 
 export const siteNavGroupSchema = z.object({
@@ -57,6 +61,7 @@ export const siteNavGroupSchema = z.object({
   sort: z.coerce.number().default(10),
   enabled: z.boolean().default(true),
   description: z.string().optional(),
+  nameTranslations: z.record(z.string(), z.string()).optional(),
 })
 
 export type SiteNavGroupFormValues = z.infer<typeof siteNavGroupSchema>
@@ -74,6 +79,7 @@ export interface SiteNavItem {
   parentId?: string // 父级菜单 ID (支持多级子菜单)
   description?: string // 描述/副标题 (富文本下拉菜单展现)
   children?: SiteNavItem[] // 树状展示时的子菜单列表
+  nameTranslations?: Record<string, string> // 各语言显示名覆盖，缺省回落 title
 }
 
 export const siteNavItemSchema = z.object({
@@ -89,6 +95,7 @@ export const siteNavItemSchema = z.object({
   group: z.string().optional(),
   parentId: z.string().optional(),
   description: z.string().optional(),
+  nameTranslations: z.record(z.string(), z.string()).optional(),
 })
 
 export type SiteNavItemFormValues = z.infer<typeof siteNavItemSchema>

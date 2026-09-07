@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
@@ -10,6 +10,7 @@ import {
   TextField,
   TextareaField,
 } from '~/components/admin'
+import { NameTranslationsInput } from '../../components/name-translations-input'
 import {
   sitePageFormSchema,
   type SitePage,
@@ -43,6 +44,7 @@ export function PageForm({
       seoDescription: initialData?.seoDescription || '',
       seoKeywords: initialData?.seoKeywords || '',
       status: initialData?.status || 'published',
+      nameTranslations: initialData?.nameTranslations || {},
     },
   })
 
@@ -132,6 +134,17 @@ export function PageForm({
           rows={3}
         />
       </div>
+
+      <Controller
+        control={form.control}
+        name="nameTranslations"
+        render={({ field }) => (
+          <NameTranslationsInput
+            value={field.value}
+            onChange={field.onChange}
+          />
+        )}
+      />
     </AdminForm>
   )
 }

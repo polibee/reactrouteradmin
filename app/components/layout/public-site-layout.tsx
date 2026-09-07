@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
+import { localizedName } from '~/resources/site/localize'
 import {
   BottomMarqueeNotice,
   OverlayNotices,
@@ -23,7 +24,7 @@ export interface PublicSiteLayoutProps {
 }
 
 export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [headerNav, setHeaderNav] = useState<SiteNavItem[]>([])
   const [footerNav, setFooterNav] = useState<SiteNavItem[]>([])
   const [footerGroups, setFooterGroups] = useState<SiteNavGroup[]>([])
@@ -49,7 +50,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
   // 动态组装页脚多列分类导航
   const footerSections = footerGroups.map((group) => ({
     id: group.id,
-    title: group.name,
+    title: localizedName(group, i18n.language),
     items: footerNav
       .filter((item) =>
         item.groupId ? item.groupId === group.id : item.group === group.name,
@@ -102,7 +103,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
                           type="button"
                           className="text-muted-foreground hover:text-foreground hover:bg-muted/50 group flex cursor-pointer items-center gap-1 rounded-md px-3 py-1.5 text-sm transition-colors focus:outline-hidden"
                         >
-                          <span>{item.title}</span>
+                          <span>{localizedName(item, i18n.language)}</span>
                           <ChevronDown className="size-3.5 opacity-60 transition-transform duration-200 group-data-[state=open]:rotate-180" />
                         </button>
                       </DropdownMenuTrigger>
@@ -128,7 +129,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
                             >
                               <div className="flex w-full items-center justify-between">
                                 <span className="text-foreground text-xs font-medium">
-                                  {child.title}
+                                  {localizedName(child, i18n.language)}
                                 </span>
                                 {child.target === '_blank' && (
                                   <ExternalLink className="text-muted-foreground size-2.5" />
@@ -155,7 +156,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
                     rel={item.target === '_blank' ? 'noreferrer' : undefined}
                     className="text-muted-foreground hover:text-foreground hover:bg-muted/50 inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-sm transition-colors"
                   >
-                    {item.title}
+                    {localizedName(item, i18n.language)}
                     {item.target === '_blank' && (
                       <ExternalLink className="size-3" />
                     )}
@@ -245,7 +246,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
                           }
                           className="hover:text-primary inline-flex items-center gap-1.5 transition-colors"
                         >
-                          <span>{item.title}</span>
+                          <span>{localizedName(item, i18n.language)}</span>
                           {item.target === '_blank' && (
                             <ExternalLink className="size-2.5 opacity-60" />
                           )}

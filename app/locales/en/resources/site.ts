@@ -14,6 +14,10 @@ export const siteResources = {
     updateFailed: 'Failed to update',
     statusUpdateFailed: 'Failed to update status',
   },
+  nameTranslations: {
+    title: 'Localized names (used when this language is active)',
+    inputLabel: 'Name ({{locale}})',
+  },
   validation: {
     pageTitleMin: 'Page title must be at least {{count}} characters',
     pageSlugMin: 'Page slug must be at least {{count}} characters',

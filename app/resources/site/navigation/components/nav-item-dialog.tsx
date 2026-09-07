@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from '~/components/ui/select'
 import { Switch } from '~/components/ui/switch'
+import { NameTranslationsInput } from '../../components/name-translations-input'
 import type {
   NavLocation,
   SiteNavGroup,
@@ -63,6 +64,7 @@ export function NavItemDialog({
   const [description, setDescription] = useState('')
   const [sort, setSort] = useState(10)
   const [enabled, setEnabled] = useState(true)
+  const [translations, setTranslations] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
 
   // Filter groups for current location
@@ -88,6 +90,7 @@ export function NavItemDialog({
       setDescription(initialData.description || '')
       setSort(initialData.sort)
       setEnabled(initialData.enabled)
+      setTranslations(initialData.nameTranslations ?? {})
     } else {
       setTitle('')
       setUrl('')
@@ -98,6 +101,7 @@ export function NavItemDialog({
       setDescription('')
       setSort(10)
       setEnabled(true)
+      setTranslations({})
     }
   }, [initialData, defaultLocation, defaultParentId, defaultGroupId, open])
 
@@ -120,6 +124,8 @@ export function NavItemDialog({
         description: description.trim() || undefined,
         sort: Number(sort),
         enabled,
+        nameTranslations:
+          Object.keys(translations).length > 0 ? translations : undefined,
       })
       onOpenChange(false)
     } finally {
@@ -313,6 +319,11 @@ export function NavItemDialog({
               />
             </div>
           </div>
+
+          <NameTranslationsInput
+            value={translations}
+            onChange={setTranslations}
+          />
 
           {/* 4. 跳转 URL 与快捷填充 */}
           <div className="space-y-1.5">

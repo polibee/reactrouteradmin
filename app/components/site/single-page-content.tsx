@@ -6,6 +6,7 @@ import { PublicSiteLayout } from '~/components/layout/public-site-layout'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
+import { localizedName } from '~/resources/site/localize'
 import { siteService } from '~/resources/site/service'
 import type { SitePage, SiteWidgetGlobalSettings } from '~/resources/site/types'
 import { WidgetRenderer } from '~/resources/site/widgets/components/widget-renderer'
@@ -15,7 +16,7 @@ export interface SinglePageViewProps {
 }
 
 export function SinglePageView({ slug }: SinglePageViewProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [page, setPage] = useState<SitePage | null>(null)
   const [loading, setLoading] = useState(true)
   const [globalSettings, setGlobalSettings] =
@@ -113,7 +114,9 @@ export function SinglePageView({ slug }: SinglePageViewProps) {
             {t('pages.singlePage.breadcrumbHome')}
           </Link>
           <span>/</span>
-          <span className="text-foreground font-medium">{page.title}</span>
+          <span className="text-foreground font-medium">
+            {localizedName(page, i18n.language)}
+          </span>
         </div>
 
         {/* 主区 2 栏式布局：左侧单页正文 + 右侧固定悬浮侧边栏 (Sticky Sidebar) */}
@@ -125,7 +128,7 @@ export function SinglePageView({ slug }: SinglePageViewProps) {
                 <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
                   <div>
                     <CardTitle className="text-foreground text-xl font-bold tracking-tight sm:text-2xl">
-                      {page.title}
+                      {localizedName(page, i18n.language)}
                     </CardTitle>
                     <div className="text-muted-foreground mt-2 flex flex-wrap items-center gap-3 font-mono text-xs">
                       <span className="flex items-center gap-1">

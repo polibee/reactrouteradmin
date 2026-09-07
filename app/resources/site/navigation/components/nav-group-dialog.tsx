@@ -21,6 +21,7 @@ import {
 } from '~/components/ui/select'
 import { Switch } from '~/components/ui/switch'
 import { Textarea } from '~/components/ui/textarea'
+import { NameTranslationsInput } from '../../components/name-translations-input'
 import type {
   NavLocation,
   SiteNavGroup,
@@ -49,6 +50,7 @@ export function NavGroupDialog({
   const [sort, setSort] = useState(10)
   const [enabled, setEnabled] = useState(true)
   const [description, setDescription] = useState('')
+  const [translations, setTranslations] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: sync state when the edited group changes
@@ -59,12 +61,14 @@ export function NavGroupDialog({
       setSort(group.sort)
       setEnabled(group.enabled)
       setDescription(group.description || '')
+      setTranslations(group.nameTranslations ?? {})
     } else {
       setName('')
       setLocation(defaultLocation)
       setSort(10)
       setEnabled(true)
       setDescription('')
+      setTranslations({})
     }
   }, [group, defaultLocation, open])
 
@@ -81,6 +85,8 @@ export function NavGroupDialog({
         sort: Number(sort),
         enabled,
         description: description.trim() || undefined,
+        nameTranslations:
+          Object.keys(translations).length > 0 ? translations : undefined,
       })
       onOpenChange(false)
     } finally {
@@ -175,6 +181,11 @@ export function NavGroupDialog({
               className="text-xs"
             />
           </div>
+
+          <NameTranslationsInput
+            value={translations}
+            onChange={setTranslations}
+          />
 
           <div className="flex items-center justify-between border-t pt-2">
             <div className="flex items-center space-x-2">
