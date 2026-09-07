@@ -1,0 +1,69 @@
+import { Outlet, useMatches } from 'react-router'
+import { AppSidebar } from '~/components/layout/app-sidebar'
+import { Header } from '~/components/layout/header'
+import { Main } from '~/components/layout/main'
+import { ProfileDropdown } from '~/components/layout/profile-dropdown'
+import { Search } from '~/components/layout/search'
+import { ThemeSwitch } from '~/components/layout/theme-switch'
+import { SidebarProvider } from '~/components/ui/sidebar'
+import { SearchProvider } from '~/context/search-context'
+import { useBreadcrumbs } from '~/hooks/use-breadcrumbs'
+import { cn } from '~/lib/utils'
+import { AuthProvider } from '~/admin/core/auth/auth-context'
+import { PanelProvider } from '~/admin/core/panel/panel-provider'
+import { ThemePresetProvider } from '~/admin/ui/themes/theme-context'
+import { PresetSelector } from '~/admin/ui/themes/preset-selector'
+
+export interface RouteHandle {
+  breadcrumb?: (data?: unknown) => { label: string; to?: string }
+  headerFixed?: boolean
+  mainFixed?: boolean
+}
+
+export default function DashboardLayout() {
+  const { Breadcrumbs } = useBreadcrumbs()
+  const matches = useMatches()
+  const handle = matches.reduce<Record<string, unknown>>((acc, m) => {
+    if (m.handle && typeof m.handle === 'object') Object.assign(acc, m.handle)
+    return acc
+  }, {}) as RouteHandle
+
+  return (
+    <AuthProvider>
+      <PanelProvider>
+        <ThemePresetProvider>
+          <SearchProvider>
+            <SidebarProvider>
+              <AppSidebar />
+              <div
+                id="content"
+                className={cn(
+                  'ml-auto w-full max-w-full',
+                  'peer-data-[state=collapsed]:w-[calc(100%-var(--sidebar-width-icon)-1rem)]',
+                  'peer-data-[state=expanded]:w-[calc(100%-var(--sidebar-width))]',
+                  'transition-[width] duration-200 ease-linear',
+                  'flex h-svh flex-col',
+                  'group-data-[scroll-locked=1]/body:h-full',
+                  'has-[main.fixed-main]:group-data-[scroll-locked=1]/body:h-svh',
+                )}
+              >
+                <Header fixed={handle.headerFixed}>
+                  <Search />
+                  <div className="ml-auto flex items-center gap-2 sm:gap-4">
+                    <PresetSelector />
+                    <ThemeSwitch />
+                    <ProfileDropdown />
+                  </div>
+                </Header>
+                <Breadcrumbs />
+                <Main fixed={handle.mainFixed}>
+                  <Outlet />
+                </Main>
+              </div>
+            </SidebarProvider>
+          </SearchProvider>
+        </ThemePresetProvider>
+      </PanelProvider>
+    </AuthProvider>
+  )
+}
