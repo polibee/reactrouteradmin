@@ -1,5 +1,3 @@
-export * from './components/user-form'
-export * from './components/user-table'
 export * from './repository'
 export * from './resource'
 export * from './service'

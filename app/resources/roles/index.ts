@@ -1,6 +1,3 @@
-export * from './components/permission-matrix'
-export * from './components/role-form'
-export * from './components/role-table'
 export * from './permissions'
 export * from './repository'
 export * from './resource'
