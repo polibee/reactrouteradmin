@@ -1,6 +1,7 @@
-import { resourceRegistry } from '~/admin/core/resource/registry'
 import type { AuthUser } from '~/core/auth/auth.types'
+import { i18n } from '~/core/i18n'
 import { hasPermission } from '~/core/permissions/permission.service'
+import { resourceRegistry } from '~/core/registry/resource.registry'
 import { navigationRegistry } from './navigation-registry'
 import type { NavGroup, NavItem } from './navigation.types'
 
@@ -36,7 +37,8 @@ export function buildNavigation(user: AuthUser | null): NavGroup[] {
       continue
     }
 
-    const groupTitle = resource.navigation?.group || 'Resources'
+    const groupTitle =
+      resource.navigation?.group || i18n.t('navigation.groups.resources')
     const groupSort = resource.navigation?.sort ?? 10
     const group = groupMap.get(groupTitle) || { sort: groupSort, items: [] }
 

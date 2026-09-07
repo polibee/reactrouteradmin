@@ -1,5 +1,5 @@
 import { navigationRegistry } from '~/core/navigation/navigation-registry'
-import { resourceRegistry } from '../resource/registry'
+import { resourceRegistry } from '~/core/registry/resource.registry'
 import type { AdminModule } from './types'
 
 export class ModuleRegistry {

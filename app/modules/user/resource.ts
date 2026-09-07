@@ -1,6 +1,6 @@
 import { Users } from 'lucide-react'
 import { i18n } from '~/core/i18n'
-import { defineResource } from '../../admin/core/resource/resource'
+import { defineResource } from '~/resource-engine/resource'
 import type { User } from './types'
 
 export const UserResource = defineResource<User>({

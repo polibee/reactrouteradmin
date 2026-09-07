@@ -1,4 +1,4 @@
-import type { AdminResource, ResourceConfig } from './types'
+import type { AdminResource, ResourceConfig } from './resource.types'
 
 export function defineResource<T = unknown>(
   config: ResourceConfig<T>,
@@ -6,7 +6,6 @@ export function defineResource<T = unknown>(
   const defaultPath = `/admin/${config.name}`
   return {
     ...config,
-    pluralLabel: config.pluralLabel || `${config.label} list`,
     routes: {
       path: defaultPath,
       listPath: defaultPath,
@@ -15,11 +14,8 @@ export function defineResource<T = unknown>(
       viewPath: `${defaultPath}/:id`,
       ...config.routes,
     },
-    navigation: {
-      group: 'Default group',
-      sort: 10,
-      icon: config.icon,
-      ...config.navigation,
-    },
+    ...(config.navigation
+      ? { navigation: { sort: 10, ...config.navigation } }
+      : {}),
   }
 }

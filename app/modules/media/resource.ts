@@ -1,6 +1,6 @@
 import { Image as ImageIcon } from 'lucide-react'
 import { i18n } from '~/core/i18n'
-import { defineResource } from '../../admin/core/resource/resource'
+import { defineResource } from '~/resource-engine/resource'
 import type { MediaItem } from './types'
 
 export const MediaResource = defineResource<MediaItem>({

@@ -1,6 +1,6 @@
 import { Compass, FileText, LayoutGrid, Link2, Megaphone } from 'lucide-react'
 import { i18n } from '~/core/i18n'
-import { defineResource } from '../../admin/core/resource/resource'
+import { defineResource } from '~/resource-engine/resource'
 import type {
   FriendLink,
   SiteAnnouncement,
