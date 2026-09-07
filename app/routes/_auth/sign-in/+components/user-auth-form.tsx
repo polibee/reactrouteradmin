@@ -29,10 +29,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     <Form
       method="POST"
       {...form.props}
-      className={cn('grid gap-2', className)}
+      className={cn('grid gap-6', className)}
       {...props}
     >
-      <div className="space-y-1">
+      <div className="space-y-2">
         <Label htmlFor={fields.email.id}>Email</Label>
         <Input
           {...fields.email.inputProps}
@@ -47,7 +47,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         </div>
       </div>
 
-      <div className="space-y-1">
+      <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Label htmlFor={fields.password.id}>Password</Label>
           <Link
@@ -73,9 +73,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         </Alert>
       )}
 
-      <Button className="mt-2" disabled={isLoading}>
-        Login
-      </Button>
+      <Button disabled={isLoading}>Login</Button>
 
       <div className="relative my-2">
         <div className="absolute inset-0 flex items-center">

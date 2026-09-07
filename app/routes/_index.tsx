@@ -72,7 +72,7 @@ export default function HomePage() {
 
   return (
     <PublicSiteLayout>
-      <div className="space-y-6">
+      <div className="space-y-10">
         {/* 1. 顶部通栏广告位 (Header Banner Ad) */}
         {headerAd && (
           <div className="from-primary/10 via-primary/5 to-accent flex flex-col justify-between gap-3 rounded-lg border bg-linear-to-r p-3.5 shadow-xs sm:flex-row sm:items-center">
@@ -101,20 +101,20 @@ export default function HomePage() {
         )}
 
         {/* 2. 主区 2 栏式布局：左侧核心内容 + 右侧吸顶固定小工具侧边栏 (Sticky Sidebar) */}
-        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-3">
           {/* 左侧 2 列：主门户内容 */}
-          <div className="space-y-6 lg:col-span-2">
+          <div className="space-y-8 lg:col-span-2">
             {/* Hero Card */}
             <Card className="overflow-hidden border shadow-xs">
-              <div className="from-primary/15 via-background to-background space-y-4 bg-linear-to-br p-6 sm:p-8">
+              <div className="from-primary/15 via-background to-background space-y-6 bg-linear-to-br p-6 sm:p-10">
                 <div className="bg-primary/15 text-primary inline-flex items-center gap-2 rounded-full px-2.5 py-1 text-xs font-semibold">
                   <Sparkles className="size-3.5" />
                   {t('pages.home.hero.badge')}
                 </div>
-                <h1 className="text-foreground text-2xl font-extrabold tracking-tight sm:text-3xl">
+                <h1 className="text-foreground text-4xl font-semibold tracking-tight sm:text-5xl">
                   {t('pages.home.hero.title')}
                 </h1>
-                <p className="text-muted-foreground max-w-xl text-sm leading-relaxed">
+                <p className="text-muted-foreground max-w-xl text-base leading-7">
                   {t('pages.home.hero.descriptionPrefix')}{' '}
                   <strong>{t('pages.home.hero.featurePages')}</strong>
                   {t('pages.home.hero.listSeparator')}

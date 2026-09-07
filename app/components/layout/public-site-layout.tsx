@@ -77,7 +77,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
       {/* 1. 前台吸顶 Header：内置顶部运营通告条 + 导航栏，垂直流式排列，自然撑开文档流，绝对防遮挡 */}
       <header className="bg-background/90 sticky top-0 z-40 flex w-full flex-col border-b shadow-xs backdrop-blur-md transition-all">
         <TopBannerNotice />
-        <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
+        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-6">
             <Link
               to="/"
@@ -181,13 +181,13 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
       <OverlayNotices />
 
       {/* 3. 主页面内容 (由吸顶 Header 自然推开，pt-6 优雅呼吸感，防一切数据遮盖) */}
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 pt-6 pb-16 sm:px-6 sm:pt-8">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 pt-8 pb-16 sm:px-6 lg:px-8 lg:pt-10">
         {children}
       </main>
 
       {/* 4. 经典现代化全宽页尾 (五列栅格布局，分类名字后台自由增删改) */}
       <footer className="bg-muted/20 text-foreground mt-auto border-t">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
           <div className="mb-10 grid grid-cols-2 gap-8 md:grid-cols-5 lg:gap-12">
             {/* 品牌定位与系统简介（占 2 列） */}
             <div className="col-span-2 space-y-4">
