@@ -1,5 +1,12 @@
 export const permissionsResources = {
   title: 'Permissions',
+  resource: {
+    label: 'Permissions',
+    pluralLabel: 'Permission list',
+    codeLabel: 'Permission code',
+    nameLabel: 'Permission',
+    groupLabel: 'Module group',
+  },
   groups: {
     users: 'User Management',
     usersDescription:

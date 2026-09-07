@@ -1,5 +1,6 @@
 import { resourceRegistry } from '~/core/registry/resource.registry'
 import { MediaResource } from './media/resource'
+import { PermissionsResource } from './permissions/resource'
 import { RoleResource } from './roles/resource'
 import {
   SiteLinksResource,
@@ -18,6 +19,7 @@ export function registerAllResources(): void {
 
   resourceRegistry.register(UserResource)
   resourceRegistry.register(RoleResource)
+  resourceRegistry.register(PermissionsResource)
   resourceRegistry.register(MediaResource)
   resourceRegistry.register(SitePagesResource)
   resourceRegistry.register(SiteNavResource)
