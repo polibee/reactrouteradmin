@@ -1,7 +1,7 @@
 // biome-ignore-all lint/suspicious/useAwait: async signatures reserved for a future HTTP data source
-import { i18n } from '~/core/i18n'
 import { mediaRepository } from './repository'
 import type {
+  MediaCategoryDef,
   MediaDimensions,
   MediaFilterParams,
   MediaItem,
@@ -46,6 +46,11 @@ export class MediaService {
       url = `/uploads/${file.name}`
     }
 
+    if (folder) {
+      // Uploading into a free-typed folder name registers it as a category
+      await mediaRepository.saveCategory({ name: folder })
+    }
+
     const payload: Omit<MediaItem, 'id' | 'createdAt' | 'updatedAt'> = {
       name: file.name,
       originalName: file.name,
@@ -55,7 +60,7 @@ export class MediaService {
       url,
       thumbnailUrl: type === 'image' ? url : undefined,
       dimensions,
-      folder: folder || i18n.t('resources.media.folders.ungrouped'),
+      folder: folder || undefined,
       tags: tags || [],
     }
 
@@ -72,6 +77,22 @@ export class MediaService {
 
   async deleteBatch(ids: string[]): Promise<number> {
     return mediaRepository.deleteBatch(ids)
+  }
+
+  async getCategories(): Promise<MediaCategoryDef[]> {
+    return mediaRepository.getCategories()
+  }
+
+  async saveCategory(input: {
+    id?: string
+    name: string
+    sort?: number
+  }): Promise<MediaCategoryDef> {
+    return mediaRepository.saveCategory(input)
+  }
+
+  async deleteCategory(id: string): Promise<boolean> {
+    return mediaRepository.deleteCategory(id)
   }
 
   async getStorageStats(): Promise<MediaStorageStats> {

@@ -1,5 +1,6 @@
 // biome-ignore-all lint/suspicious/useAwait: async signatures reserved for a future HTTP data source
 import type {
+  MediaCategoryDef,
   MediaFilterParams,
   MediaItem,
   MediaStorageStats,
@@ -7,6 +8,73 @@ import type {
 } from './types'
 
 const STORAGE_KEY_MEDIA = 'site_media_items_v1'
+const STORAGE_KEY_CATEGORIES = 'site_media_categories_v1'
+const STORAGE_KEY_META = 'site_media_meta_v1'
+
+const SEED_MEDIA_CATEGORIES: MediaCategoryDef[] = [
+  {
+    id: 'mcat-1',
+    name: 'Site Images',
+    sort: 10,
+    createdAt: '2026-03-01T09:00:00.000Z',
+    updatedAt: '2026-03-01T09:00:00.000Z',
+  },
+  {
+    id: 'mcat-2',
+    name: 'System Architecture',
+    sort: 20,
+    createdAt: '2026-03-01T09:00:00.000Z',
+    updatedAt: '2026-03-01T09:00:00.000Z',
+  },
+  {
+    id: 'mcat-3',
+    name: 'Development Guidelines',
+    sort: 30,
+    createdAt: '2026-03-01T09:00:00.000Z',
+    updatedAt: '2026-03-01T09:00:00.000Z',
+  },
+  {
+    id: 'mcat-4',
+    name: 'Business Reports',
+    sort: 40,
+    createdAt: '2026-03-01T09:00:00.000Z',
+    updatedAt: '2026-03-01T09:00:00.000Z',
+  },
+  {
+    id: 'mcat-5',
+    name: 'Team News',
+    sort: 50,
+    createdAt: '2026-03-01T09:00:00.000Z',
+    updatedAt: '2026-03-01T09:00:00.000Z',
+  },
+  {
+    id: 'mcat-6',
+    name: 'Compliance',
+    sort: 60,
+    createdAt: '2026-03-01T09:00:00.000Z',
+    updatedAt: '2026-03-01T09:00:00.000Z',
+  },
+  {
+    id: 'mcat-7',
+    name: 'Promo Videos',
+    sort: 70,
+    createdAt: '2026-03-01T09:00:00.000Z',
+    updatedAt: '2026-03-01T09:00:00.000Z',
+  },
+]
+
+// One-shot migration for localStorage data written before categories became
+// manageable; runs once guarded by the META flag, then never again.
+const LEGACY_FOLDER_MAP: Record<string, string> = {
+  站点配图: 'Site Images',
+  系统架构: 'System Architecture',
+  开发规范: 'Development Guidelines',
+  业务报表: 'Business Reports',
+  团队动态: 'Team News',
+  合规文件: 'Compliance',
+  宣传视频: 'Promo Videos',
+  未分组: '',
+}
 
 export const SEED_MEDIA: MediaItem[] = [
   {
@@ -20,7 +88,7 @@ export const SEED_MEDIA: MediaItem[] = [
     thumbnailUrl:
       'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&q=80',
     dimensions: { width: 1920, height: 1080 },
-    folder: '系统架构',
+    folder: 'System Architecture',
     tags: ['架构图', '拓扑', '后台'],
     createdAt: '2026-03-01T10:00:00.000Z',
     updatedAt: '2026-03-01T10:00:00.000Z',
@@ -36,7 +104,7 @@ export const SEED_MEDIA: MediaItem[] = [
     thumbnailUrl:
       'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80',
     dimensions: { width: 2400, height: 1200 },
-    folder: '站点配图',
+    folder: 'Site Images',
     tags: ['Banner', '首页', '现代化'],
     createdAt: '2026-03-02T11:20:00.000Z',
     updatedAt: '2026-03-02T11:20:00.000Z',
@@ -52,7 +120,7 @@ export const SEED_MEDIA: MediaItem[] = [
     thumbnailUrl:
       'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=400&q=80',
     dimensions: { width: 2048, height: 1365 },
-    folder: '团队动态',
+    folder: 'Team News',
     tags: ['团队', '研发', '办公'],
     createdAt: '2026-03-02T14:30:00.000Z',
     updatedAt: '2026-03-02T14:30:00.000Z',
@@ -68,7 +136,7 @@ export const SEED_MEDIA: MediaItem[] = [
     thumbnailUrl:
       'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80',
     dimensions: { width: 1920, height: 1200 },
-    folder: '站点配图',
+    folder: 'Site Images',
     tags: ['控制台', '看板', 'UI'],
     createdAt: '2026-03-03T09:15:00.000Z',
     updatedAt: '2026-03-03T09:15:00.000Z',
@@ -81,7 +149,7 @@ export const SEED_MEDIA: MediaItem[] = [
     mimeType: 'application/pdf',
     size: 4520000, // ~4.5 MB
     url: '/docs/developer-guide.pdf',
-    folder: '开发规范',
+    folder: 'Development Guidelines',
     tags: ['PDF', '技术手册', '开发指南'],
     createdAt: '2026-03-03T16:45:00.000Z',
     updatedAt: '2026-03-03T16:45:00.000Z',
@@ -95,7 +163,7 @@ export const SEED_MEDIA: MediaItem[] = [
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     size: 780000, // ~780 KB
     url: '/docs/q1-report.xlsx',
-    folder: '业务报表',
+    folder: 'Business Reports',
     tags: ['Excel', '财务', 'Q1报告'],
     createdAt: '2026-03-04T08:10:00.000Z',
     updatedAt: '2026-03-04T08:10:00.000Z',
@@ -109,7 +177,7 @@ export const SEED_MEDIA: MediaItem[] = [
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     size: 320000, // ~320 KB
     url: '/docs/privacy-whitepaper.docx',
-    folder: '合规文件',
+    folder: 'Compliance',
     tags: ['Word', '隐私政策', '法务'],
     createdAt: '2026-03-04T12:00:00.000Z',
     updatedAt: '2026-03-04T12:00:00.000Z',
@@ -122,7 +190,7 @@ export const SEED_MEDIA: MediaItem[] = [
     mimeType: 'application/zip',
     size: 12500000, // ~12.5 MB
     url: '/assets/brand-pack.zip',
-    folder: '站点配图',
+    folder: 'Site Images',
     tags: ['ZIP', '品牌素材', 'SVG图标'],
     createdAt: '2026-03-05T10:30:00.000Z',
     updatedAt: '2026-03-05T10:30:00.000Z',
@@ -135,7 +203,7 @@ export const SEED_MEDIA: MediaItem[] = [
     mimeType: 'video/mp4',
     size: 18600000, // ~18.6 MB
     url: '/videos/product-tour.mp4',
-    folder: '宣传视频',
+    folder: 'Promo Videos',
     tags: ['视频', '演示', '入门教程'],
     createdAt: '2026-03-05T15:20:00.000Z',
     updatedAt: '2026-03-05T15:20:00.000Z',
@@ -149,9 +217,9 @@ export class MediaRepository {
       const raw = localStorage.getItem(STORAGE_KEY_MEDIA)
       if (!raw) {
         localStorage.setItem(STORAGE_KEY_MEDIA, JSON.stringify(SEED_MEDIA))
-        return SEED_MEDIA
+        return this.normalizeStorage(SEED_MEDIA)
       }
-      return JSON.parse(raw)
+      return this.normalizeStorage(JSON.parse(raw))
     } catch {
       return SEED_MEDIA
     }
@@ -163,6 +231,57 @@ export class MediaRepository {
       localStorage.setItem(STORAGE_KEY_MEDIA, JSON.stringify(items))
     } catch (e) {
       console.warn('Failed to persist media items:', e)
+    }
+  }
+
+  private getCategoriesStorage(): MediaCategoryDef[] {
+    if (typeof window === 'undefined') return SEED_MEDIA_CATEGORIES
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY_CATEGORIES)
+      if (!raw) {
+        localStorage.setItem(
+          STORAGE_KEY_CATEGORIES,
+          JSON.stringify(SEED_MEDIA_CATEGORIES),
+        )
+        return SEED_MEDIA_CATEGORIES
+      }
+      return JSON.parse(raw)
+    } catch {
+      return SEED_MEDIA_CATEGORIES
+    }
+  }
+
+  private setCategoriesStorage(categories: MediaCategoryDef[]): void {
+    if (typeof window === 'undefined') return
+    try {
+      localStorage.setItem(STORAGE_KEY_CATEGORIES, JSON.stringify(categories))
+    } catch (e) {
+      console.warn('Failed to persist media categories:', e)
+    }
+  }
+
+  private normalizeStorage(items: MediaItem[]): MediaItem[] {
+    if (typeof window === 'undefined') return items
+    try {
+      if (localStorage.getItem(STORAGE_KEY_META)) return items
+      let dirty = false
+      const migrated = items.map((item) => {
+        if (!item.folder) return item
+        const mapped = LEGACY_FOLDER_MAP[item.folder]
+        if (mapped === undefined) return item
+        dirty = true
+        return { ...item, folder: mapped || undefined }
+      })
+      localStorage.setItem(
+        STORAGE_KEY_META,
+        JSON.stringify({ legacyFolderMigrated: true }),
+      )
+      if (dirty) {
+        localStorage.setItem(STORAGE_KEY_MEDIA, JSON.stringify(migrated))
+      }
+      return migrated
+    } catch {
+      return items
     }
   }
 
@@ -270,6 +389,98 @@ export class MediaRepository {
     return items.length - remaining.length
   }
 
+  async getCategories(): Promise<MediaCategoryDef[]> {
+    let categories = this.getCategoriesStorage()
+    const items = this.getStorage()
+
+    // Self-heal: folder values on items without a matching category
+    // (e.g. imported data) become new categories instead of vanishing
+    const known = new Set(categories.map((c) => c.name))
+    const missing = new Set<string>()
+    for (const item of items) {
+      if (item.folder && !known.has(item.folder)) missing.add(item.folder)
+    }
+    if (missing.size > 0) {
+      const now = new Date().toISOString()
+      const added = Array.from(missing).map((name, index) => ({
+        id: `mcat-${Date.now()}-${index}-${Math.floor(Math.random() * 1000)}`,
+        name,
+        sort: 1000 + index * 10,
+        createdAt: now,
+        updatedAt: now,
+      }))
+      categories = [...categories, ...added]
+      this.setCategoriesStorage(categories)
+    }
+
+    return [...categories].sort((a, b) => a.sort - b.sort)
+  }
+
+  async saveCategory(input: {
+    id?: string
+    name: string
+    sort?: number
+  }): Promise<MediaCategoryDef> {
+    const categories = this.getCategoriesStorage()
+    const now = new Date().toISOString()
+
+    if (input.id) {
+      const target = categories.find((c) => c.id === input.id)
+      if (!target) {
+        throw new Error(`Media category with id "${input.id}" not found`)
+      }
+      const updated: MediaCategoryDef = {
+        ...target,
+        name: input.name,
+        sort: input.sort ?? target.sort,
+        updatedAt: now,
+      }
+      this.setCategoriesStorage(
+        categories.map((c) => (c.id === input.id ? updated : c)),
+      )
+      if (target.name !== input.name) {
+        // Rename cascades to every item assigned to the old category
+        const items = this.getStorage()
+        this.setStorage(
+          items.map((item) =>
+            item.folder === target.name
+              ? { ...item, folder: input.name }
+              : item,
+          ),
+        )
+      }
+      return updated
+    }
+
+    const existing = categories.find((c) => c.name === input.name)
+    if (existing) return existing
+
+    const created: MediaCategoryDef = {
+      id: `mcat-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      name: input.name,
+      sort: input.sort ?? 10,
+      createdAt: now,
+      updatedAt: now,
+    }
+    this.setCategoriesStorage([...categories, created])
+    return created
+  }
+
+  async deleteCategory(id: string): Promise<boolean> {
+    const categories = this.getCategoriesStorage()
+    const target = categories.find((c) => c.id === id)
+    if (!target) return false
+
+    this.setCategoriesStorage(categories.filter((c) => c.id !== id))
+    const items = this.getStorage()
+    this.setStorage(
+      items.map((item) =>
+        item.folder === target.name ? { ...item, folder: undefined } : item,
+      ),
+    )
+    return true
+  }
+
   async getStorageStats(): Promise<MediaStorageStats> {
     const items = this.getStorage()
     const byType: Record<MediaType, { bytes: number; count: number }> = {
@@ -301,8 +512,10 @@ export class MediaRepository {
   }
 
   async getFolders(): Promise<string[]> {
+    const categories = await this.getCategories()
     const items = this.getStorage()
     const folders = new Set<string>()
+    for (const category of categories) folders.add(category.name)
     for (const item of items) {
       if (item.folder) folders.add(item.folder)
     }

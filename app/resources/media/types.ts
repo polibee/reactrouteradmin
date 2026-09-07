@@ -2,6 +2,19 @@ export type MediaType = 'image' | 'document' | 'video' | 'archive' | 'other'
 
 export type MediaCategory = 'all' | MediaType
 
+export interface MediaCategoryDef {
+  id: string
+  name: string
+  sort: number
+  createdAt: string
+  updatedAt: string
+}
+
+export interface MediaCategoryFormValues {
+  name: string
+  sort: number
+}
+
 export interface MediaDimensions {
   width: number
   height: number
