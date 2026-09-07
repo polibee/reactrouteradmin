@@ -19,8 +19,25 @@ export const mediaResources = {
     upload: 'Upload files',
     searchPlaceholder: 'Search by file name, tag or format...',
     allFolders: 'All folders',
+    manageCategories: 'Manage categories',
     gridView: 'Grid view',
     tableView: 'List view',
+  },
+  categories: {
+    title: 'Manage categories',
+    description:
+      'Categories group media files and drive the folder filter. Renaming a category updates every file inside it; deleting one moves its files to ungrouped.',
+    add: 'New category',
+    createTitle: 'New category',
+    editTitle: 'Edit category',
+    nameLabel: 'Category name',
+    namePlaceholder: 'e.g. Site images',
+    sortLabel: 'Sort order',
+    empty: 'No categories yet. Create one to organize your media.',
+    count: '{{count}} items',
+    deleteTitle: 'Delete category',
+    deleteDescription:
+      'The category "{{name}}" will be removed. Its items will move to ungrouped.',
   },
   grid: {
     emptyTitle: 'No matching media assets',
@@ -79,15 +96,12 @@ export const mediaResources = {
     startUpload: 'Start upload ({{total}})',
     successToast: 'Successfully uploaded {{total}} media files',
     failedToast: 'File upload failed',
-    presetFolders: {
-      siteImages: 'Site images',
-      systemArchitecture: 'System architecture',
-      devGuidelines: 'Development guidelines',
-      businessReports: 'Business reports',
-    },
   },
   folders: {
     ungrouped: 'Ungrouped',
+  },
+  validation: {
+    categoryNameMin: 'Category name must be at least 2 characters',
   },
   picker: {
     title: 'Select media from the library',

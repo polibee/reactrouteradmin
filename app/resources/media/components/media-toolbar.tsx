@@ -8,6 +8,7 @@ import {
   LayoutGrid,
   List,
   Search,
+  Settings2,
   Trash2,
   Upload,
 } from 'lucide-react'
@@ -26,6 +27,7 @@ export interface MediaToolbarProps {
   folders: string[]
   selectedFolder: string
   onFolderChange: (f: string) => void
+  onOpenCategoryManager: () => void
   selectedCount: number
   onBatchDelete: () => void
   onOpenUpload: () => void
@@ -41,6 +43,7 @@ export function MediaToolbar({
   folders,
   selectedFolder,
   onFolderChange,
+  onOpenCategoryManager,
   selectedCount,
   onBatchDelete,
   onOpenUpload,
@@ -172,6 +175,17 @@ export function MediaToolbar({
               </select>
             </div>
           )}
+
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            className="text-muted-foreground hover:text-foreground size-8 shrink-0"
+            onClick={onOpenCategoryManager}
+            title={t('resources.media.toolbar.manageCategories')}
+          >
+            <Settings2 className="size-3.5" />
+          </Button>
         </div>
 
         {/* 视图切换 (Grid vs Table) */}

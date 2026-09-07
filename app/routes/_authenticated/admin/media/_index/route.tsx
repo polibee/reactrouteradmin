@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   AdminLoading,
@@ -9,6 +9,7 @@ import {
 } from '~/components/admin'
 import { i18n } from '~/core/i18n'
 import {
+  MediaCategoryManager,
   MediaGrid,
   MediaInspector,
   mediaService,
@@ -17,6 +18,7 @@ import {
   MediaToolbar,
   MediaUploadDialog,
   type MediaCategory,
+  type MediaCategoryDef,
   type MediaItem,
   type MediaStorageStats,
 } from '~/resources/media'
@@ -34,6 +36,7 @@ export default function MediaAdminRoute() {
   const [items, setItems] = useState<MediaItem[]>([])
   const [stats, setStats] = useState<MediaStorageStats | null>(null)
   const [folders, setFolders] = useState<string[]>([])
+  const [categories, setCategories] = useState<MediaCategoryDef[]>([])
   const [loading, setLoading] = useState(true)
 
   // Filters & Views
@@ -46,22 +49,26 @@ export default function MediaAdminRoute() {
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [inspectItem, setInspectItem] = useState<MediaItem | null>(null)
   const [uploadOpen, setUploadOpen] = useState(false)
+  const [categoryManagerOpen, setCategoryManagerOpen] = useState(false)
 
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const [mediaList, storageStats, folderList] = await Promise.all([
-        mediaService.getMediaList({
-          category,
-          folder: folder === 'all' ? undefined : folder,
-          search,
-        }),
-        mediaService.getStorageStats(),
-        mediaService.getFolders(),
-      ])
+      const [mediaList, storageStats, folderList, categoryList] =
+        await Promise.all([
+          mediaService.getMediaList({
+            category,
+            folder: folder === 'all' ? undefined : folder,
+            search,
+          }),
+          mediaService.getStorageStats(),
+          mediaService.getFolders(),
+          mediaService.getCategories(),
+        ])
       setItems(mediaList)
       setStats(storageStats)
       setFolders(folderList)
+      setCategories(categoryList)
     } catch (e: unknown) {
       const err = e as Error
       notify.error(err?.message || t('pages.admin.media.loadFailed'))
@@ -73,6 +80,15 @@ export default function MediaAdminRoute() {
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  const itemCounts = useMemo(() => {
+    const counts: Record<string, number> = {}
+    for (const item of items) {
+      if (!item.folder) continue
+      counts[item.folder] = (counts[item.folder] ?? 0) + 1
+    }
+    return counts
+  }, [items])
 
   const handleToggleSelect = (id: string) => {
     setSelectedIds((prev) =>
@@ -143,6 +159,33 @@ export default function MediaAdminRoute() {
     }
   }
 
+  const handleCategorySave = async (values: {
+    id?: string
+    name: string
+    sort: number
+  }) => {
+    try {
+      await mediaService.saveCategory(values)
+      loadData()
+    } catch (e: unknown) {
+      const err = e as Error
+      notify.error(err?.message || t('pages.admin.media.updateFailed'))
+    }
+  }
+
+  const handleCategoryDelete = async (target: MediaCategoryDef) => {
+    try {
+      await mediaService.deleteCategory(target.id)
+      if (folder === target.name) {
+        setFolder('all')
+      }
+      loadData()
+    } catch (e: unknown) {
+      const err = e as Error
+      notify.error(err?.message || t('pages.admin.media.updateFailed'))
+    }
+  }
+
   return (
     <AdminPage>
       <AdminPageHeader
@@ -165,6 +208,7 @@ export default function MediaAdminRoute() {
           folders={folders}
           selectedFolder={folder}
           onFolderChange={setFolder}
+          onOpenCategoryManager={() => setCategoryManagerOpen(true)}
           selectedCount={selectedIds.length}
           onBatchDelete={handleBatchDelete}
           onOpenUpload={() => setUploadOpen(true)}
@@ -208,8 +252,18 @@ export default function MediaAdminRoute() {
         <MediaUploadDialog
           open={uploadOpen}
           onOpenChange={setUploadOpen}
-          folders={folders}
+          categories={categories}
           onUploaded={loadData}
+        />
+
+        {/* 6. 分类（文件夹）管理弹窗：增删改 + 条目迁移 */}
+        <MediaCategoryManager
+          open={categoryManagerOpen}
+          onOpenChange={setCategoryManagerOpen}
+          categories={categories}
+          itemCounts={itemCounts}
+          onSave={handleCategorySave}
+          onDelete={handleCategoryDelete}
         />
       </AdminPageContent>
     </AdminPage>

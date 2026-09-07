@@ -13,47 +13,25 @@ import {
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { mediaService } from '../service'
+import type { MediaCategoryDef } from '../types'
 
 export interface MediaUploadDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  folders: string[]
+  categories: MediaCategoryDef[]
   onUploaded: () => void
 }
-
-// Preset folder values mirror the seed data folders stored in the repository
-const presetFolderOptions = [
-  {
-    value: '站点配图',
-    labelKey: 'resources.media.upload.presetFolders.siteImages',
-  },
-  {
-    value: '系统架构',
-    labelKey: 'resources.media.upload.presetFolders.systemArchitecture',
-  },
-  {
-    value: '开发规范',
-    labelKey: 'resources.media.upload.presetFolders.devGuidelines',
-  },
-  {
-    value: '业务报表',
-    labelKey: 'resources.media.upload.presetFolders.businessReports',
-  },
-  { value: '未分组', labelKey: 'resources.media.folders.ungrouped' },
-] as const
 
 export function MediaUploadDialog({
   open,
   onOpenChange,
-  folders,
+  categories,
   onUploaded,
 }: MediaUploadDialogProps) {
   const { t } = useTranslation()
   const [dragActive, setDragActive] = useState(false)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
-  const [targetFolder, setTargetFolder] = useState<string>(
-    presetFolderOptions[0].value,
-  )
+  const [targetFolder, setTargetFolder] = useState('')
   const [customFolder, setCustomFolder] = useState('')
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -105,10 +83,7 @@ export function MediaUploadDialog({
     setProgress(10)
 
     try {
-      const folder =
-        customFolder.trim() ||
-        targetFolder ||
-        t('resources.media.folders.ungrouped')
+      const folder = customFolder.trim() || targetFolder || undefined
 
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i]
@@ -191,20 +166,14 @@ export function MediaUploadDialog({
                 onChange={(e) => setTargetFolder(e.target.value)}
                 className="border-input bg-background focus:ring-ring h-8 w-full rounded-md border px-2 text-xs focus:ring-1 focus:outline-none"
               >
-                {presetFolderOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {t(option.labelKey)}
+                <option value="">
+                  {t('resources.media.folders.ungrouped')}
+                </option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.name}>
+                    {c.name}
                   </option>
                 ))}
-                {folders
-                  .filter(
-                    (f) => !presetFolderOptions.some((o) => o.value === f),
-                  )
-                  .map((f) => (
-                    <option key={f} value={f}>
-                      {f}
-                    </option>
-                  ))}
               </select>
             </div>
             <div className="space-y-1">

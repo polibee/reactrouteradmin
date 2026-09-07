@@ -1,3 +1,5 @@
+export * from './components/media-category-dialog'
+export * from './components/media-category-manager'
 export * from './components/media-grid'
 export * from './components/media-inspector'
 export * from './components/media-picker-modal'
