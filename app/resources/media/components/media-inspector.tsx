@@ -6,10 +6,10 @@ import {
   ExternalLink,
   File,
   FileText,
-  Film,
   HardDrive,
   Layers,
   Maximize2,
+  Music,
   Trash2,
   X,
 } from 'lucide-react'
@@ -84,7 +84,7 @@ export function MediaInspector({
   const formatSize = (bytes: number): string => {
     if (bytes === 0) return '0 B'
     const k = 1024
-    const sizes = ['B', 'KB', 'MB', 'GB']
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB']
     const i = Math.floor(Math.log(bytes) / Math.log(k))
     return `${(bytes / k ** i).toFixed(1)} ${sizes[i]}`
   }
@@ -150,18 +150,41 @@ export function MediaInspector({
             alt={item.name}
             className="bg-background max-h-[220px] max-w-full rounded-lg border object-contain shadow-xs"
           />
+        ) : item.type === 'video' || item.mimeType.startsWith('video/') ? (
+          // biome-ignore lint/a11y/useMediaCaption: user uploads have no caption assets
+          <video
+            src={resolvedFullUrl}
+            controls
+            preload="metadata"
+            className="bg-background max-h-[220px] w-full rounded-lg border shadow-xs"
+          />
+        ) : item.mimeType.startsWith('audio/') ? (
+          <div className="flex w-full flex-col items-center gap-2 py-4 text-purple-600 dark:text-purple-400">
+            <Music className="size-12" />
+            {/* biome-ignore lint/a11y/useMediaCaption: user uploads have no caption assets */}
+            <audio
+              src={resolvedFullUrl}
+              controls
+              preload="metadata"
+              className="text-foreground w-full max-w-[280px]"
+            />
+            <span className="font-mono text-xs font-semibold">
+              {t('resources.media.inspector.preview.audio')}
+            </span>
+          </div>
+        ) : item.type === 'document' &&
+          item.mimeType.includes('pdf') &&
+          !item.url.startsWith('data:') ? (
+          <iframe
+            src={resolvedFullUrl}
+            title={item.name}
+            className="bg-background h-[220px] w-full rounded-lg border shadow-xs"
+          />
         ) : item.type === 'document' ? (
           <div className="flex flex-col items-center gap-2 py-6 text-emerald-600 dark:text-emerald-400">
             <FileText className="size-16" />
             <span className="font-mono text-xs font-semibold">
               {t('resources.media.inspector.preview.document')}
-            </span>
-          </div>
-        ) : item.type === 'video' ? (
-          <div className="flex flex-col items-center gap-2 py-6 text-purple-600 dark:text-purple-400">
-            <Film className="size-16" />
-            <span className="font-mono text-xs font-semibold">
-              {t('resources.media.inspector.preview.video')}
             </span>
           </div>
         ) : item.type === 'archive' ? (

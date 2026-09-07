@@ -67,7 +67,7 @@ export const mediaResources = {
     title: 'Asset inspector',
     preview: {
       document: 'Document',
-      video: 'Audio & video',
+      audio: 'Audio',
       archive: 'Archive',
       file: 'File',
     },
