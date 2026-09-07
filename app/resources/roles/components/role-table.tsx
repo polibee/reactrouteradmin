@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
   AdminBadge,
-  DataTable,
+  AdminTable,
   DeleteAction,
   EditAction,
   notify,
-} from '~/admin/ui'
+} from '~/components/admin'
 import { roleService } from '../service'
 import type { Role } from '../types'
 
@@ -170,7 +170,7 @@ export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
   ]
 
   return (
-    <DataTable
+    <AdminTable
       columns={columns}
       data={data}
       loading={loading}

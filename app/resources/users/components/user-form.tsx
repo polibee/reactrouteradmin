@@ -7,7 +7,7 @@ import {
   SelectField,
   TextareaField,
   TextField,
-} from '~/admin/ui'
+} from '~/components/admin'
 import { userFormSchema, type User, type UserFormData } from '../types'
 
 export interface UserFormProps {

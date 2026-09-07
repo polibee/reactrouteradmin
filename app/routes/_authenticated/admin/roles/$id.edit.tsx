@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
 import {
-  DashboardCard,
-  DashboardPage,
-  DashboardPageContent,
-  DashboardPageHeader,
-  EmptyState,
-  LoadingState,
+  AdminCard,
+  AdminEmpty,
+  AdminLoading,
+  AdminPage,
+  AdminPageContent,
+  AdminPageHeader,
   notify,
-} from '~/admin/ui'
+} from '~/components/admin'
 import { i18n } from '~/core/i18n'
 import { RoleForm } from '~/resources/roles/components/role-form'
 import { roleService } from '~/resources/roles/service'
@@ -62,16 +62,16 @@ export default function RoleEditPage() {
 
   if (fetching) {
     return (
-      <DashboardPage>
-        <LoadingState text={t('pages.admin.roles.loading')} />
-      </DashboardPage>
+      <AdminPage>
+        <AdminLoading text={t('pages.admin.roles.loading')} />
+      </AdminPage>
     )
   }
 
   if (!role) {
     return (
-      <DashboardPage>
-        <EmptyState
+      <AdminPage>
+        <AdminEmpty
           title={t('pages.admin.roles.notFoundTitle')}
           description={t('pages.admin.roles.notFoundDescription')}
           action={
@@ -84,19 +84,19 @@ export default function RoleEditPage() {
             </button>
           }
         />
-      </DashboardPage>
+      </AdminPage>
     )
   }
 
   return (
-    <DashboardPage>
-      <DashboardPageHeader
+    <AdminPage>
+      <AdminPageHeader
         title={t('pages.admin.roles.editHeading', { name: role.name })}
         description={t('pages.admin.roles.editDescription')}
       />
 
-      <DashboardPageContent>
-        <DashboardCard
+      <AdminPageContent>
+        <AdminCard
           title={t('pages.admin.roles.editCardTitle')}
           description={
             role.isSystem
@@ -110,8 +110,8 @@ export default function RoleEditPage() {
             loading={saving}
             submitText={t('pages.admin.roles.editSubmit')}
           />
-        </DashboardCard>
-      </DashboardPageContent>
-    </DashboardPage>
+        </AdminCard>
+      </AdminPageContent>
+    </AdminPage>
   )
 }

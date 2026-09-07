@@ -9,8 +9,8 @@ export type AdminButtonProps = React.ComponentProps<typeof Button> & {
   loadingText?: string
   icon?: React.ComponentType<{ className?: string }>
   /**
-   * @deprecated 新代码请用 `<Can permission="...">` 包裹原生 Button。
-   * 保留此 prop 仅委托 core/permissions 服务做存量兼容。
+   * @deprecated Wrap a native Button in `<Can permission="...">` in new code.
+   *  Kept only to delegate to the core/permissions service for legacy usage.
    */
   permission?: string
 }

@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import {
-  DashboardPage,
-  DashboardPageContent,
-  DashboardPageHeader,
-} from '~/admin/ui'
+  AdminPage,
+  AdminPageContent,
+  AdminPageHeader,
+} from '~/components/admin'
 import { i18n } from '~/core/i18n'
 import { NavigationEditor } from '~/resources/site/navigation/components/navigation-editor'
 
@@ -18,15 +18,15 @@ export const handle = {
 export default function SiteNavigationPage() {
   const { t } = useTranslation()
   return (
-    <DashboardPage>
-      <DashboardPageHeader
+    <AdminPage>
+      <AdminPageHeader
         title={t('pages.admin.navigation.heading')}
         description={t('pages.admin.navigation.description')}
       />
 
-      <DashboardPageContent>
+      <AdminPageContent>
         <NavigationEditor />
-      </DashboardPageContent>
-    </DashboardPage>
+      </AdminPageContent>
+    </AdminPage>
   )
 }

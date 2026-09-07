@@ -1,10 +1,10 @@
 import { Megaphone, MonitorPlay } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
-  DashboardPage,
-  DashboardPageContent,
-  DashboardPageHeader,
-} from '~/admin/ui'
+  AdminPage,
+  AdminPageContent,
+  AdminPageHeader,
+} from '~/components/admin'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { i18n } from '~/core/i18n'
 import { AdSlotManager } from '~/resources/site/operations/components/ad-slot-manager'
@@ -21,13 +21,13 @@ export const handle = {
 export default function SiteOperationsPage() {
   const { t } = useTranslation()
   return (
-    <DashboardPage>
-      <DashboardPageHeader
+    <AdminPage>
+      <AdminPageHeader
         title={t('pages.admin.operations.heading')}
         description={t('pages.admin.operations.description')}
       />
 
-      <DashboardPageContent>
+      <AdminPageContent>
         <Tabs defaultValue="announcements" className="space-y-4">
           <TabsList className="grid w-full max-w-[420px] grid-cols-2">
             <TabsTrigger value="announcements" className="gap-1.5">
@@ -48,7 +48,7 @@ export default function SiteOperationsPage() {
             <AdSlotManager />
           </TabsContent>
         </Tabs>
-      </DashboardPageContent>
-    </DashboardPage>
+      </AdminPageContent>
+    </AdminPage>
   )
 }

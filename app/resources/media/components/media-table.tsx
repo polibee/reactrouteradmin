@@ -2,7 +2,12 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { Archive, Check, Copy, File, FileText, Film } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AdminBadge, DataTable, DeleteAction, ViewAction } from '~/admin/ui'
+import {
+  AdminBadge,
+  AdminTable,
+  DeleteAction,
+  ViewAction,
+} from '~/components/admin'
 import type { MediaItem, MediaType } from '../types'
 
 export interface MediaTableProps {
@@ -215,7 +220,7 @@ export function MediaTable({
   ]
 
   return (
-    <DataTable
+    <AdminTable
       columns={columns}
       data={data}
       loading={loading}

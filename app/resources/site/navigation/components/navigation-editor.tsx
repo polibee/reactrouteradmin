@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { notify } from '~/admin/ui'
+import { notify } from '~/components/admin'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
 import {

@@ -3,13 +3,13 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import {
-  ActionButton,
+  AdminButton,
+  AdminForm,
   SelectField,
-  SmartForm,
   SwitchField,
   TextField,
   TextareaField,
-} from '~/admin/ui'
+} from '~/components/admin'
 import {
   Dialog,
   DialogContent,
@@ -98,25 +98,25 @@ export function AdSlotDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <SmartForm<SiteAdSlotFormValues>
+        <AdminForm<SiteAdSlotFormValues>
           form={form}
           onSubmit={onSubmit}
           loading={loading}
           actions={
             <div className="flex items-center justify-end gap-2 pt-2">
-              <ActionButton
+              <AdminButton
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
                 disabled={loading}
               >
                 {t('common.actions.cancel')}
-              </ActionButton>
-              <ActionButton type="submit" loading={loading}>
+              </AdminButton>
+              <AdminButton type="submit" loading={loading}>
                 {isEditing
                   ? t('resources.site.shared.saveChanges')
                   : t('resources.site.shared.createNow')}
-              </ActionButton>
+              </AdminButton>
             </div>
           }
         >
@@ -211,7 +211,7 @@ export function AdSlotDialog({
               required
             />
           )}
-        </SmartForm>
+        </AdminForm>
       </DialogContent>
     </Dialog>
   )

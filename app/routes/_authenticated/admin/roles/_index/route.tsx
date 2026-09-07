@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
+  AdminPage,
+  AdminPageContent,
+  AdminPageHeader,
   CreateAction,
-  DashboardPage,
-  DashboardPageContent,
-  DashboardPageHeader,
-} from '~/admin/ui'
+} from '~/components/admin'
 import { i18n } from '~/core/i18n'
 import { RoleTable } from '~/resources/roles/components/role-table'
 import { roleService } from '~/resources/roles/service'
@@ -42,8 +42,8 @@ export default function RolesIndexPage() {
   }, [])
 
   return (
-    <DashboardPage>
-      <DashboardPageHeader
+    <AdminPage>
+      <AdminPageHeader
         title={t('pages.admin.roles.heading')}
         description={t('pages.admin.roles.description')}
         actions={
@@ -55,9 +55,9 @@ export default function RolesIndexPage() {
         }
       />
 
-      <DashboardPageContent>
+      <AdminPageContent>
         <RoleTable data={roles} loading={loading} onDataChange={loadData} />
-      </DashboardPageContent>
-    </DashboardPage>
+      </AdminPageContent>
+    </AdminPage>
   )
 }

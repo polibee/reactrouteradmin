@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
   AdminBadge,
-  DataTable,
+  AdminTable,
   DeleteAction,
   EditAction,
   ViewAction,
   notify,
-} from '~/admin/ui'
+} from '~/components/admin'
 import { siteService } from '../../service'
 import type { SitePage } from '../../types'
 
@@ -138,7 +138,7 @@ export function PageTable({ data, loading, onDataChange }: PageTableProps) {
   ]
 
   return (
-    <DataTable
+    <AdminTable
       columns={columns}
       data={data}
       loading={loading}

@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
 import {
-  DashboardCard,
-  DashboardPage,
-  DashboardPageContent,
-  DashboardPageHeader,
-  EmptyState,
-  LoadingState,
+  AdminCard,
+  AdminEmpty,
+  AdminLoading,
+  AdminPage,
+  AdminPageContent,
+  AdminPageHeader,
   notify,
-} from '~/admin/ui'
+} from '~/components/admin'
 import { i18n } from '~/core/i18n'
 import { PageForm } from '~/resources/site/pages/components/page-form'
 import { siteService } from '~/resources/site/service'
@@ -62,16 +62,16 @@ export default function SitePageEdit() {
 
   if (fetching) {
     return (
-      <DashboardPage>
-        <LoadingState text={t('pages.admin.sitePages.loading')} />
-      </DashboardPage>
+      <AdminPage>
+        <AdminLoading text={t('pages.admin.sitePages.loading')} />
+      </AdminPage>
     )
   }
 
   if (!page) {
     return (
-      <DashboardPage>
-        <EmptyState
+      <AdminPage>
+        <AdminEmpty
           title={t('pages.admin.sitePages.notFoundTitle')}
           description={t('pages.admin.sitePages.notFoundDescription')}
           action={
@@ -84,13 +84,13 @@ export default function SitePageEdit() {
             </button>
           }
         />
-      </DashboardPage>
+      </AdminPage>
     )
   }
 
   return (
-    <DashboardPage>
-      <DashboardPageHeader
+    <AdminPage>
+      <AdminPageHeader
         title={t('pages.admin.sitePages.editHeading', { title: page.title })}
         description={t('pages.admin.sitePages.viewMeta', {
           slug: page.slug,
@@ -98,8 +98,8 @@ export default function SitePageEdit() {
         })}
       />
 
-      <DashboardPageContent>
-        <DashboardCard
+      <AdminPageContent>
+        <AdminCard
           title={t('pages.admin.sitePages.editCardTitle')}
           description={t('pages.admin.sitePages.idLabel', {
             id: page.slug || page.id.replace(/^page-/, ''),
@@ -111,8 +111,8 @@ export default function SitePageEdit() {
             loading={saving}
             submitText={t('pages.admin.sitePages.editSubmit')}
           />
-        </DashboardCard>
-      </DashboardPageContent>
-    </DashboardPage>
+        </AdminCard>
+      </AdminPageContent>
+    </AdminPage>
   )
 }

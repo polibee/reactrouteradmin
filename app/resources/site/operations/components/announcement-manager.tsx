@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ConfirmDialog, notify } from '~/admin/ui'
+import { AdminConfirmDialog, notify } from '~/components/admin'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
 import {
@@ -450,7 +450,7 @@ export function AnnouncementManager() {
       />
 
       {/* 删除二次确认弹窗 */}
-      <ConfirmDialog
+      <AdminConfirmDialog
         open={Boolean(deleteTarget)}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
         title={t('resources.site.operations.announcements.delete.title')}

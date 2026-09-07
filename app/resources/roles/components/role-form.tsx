@@ -2,7 +2,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
-import { ActionButton, SmartForm, TextField, TextareaField } from '~/admin/ui'
+import {
+  AdminButton,
+  AdminForm,
+  TextField,
+  TextareaField,
+} from '~/components/admin'
 import { roleFormSchema, type Role, type RoleFormValues } from '../types'
 import { PermissionMatrix } from './permission-matrix'
 
@@ -45,24 +50,24 @@ export function RoleForm({
   }
 
   return (
-    <SmartForm<RoleFormValues>
+    <AdminForm<RoleFormValues>
       form={form}
       onSubmit={onSubmit}
       loading={loading}
       submitText={resolvedSubmitText}
       actions={
         <div className="flex items-center gap-3">
-          <ActionButton type="submit" loading={loading}>
+          <AdminButton type="submit" loading={loading}>
             {resolvedSubmitText}
-          </ActionButton>
-          <ActionButton
+          </AdminButton>
+          <AdminButton
             type="button"
             variant="outline"
             onClick={() => navigate('/admin/roles')}
             disabled={loading}
           >
             {t('resources.roles.form.cancelBack')}
-          </ActionButton>
+          </AdminButton>
         </div>
       }
     >
@@ -96,6 +101,6 @@ export function RoleForm({
           disabled={loading}
         />
       </div>
-    </SmartForm>
+    </AdminForm>
   )
 }

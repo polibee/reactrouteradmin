@@ -3,13 +3,13 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
-  ActionButton,
+  AdminButton,
+  AdminForm,
   RichTextField,
   SelectField,
-  SmartForm,
   TextField,
   TextareaField,
-} from '~/admin/ui'
+} from '~/components/admin'
 import {
   sitePageFormSchema,
   type SitePage,
@@ -47,24 +47,24 @@ export function PageForm({
   })
 
   return (
-    <SmartForm<SitePageFormValues>
+    <AdminForm<SitePageFormValues>
       form={form}
       onSubmit={onSubmit}
       loading={loading}
       submitText={resolvedSubmitText}
       actions={
         <div className="flex items-center gap-3">
-          <ActionButton type="submit" loading={loading}>
+          <AdminButton type="submit" loading={loading}>
             {resolvedSubmitText}
-          </ActionButton>
-          <ActionButton
+          </AdminButton>
+          <AdminButton
             type="button"
             variant="outline"
             onClick={() => navigate('/admin/pages')}
             disabled={loading}
           >
             {t('resources.site.pages.form.cancelBack')}
-          </ActionButton>
+          </AdminButton>
         </div>
       }
     >
@@ -132,6 +132,6 @@ export function PageForm({
           rows={3}
         />
       </div>
-    </SmartForm>
+    </AdminForm>
   )
 }

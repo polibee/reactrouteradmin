@@ -4,14 +4,14 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import {
-  ActionButton,
+  AdminButton,
+  AdminForm,
   NumberField,
   SelectField,
-  SmartForm,
   SwitchField,
   TextField,
   TextareaField,
-} from '~/admin/ui'
+} from '~/components/admin'
 import { Button } from '~/components/ui/button'
 import {
   Dialog,
@@ -119,25 +119,25 @@ export function WidgetDialog({
             </DialogDescription>
           </DialogHeader>
 
-          <SmartForm<SiteWidgetFormValues>
+          <AdminForm<SiteWidgetFormValues>
             form={form}
             onSubmit={onSubmit}
             loading={loading}
             actions={
               <div className="flex items-center justify-end gap-2 pt-2">
-                <ActionButton
+                <AdminButton
                   type="button"
                   variant="outline"
                   onClick={() => onOpenChange(false)}
                   disabled={loading}
                 >
                   {t('common.actions.cancel')}
-                </ActionButton>
-                <ActionButton type="submit" loading={loading}>
+                </AdminButton>
+                <AdminButton type="submit" loading={loading}>
                   {isEditing
                     ? t('resources.site.shared.saveChanges')
                     : t('resources.site.shared.createNow')}
-                </ActionButton>
+                </AdminButton>
               </div>
             }
           >
@@ -366,7 +366,7 @@ export function WidgetDialog({
                 rows={5}
               />
             )}
-          </SmartForm>
+          </AdminForm>
         </DialogContent>
       </Dialog>
 

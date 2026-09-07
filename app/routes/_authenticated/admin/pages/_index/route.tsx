@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
+  AdminPage,
+  AdminPageContent,
+  AdminPageHeader,
   CreateAction,
-  DashboardPage,
-  DashboardPageContent,
-  DashboardPageHeader,
-} from '~/admin/ui'
+} from '~/components/admin'
 import { i18n } from '~/core/i18n'
 import { PageTable } from '~/resources/site/pages/components/page-table'
 import { siteService } from '~/resources/site/service'
@@ -42,8 +42,8 @@ export default function SitePagesIndexPage() {
   }, [])
 
   return (
-    <DashboardPage>
-      <DashboardPageHeader
+    <AdminPage>
+      <AdminPageHeader
         title={t('pages.admin.sitePages.title')}
         description={t('pages.admin.sitePages.description')}
         actions={
@@ -55,9 +55,9 @@ export default function SitePagesIndexPage() {
         }
       />
 
-      <DashboardPageContent>
+      <AdminPageContent>
         <PageTable data={pages} loading={loading} onDataChange={loadData} />
-      </DashboardPageContent>
-    </DashboardPage>
+      </AdminPageContent>
+    </AdminPage>
   )
 }

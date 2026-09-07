@@ -18,7 +18,7 @@ import {
   AdminPage,
   AdminPageContent,
   AdminPageHeader,
-} from '~/admin/ui'
+} from '~/components/admin'
 import { i18n } from '~/core/i18n'
 import { userService } from '~/resources/users/service'
 import type { User } from '~/resources/users/types'

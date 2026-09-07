@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
-  DashboardCard,
-  DashboardPage,
-  DashboardPageContent,
-  DashboardPageHeader,
+  AdminCard,
+  AdminPage,
+  AdminPageContent,
+  AdminPageHeader,
   notify,
-} from '~/admin/ui'
+} from '~/components/admin'
 import { i18n } from '~/core/i18n'
 import { RoleForm } from '~/resources/roles/components/role-form'
 import { roleService } from '~/resources/roles/service'
@@ -46,14 +46,14 @@ export default function RoleCreatePage() {
   }
 
   return (
-    <DashboardPage>
-      <DashboardPageHeader
+    <AdminPage>
+      <AdminPageHeader
         title={t('pages.admin.roles.createTitle')}
         description={t('pages.admin.roles.createDescription')}
       />
 
-      <DashboardPageContent>
-        <DashboardCard
+      <AdminPageContent>
+        <AdminCard
           title={t('pages.admin.roles.createCardTitle')}
           description={t('pages.admin.requiredHint')}
         >
@@ -62,8 +62,8 @@ export default function RoleCreatePage() {
             loading={loading}
             submitText={t('pages.admin.roles.createSubmit')}
           />
-        </DashboardCard>
-      </DashboardPageContent>
-    </DashboardPage>
+        </AdminCard>
+      </AdminPageContent>
+    </AdminPage>
   )
 }

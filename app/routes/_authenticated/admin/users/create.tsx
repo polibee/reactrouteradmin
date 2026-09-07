@@ -7,7 +7,7 @@ import {
   AdminPageContent,
   AdminPageHeader,
   notify,
-} from '~/admin/ui'
+} from '~/components/admin'
 import { i18n } from '~/core/i18n'
 import { UserForm } from '~/resources/users/components/user-form'
 import { userService } from '~/resources/users/service'

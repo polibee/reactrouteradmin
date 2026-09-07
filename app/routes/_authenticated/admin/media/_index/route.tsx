@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  DashboardPage,
-  DashboardPageContent,
-  DashboardPageHeader,
-  LoadingState,
+  AdminLoading,
+  AdminPage,
+  AdminPageContent,
+  AdminPageHeader,
   notify,
-} from '~/admin/ui'
+} from '~/components/admin'
 import { i18n } from '~/core/i18n'
 import {
   MediaGrid,
@@ -144,13 +144,13 @@ export default function MediaAdminRoute() {
   }
 
   return (
-    <DashboardPage>
-      <DashboardPageHeader
+    <AdminPage>
+      <AdminPageHeader
         title={t('pages.admin.media.heading')}
         description={t('pages.admin.media.description')}
       />
 
-      <DashboardPageContent className="space-y-4">
+      <AdminPageContent className="space-y-4">
         {/* 1. 存储用量与多类型文件占比指示板 */}
         <MediaStorageStatsCard stats={stats} loading={loading && !stats} />
 
@@ -172,7 +172,7 @@ export default function MediaAdminRoute() {
 
         {/* 3. 媒体主体展示：网格模式 vs 表格模式 */}
         {loading && items.length === 0 ? (
-          <LoadingState text={t('pages.admin.media.loading')} />
+          <AdminLoading text={t('pages.admin.media.loading')} />
         ) : viewMode === 'grid' ? (
           <MediaGrid
             items={items}
@@ -211,7 +211,7 @@ export default function MediaAdminRoute() {
           folders={folders}
           onUploaded={loadData}
         />
-      </DashboardPageContent>
-    </DashboardPage>
+      </AdminPageContent>
+    </AdminPage>
   )
 }

@@ -2,7 +2,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { ActionButton, SmartForm, TextField, TextareaField } from '~/admin/ui'
+import {
+  AdminButton,
+  AdminForm,
+  TextField,
+  TextareaField,
+} from '~/components/admin'
 import {
   Dialog,
   DialogContent,
@@ -88,23 +93,23 @@ export function GuidelinesDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <SmartForm<FriendLinkGuidelinesFormValues>
+        <AdminForm<FriendLinkGuidelinesFormValues>
           form={form}
           onSubmit={onSubmit}
           loading={loading}
           actions={
             <div className="flex items-center justify-end gap-2 border-t pt-3">
-              <ActionButton
+              <AdminButton
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
                 disabled={loading}
               >
                 {t('common.actions.cancel')}
-              </ActionButton>
-              <ActionButton type="submit" loading={loading}>
+              </AdminButton>
+              <AdminButton type="submit" loading={loading}>
                 {t('resources.site.links.guidelines.save')}
-              </ActionButton>
+              </AdminButton>
             </div>
           }
         >
@@ -190,7 +195,7 @@ export function GuidelinesDialog({
               rows={2}
             />
           </div>
-        </SmartForm>
+        </AdminForm>
       </DialogContent>
     </Dialog>
   )

@@ -6,7 +6,7 @@ import {
   AdminPageContent,
   AdminPageHeader,
   CreateAction,
-} from '~/admin/ui'
+} from '~/components/admin'
 import { i18n } from '~/core/i18n'
 import { UserTable } from '~/resources/users/components/user-table'
 import { userService } from '~/resources/users/service'

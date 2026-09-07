@@ -8,7 +8,7 @@ import {
   EditAction,
   ViewAction,
   notify,
-} from '~/admin/ui'
+} from '~/components/admin'
 import { userService } from '../service'
 import type { User, UserRole, UserStatus } from '../types'
 

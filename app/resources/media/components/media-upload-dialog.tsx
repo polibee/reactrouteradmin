@@ -1,7 +1,7 @@
 import { Check, File, Loader2, UploadCloud, X } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { notify } from '~/admin/ui'
+import { notify } from '~/components/admin'
 import { Button } from '~/components/ui/button'
 import {
   Dialog,

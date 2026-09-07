@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
-  DashboardCard,
-  DashboardPage,
-  DashboardPageContent,
-  DashboardPageHeader,
+  AdminCard,
+  AdminPage,
+  AdminPageContent,
+  AdminPageHeader,
   notify,
-} from '~/admin/ui'
+} from '~/components/admin'
 import { i18n } from '~/core/i18n'
 import { PageForm } from '~/resources/site/pages/components/page-form'
 import { siteService } from '~/resources/site/service'
@@ -46,14 +46,14 @@ export default function SitePageCreate() {
   }
 
   return (
-    <DashboardPage>
-      <DashboardPageHeader
+    <AdminPage>
+      <AdminPageHeader
         title={t('pages.admin.sitePages.createAction')}
         description={t('pages.admin.sitePages.createDescription')}
       />
 
-      <DashboardPageContent>
-        <DashboardCard
+      <AdminPageContent>
+        <AdminCard
           title={t('pages.admin.sitePages.createCardTitle')}
           description={t('pages.admin.requiredHint')}
         >
@@ -62,8 +62,8 @@ export default function SitePageCreate() {
             loading={loading}
             submitText={t('pages.admin.sitePages.createSubmit')}
           />
-        </DashboardCard>
-      </DashboardPageContent>
-    </DashboardPage>
+        </AdminCard>
+      </AdminPageContent>
+    </AdminPage>
   )
 }

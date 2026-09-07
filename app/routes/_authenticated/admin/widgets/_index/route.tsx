@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import {
-  DashboardPage,
-  DashboardPageContent,
-  DashboardPageHeader,
-} from '~/admin/ui'
+  AdminPage,
+  AdminPageContent,
+  AdminPageHeader,
+} from '~/components/admin'
 import { i18n } from '~/core/i18n'
 import { WidgetManager } from '~/resources/site/widgets/components/widget-manager'
 
@@ -18,15 +18,15 @@ export const handle = {
 export default function SiteWidgetsPage() {
   const { t } = useTranslation()
   return (
-    <DashboardPage>
-      <DashboardPageHeader
+    <AdminPage>
+      <AdminPageHeader
         title={t('pages.admin.widgets.heading')}
         description={t('pages.admin.widgets.description')}
       />
 
-      <DashboardPageContent>
+      <AdminPageContent>
         <WidgetManager />
-      </DashboardPageContent>
-    </DashboardPage>
+      </AdminPageContent>
+    </AdminPage>
   )
 }
