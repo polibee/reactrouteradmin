@@ -1,4 +1,5 @@
-import { ShieldCheck } from 'lucide-react'
+import { KeyRound, ShieldAlert, ShieldCheck } from 'lucide-react'
+import { AdminBadge } from '~/components/admin/primitives/admin-badge'
 import { i18n } from '~/core/i18n'
 import { action } from '~/resource-engine/actions/action-builder'
 import { column } from '~/resource-engine/columns/column-builder'
@@ -31,29 +32,58 @@ export const RoleResource = defineResource<Role>({
   },
   columns: [
     column
-      .text<Role>('name')
+      .custom<Role>('name')
       .labelKey('resources.roles.table.name')
       .sortable()
+      .searchable()
+      .render((row) => (
+        <div className="flex items-center gap-2.5">
+          <div className="bg-primary/10 text-primary flex h-8 w-8 items-center justify-center rounded-lg">
+            {row.isSystem ? (
+              <ShieldAlert className="h-4 w-4 text-amber-600" />
+            ) : (
+              <ShieldCheck className="h-4 w-4" />
+            )}
+          </div>
+          <div>
+            <div className="text-foreground flex items-center gap-1.5 font-medium">
+              {row.name}
+              {row.isSystem && (
+                <span className="rounded-xs bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                  {i18n.t('resources.roles.table.systemBadge')}
+                </span>
+              )}
+            </div>
+            <div className="text-muted-foreground font-mono text-xs">
+              {row.code}
+            </div>
+          </div>
+        </div>
+      ))
       .build(),
-    column.text<Role>('code').labelKey('resources.roles.fields.code').build(),
     column
       .text<Role>('description')
       .labelKey('resources.roles.table.description')
       .build(),
     column
       .custom<Role>('permissions')
+      .labelKey('resources.roles.table.permissions')
       .render((row) =>
-        i18n.t('resources.roles.table.permissionCount', {
-          count: row.permissions.length,
-        }),
+        row.permissions.includes('*') ? (
+          <AdminBadge status="warning">
+            <KeyRound className="mr-1 h-3 w-3" />
+            {i18n.t('resources.roles.table.fullAccess')}
+          </AdminBadge>
+        ) : (
+          <AdminBadge status={row.permissions.length > 0 ? 'info' : 'default'}>
+            {i18n.t('resources.roles.table.permissionCount', {
+              count: row.permissions.length,
+            })}
+          </AdminBadge>
+        ),
       )
       .build(),
-    column.boolean<Role>('isSystem').labelKey('common.labels.default').build(),
-    column
-      .date<Role>('createdAt')
-      .labelKey('common.labels.createdAt')
-      .sortable()
-      .build(),
+    column.date<Role>('updatedAt').labelKey('common.labels.updatedAt').build(),
   ],
   fields: [
     field
@@ -78,6 +108,7 @@ export const RoleResource = defineResource<Role>({
     action.create().build(),
     action.edit().build(),
     action.delete().confirm().build(),
+    action.bulkDelete().confirm().build(),
   ],
   data: roleApi,
 })

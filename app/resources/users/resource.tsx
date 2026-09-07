@@ -62,15 +62,29 @@ export const UserResource = defineResource<User>({
   },
   columns: [
     column
-      .text<User>('name')
+      .custom<User>('name')
       .labelKey('common.labels.name')
       .sortable()
       .searchable()
-      .build(),
-    column
-      .text<User>('email')
-      .labelKey('common.labels.email')
-      .searchable()
+      .render((row) => (
+        <div className="flex items-center gap-3">
+          {row.avatar ? (
+            <img
+              src={row.avatar}
+              alt={row.name}
+              className="h-8 w-8 rounded-full border object-cover"
+            />
+          ) : (
+            <div className="bg-muted flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold">
+              {row.name.charAt(0)}
+            </div>
+          )}
+          <div>
+            <div className="text-foreground font-medium">{row.name}</div>
+            <div className="text-muted-foreground text-xs">{row.email}</div>
+          </div>
+        </div>
+      ))
       .build(),
     column
       .custom<User>('role')
@@ -132,6 +146,7 @@ export const UserResource = defineResource<User>({
     action.create().build(),
     action.edit().build(),
     action.delete().confirm().build(),
+    action.bulkDelete().confirm().build(),
   ],
   data: userApi,
 })

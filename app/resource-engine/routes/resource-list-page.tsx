@@ -88,6 +88,11 @@ export function ResourceListPage({ resource }: { resource: AnyAdminResource }) {
   }
 
   const baseColumns = resource.columns ?? []
+  const searchColumn = baseColumns.find(
+    (item) => item.meta?.searchable === true && typeof item.id === 'string',
+  )
+  const searchKey =
+    typeof searchColumn?.id === 'string' ? searchColumn.id : undefined
   if (baseColumns.length === 0) {
     return (
       <AdminPage>
@@ -142,6 +147,7 @@ export function ResourceListPage({ resource }: { resource: AnyAdminResource }) {
           columns={columns}
           data={listQuery.data?.items ?? []}
           loading={listQuery.isLoading}
+          searchKey={searchKey}
           enableRowSelection={hasBulkActions}
           onBulkDelete={
             hasBulkActions
