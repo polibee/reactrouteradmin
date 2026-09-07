@@ -37,7 +37,7 @@ export function ResourceListPage({ resource }: { resource: AnyAdminResource }) {
 
   const removeMutation = useMutation({
     mutationFn: async (id: string) => {
-      await resource.data?.remove?.(id)
+      await resource.data?.delete?.(id)
     },
     onSuccess: () => {
       notify.success(t('common.messages.deleteSuccess'))

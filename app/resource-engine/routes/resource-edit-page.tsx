@@ -27,9 +27,9 @@ export function ResourceEditPage({
   const listPath = resource.routes?.listPath ?? `/admin/${resource.name}`
 
   const getQuery = useQuery({
-    queryKey: ['resource', resource.name, 'get', rowId],
-    queryFn: () => resource.data?.get?.(rowId as string),
-    enabled: Boolean(resource.data?.get) && Boolean(rowId),
+    queryKey: ['resource', resource.name, 'find', rowId],
+    queryFn: () => resource.data?.find?.(rowId as string),
+    enabled: Boolean(resource.data?.find) && Boolean(rowId),
   })
 
   const updateMutation = useMutation({

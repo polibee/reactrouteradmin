@@ -129,3 +129,12 @@ Helpers & utilities (`docs/forms`, `docs/helpers`, `docs/utils`):
 - Forms: React Hook Form + zod already integrated (`~/components/ui/form`, AdminForm, FieldBuilder); TanStack Form (`@tanstack/react-form` 1.33) and Formisch (`@formisch/react` + `valibot`) installed; both guides compose on the existing `field`/`input`/`button` components.
 - Utilities scroll-fade + shimmer ship in the `shadcn` npm package (4.21); wired via `@import 'shadcn/tailwind.css'` in `app/index.css` (+8 KB CSS, verified in build output). The file defines only keyframes/variants/@utility (no theme vars), so existing theme is untouched.
 - New deps are infrastructure, mirroring `core/api`: no runtime consumers yet; guidance docs live at ui.shadcn.com/docs/forms/tanstack-form, /docs/forms/formisch, /docs/helpers/ai-sdk, /docs/helpers/tanstack-ai, /docs/utils/scroll-fade, /docs/utils/shimmer.
+
+## 10. Supplement: Data Provider Contract (重构文档补充)
+
+Architectural rule (from `docs/重构文档补充.md`): **Admin Core and the Resource Engine must not depend on Goravel or any concrete backend.** Banned patterns: `goravel: { endpoint }` resource config, `goravelResource: "..."`, `import { ... } from '@/goravel'`. Backend access happens only through provider implementations supplied by resource modules.
+
+- Contract: `ResourceDataProvider<T>` in `app/resource-engine/resource/resource.types.ts` — optional `list(ResourceListQuery) / find(id) / create(values) / update(id, values) / delete(id)`; wired as `AdminResource.data` and consumed by the four generic engine pages via react-query. This is the renamed form of the former `ResourceDataAdapter` (get→find, remove→delete) to match the supplement doc's interface sketch exactly.
+- Current implementations (all localStorage-backed, through service layers): `userApi`, `roleApi` (`app/resources/{users,roles}/api.ts`) and `permissionApi` (inline in `app/resources/permissions/resource.tsx`, list-only).
+- Reserved HTTP seam: `app/core/api` (fetch client, `ApiResponse<T>`/`ApiError`) has no runtime consumers yet; future REST providers compose it behind the same contract.
+- Deferred phases (supplement doc §六): ⑪ Fullstack Adapter (React Router loader/action + DB), ⑫ REST / Goravel Adapter (ReactRouterAdmin → REST/OpenAPI → Goravel). Until then `ResourceListQuery` stays at `{page, pageSize, search}`; sort/filter fields are added when the first remote provider needs them.

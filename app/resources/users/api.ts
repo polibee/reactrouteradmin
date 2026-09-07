@@ -19,10 +19,10 @@ export const userApi = {
       : items
     return { items: filtered, total: filtered.length }
   },
-  get: (id: string) => userService.getUser(id),
+  find: (id: string) => userService.getUser(id),
   create: (values: Record<string, unknown>) =>
     userService.createUser(values as UserFormData),
   update: (id: string, values: Record<string, unknown>) =>
     userService.updateUser(id, values),
-  remove: (id: string) => userService.deleteUser(id),
+  delete: (id: string) => userService.deleteUser(id),
 }

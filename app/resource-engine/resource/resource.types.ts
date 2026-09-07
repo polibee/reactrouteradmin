@@ -39,12 +39,18 @@ export interface ResourceListResult<T> {
   total?: number
 }
 
-export interface ResourceDataAdapter<T = unknown> {
+/**
+ * The only data seam for resources. Providers must not leak backend details
+ * (Goravel, REST endpoints, database shapes) into the engine; future
+ * Fullstack / REST / Goravel providers implement this same contract.
+ * See docs/重构文档补充.md §五.
+ */
+export interface ResourceDataProvider<T = unknown> {
   list?: (query?: ResourceListQuery) => Promise<ResourceListResult<T>>
-  get?: (id: string) => Promise<T | null>
+  find?: (id: string) => Promise<T | null>
   create?: (values: Record<string, unknown>) => Promise<T>
   update?: (id: string, values: Record<string, unknown>) => Promise<T>
-  remove?: (id: string) => Promise<boolean | void>
+  delete?: (id: string) => Promise<boolean | void>
 }
 
 export interface ResourceCustomPage {
@@ -67,7 +73,7 @@ export interface AdminResource<T = unknown> {
   columns?: ColumnDef<T, unknown>[]
   fields?: ResourceFieldConfig[]
   actions?: ResourceActionConfig[]
-  data?: ResourceDataAdapter<T>
+  data?: ResourceDataProvider<T>
   customPages?: ResourceCustomPage[]
   meta?: Record<string, unknown>
   _model?: T

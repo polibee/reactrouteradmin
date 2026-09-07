@@ -19,10 +19,10 @@ export const roleApi = {
       : items
     return { items: filtered, total: filtered.length }
   },
-  get: (id: string) => roleService.getRoleById(id),
+  find: (id: string) => roleService.getRoleById(id),
   create: (values: Record<string, unknown>) =>
     roleService.createRole(values as RoleFormValues),
   update: (id: string, values: Record<string, unknown>) =>
     roleService.updateRole(id, values as RoleFormValues),
-  remove: (id: string) => roleService.deleteRole(id),
+  delete: (id: string) => roleService.deleteRole(id),
 }
