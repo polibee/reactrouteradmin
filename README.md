@@ -1,71 +1,80 @@
-# Shadcn Admin Dashboard
+# ReactRouterAdmin
 
-Admin Dashboard UI built with Shadcn and React Router v7. Built with responsiveness and accessibility in mind.
+An admin foundation for React Router (framework mode), rebuilt around a declarative **Resource Engine** — define a resource once and get list, search, create, edit and delete pages with i18n, permissions and theming wired in.
 
-![alt text](public/images/shadcn-admin.png)
+![Users resource page with search, bulk selection and column settings](public/images/reactrouter-admin.png)
 
-I've been creating dashboard UIs at work and for my personal projects. I always wanted to make a reusable collection of dashboard UI for future projects; and here it is now. While I've created a few custom components, some of the code is directly adapted from ShadcnUI examples.
+## Highlights
 
-> This is not a starter project (template) though. I'll probably make one in the future.
+- **Resource Engine** — declarative `defineResource` with column / field / action builders; list, create and edit pages are generated per resource
+- **DataTable** — global search, column settings, row and bulk actions out of the box
+- **Permission system** — grouped permission registry, `Can` guard component, and a role permission matrix for editing every granted permission
+- **Media library** — categories, native previews (image / video / audio / PDF), multi-format URL copy
+- **Site management** — pages, navigation, widgets, announcements and links
+- **i18n** — i18next with strict key typing (English locale included)
+- **Dark mode** and a responsive admin shell
 
-## Features
+![Permissions registry](public/images/admin-permissions.png)
 
-- Light/dark mode
-- Responsive
-- Accessible
-- With built-in Sidebar component
-- Global Search Command
-- 10+ pages
-- Extra custom components
+## Architecture
 
-## Tech Stack
+Three layers keep resources decoupled from the backend:
 
-**UI:** [ShadcnUI](https://ui.shadcn.com) (TailwindCSS + RadixUI)
-
-**Build Tool:** [Vite](https://vitejs.dev/)
-
-**Routing:** [React Router v7](https://reactrouter.com/en/main) (Framework)
-
-**Form Validation:** [Conform](https://conform.guide/)
-
-**Type Checking:** [TypeScript](https://www.typescriptlang.org/)
-
-**Linting/Formatting:** [Biome](https://biomejs.dev/) & [Prettier](https://prettier.io/)
-
-**Icons:** [Tabler Icons](https://tabler.io/icons)
-
-## Run Locally
-
-Clone the project
-
-```bash
-  git clone https://github.com/coji/shadcn-admin-react-router.git
+```text
+app/resources/*        defineResource({ columns, fields, actions })
+        │
+app/resource-engine    generated list / create / edit pages, builders, splat routing
+        │
+ResourceDataProvider   list / find / create / update / delete contract
+        │
+localStorage (dev) · REST · Goravel …  — swap without touching resources
 ```
 
-Go to the project directory
+A resource only declares _what_ it shows and edits; the engine handles _how_. All data access goes through a single `ResourceDataProvider` interface, so the same resource definitions run against any backend that implements the contract.
+
+## Tech stack
+
+- [React Router 8](https://reactrouter.com) (framework mode) + React 19
+- [Vite 7](https://vite.dev) + [Tailwind CSS v4](https://tailwindcss.com)
+- [shadcn/ui](https://ui.shadcn.com) components on Radix primitives
+- [TanStack Table](https://tanstack.com/table) + [TanStack Query](https://tanstack.com/query)
+- [react-hook-form](https://react-hook-form.com) + [Zod](https://zod.dev)
+- [i18next](https://i18next.com)
+- [Biome](https://biomejs.dev) + Prettier, TypeScript strict mode
+
+## Getting started
+
+Requires Node.js ≥ 24 and pnpm.
 
 ```bash
-  cd shadcn-admin-react-router
+git clone https://github.com/polibee/reactrouteradmin.git
+cd reactrouteradmin
+pnpm install
+pnpm dev        # start dev server
+pnpm build      # production build
+pnpm validate   # biome + prettier + typecheck
 ```
 
-Install dependencies
+Auth is currently mocked: a `super_admin` user is always signed in, so every admin route is reachable while you develop your own `AuthService` and data providers.
 
-```bash
-  pnpm install
+## Project structure
+
+```text
+app/
+├── core/              # auth, permissions, navigation, i18n, api client, registry
+├── resource-engine/   # defineResource + column/field/action builders + generated pages
+├── components/
+│   ├── ui/            # shadcn/ui primitives
+│   └── admin/         # admin composites (data table, toolbar, page header…)
+├── resources/         # users, roles, permissions, media, site
+├── features/          # custom pages (dashboard)
+└── locales/           # i18n resource packs (en)
 ```
 
-Start the server
+## Acknowledgements
 
-```bash
-  pnpm run dev
-```
-
-## Author
-
-Crafted with 🤍 by [@coji](https://github.com/coji)
-
-This project is a fork of [shadcn-admin](https://github.com/satnaing/shadcn-admin) by [@satnaing](https://github.com/satnaing). Thanks for the great original work!
+Started as a fork of [shadcn-admin](https://github.com/satnaing/shadcn-admin) by [@satnaing](https://github.com/satnaing) — thanks for the great base.
 
 ## License
 
-Licensed under the [MIT License](https://choosealicense.com/licenses/mit/)
+[MIT](https://choosealicense.com/licenses/mit/)
