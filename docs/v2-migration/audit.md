@@ -111,3 +111,21 @@ Verdicts: **KEEP** (stable, untouched) · **REFACTOR** (behavior preserved, loca
 
 - Layers: `app/core/{admin,api,auth,i18n,navigation,permissions,registry,extensions}` / `app/resource-engine/{resource,columns,fields,actions,routes}` / `app/components/{ui,admin}` / `app/resources/{users,roles,permissions,media,site}` / `app/features/dashboard` / `app/providers` / `app/locales/en`.
 - All 21 phases executed on branch `refactor/v2-admin-foundation`, one commit per phase, `pnpm validate && pnpm build` green at every phase.
+
+## 9. Official shadcn registry parity + helpers (post-v2.0)
+
+Component parity: all 64 official registry components are now present in `app/components/ui` (repo had 46; 18 added). Toast is intentionally not the Base-UI-only registry item — sonner remains the official radix-project replacement and is already integrated.
+
+- Installed via shadcn CLI (new-york-v4): attachment, bubble, button-group, combobox (needs `@base-ui/react`), direction, empty, field, input-group, item, kbd, marker, message, message-scroller, native-select, spinner.
+- questionnaire: not published to the new-york-v4 style snapshot; vendored from the official source (`apps/v4/registry/bases/radix/ui/questionnaire.tsx`) with imports adapted (`~/lib/utils`, `~/components/ui/button`, lucide `CheckIcon`); uses `@shadcn/react/questionnaire`.
+- date-picker: official docs define it as a Popover + Calendar composition, not a registry item; implemented as `app/components/ui/date-picker.tsx` (single mode, Intl date formatting, passes through react-day-picker props).
+- typography: official docs ship styles, not a component; implemented `app/components/ui/typography.tsx` with the canonical utility styles (TypographyH1–H4/P/BlockQuote/Lead/Large/Small/Muted/InlineCode/List).
+- `button.tsx` gained the upstream `icon-xs` / `icon-sm` sizes required by the new components (additive).
+- CLI-installed files normalized to repo conventions: `cn` imports → `~/lib/utils` (stray `cn` npm package removed), prettier/biome clean.
+
+Helpers & utilities (`docs/forms`, `docs/helpers`, `docs/utils`):
+
+- `@shadcn/helpers` (0.2.0) installed with `ai` + `@ai-sdk/react` (AI SDK useChat) and `@tanstack/ai-react` (TanStack AI useChat); subpath exports `./ai-sdk` and `./tanstack-ai` compile-verified via a temporary probe (removed afterwards).
+- Forms: React Hook Form + zod already integrated (`~/components/ui/form`, AdminForm, FieldBuilder); TanStack Form (`@tanstack/react-form` 1.33) and Formisch (`@formisch/react` + `valibot`) installed; both guides compose on the existing `field`/`input`/`button` components.
+- Utilities scroll-fade + shimmer ship in the `shadcn` npm package (4.21); wired via `@import 'shadcn/tailwind.css'` in `app/index.css` (+8 KB CSS, verified in build output). The file defines only keyframes/variants/@utility (no theme vars), so existing theme is untouched.
+- New deps are infrastructure, mirroring `core/api`: no runtime consumers yet; guidance docs live at ui.shadcn.com/docs/forms/tanstack-form, /docs/forms/formisch, /docs/helpers/ai-sdk, /docs/helpers/tanstack-ai, /docs/utils/scroll-fade, /docs/utils/shimmer.
