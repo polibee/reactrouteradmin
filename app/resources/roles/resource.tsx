@@ -6,6 +6,7 @@ import { column } from '~/resource-engine/columns/column-builder'
 import { field } from '~/resource-engine/fields/field-builder'
 import { defineResource } from '~/resource-engine/resource'
 import { roleApi } from './api'
+import { PermissionMatrix } from './components/permission-matrix'
 import type { Role } from './types'
 
 export const RoleResource = defineResource<Role>({
@@ -102,6 +103,11 @@ export const RoleResource = defineResource<Role>({
       .textarea('description')
       .labelKey('resources.roles.fields.description')
       .placeholderKey('resources.roles.fields.descriptionPlaceholder')
+      .build(),
+    field
+      .custom('permissions')
+      .labelKey('resources.roles.fields.permissions')
+      .render(PermissionMatrix)
       .build(),
   ],
   actions: [

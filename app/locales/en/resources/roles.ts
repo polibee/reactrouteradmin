@@ -22,6 +22,7 @@ export const rolesResources = {
     description: 'Role purpose and responsibilities',
     descriptionPlaceholder:
       'Briefly describe the responsibilities and permission scope of this role...',
+    permissions: 'Permissions',
   },
   table: {
     name: 'Role name',

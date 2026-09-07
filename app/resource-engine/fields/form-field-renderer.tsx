@@ -27,6 +27,23 @@ function FieldRenderer({ config }: FieldRendererProps) {
     ? i18n.t(config.placeholderKey)
     : config.placeholder
 
+  if (config.kind === 'custom' && config.render) {
+    const CustomRender = config.render
+    return (
+      <Controller
+        name={config.name}
+        control={control}
+        render={({ field }) => (
+          <CustomRender
+            value={field.value}
+            onChange={field.onChange}
+            disabled={config.disabled}
+          />
+        )}
+      />
+    )
+  }
+
   if (config.kind === 'select') {
     return (
       <SelectField

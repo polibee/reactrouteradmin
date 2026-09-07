@@ -27,7 +27,8 @@ export class RoleService {
       name: values.name,
       code: values.code,
       description: values.description,
-      permissions: values.permissions,
+      // Engine forms may omit the matrix value; default to empty
+      permissions: values.permissions ?? [],
     })
   }
 
@@ -52,7 +53,8 @@ export class RoleService {
       name: values.name,
       code: values.code,
       description: values.description,
-      permissions: values.permissions,
+      // Engine forms may omit the matrix value; keep existing permissions
+      permissions: values.permissions ?? target.permissions,
     })
   }
 

@@ -1,4 +1,11 @@
 import type { ParseKeys } from 'i18next'
+import type React from 'react'
+
+export interface CustomFieldRenderProps {
+  value: unknown
+  onChange: (value: unknown) => void
+  disabled?: boolean
+}
 
 export type FieldType =
   | 'text'
@@ -11,6 +18,7 @@ export type FieldType =
   | 'checkbox'
   | 'date'
   | 'file'
+  | 'custom'
 
 export interface FieldOption {
   label: string
@@ -32,6 +40,7 @@ export interface ResourceFieldConfig {
   rows?: number
   accept?: string
   disabled?: boolean
+  render?: React.ComponentType<CustomFieldRenderProps>
 }
 
 export class FieldBuilder {
@@ -104,6 +113,11 @@ export class FieldBuilder {
     return this
   }
 
+  render(component: React.ComponentType<CustomFieldRenderProps>): this {
+    this.config.render = component
+    return this
+  }
+
   build(): ResourceFieldConfig {
     return { kind: this.kind, name: this.name, ...this.config }
   }
@@ -120,6 +134,7 @@ export const field = {
   checkbox: (name: string) => new FieldBuilder('checkbox', name),
   date: (name: string) => new FieldBuilder('date', name),
   file: (name: string) => new FieldBuilder('file', name),
+  custom: (name: string) => new FieldBuilder('custom', name),
 }
 
 export function buildFieldDefaultValues(
@@ -127,8 +142,13 @@ export function buildFieldDefaultValues(
 ): Record<string, unknown> {
   const values: Record<string, unknown> = {}
   for (const config of fields) {
-    values[config.name] =
-      config.kind === 'switch' || config.kind === 'checkbox' ? false : ''
+    if (config.kind === 'switch' || config.kind === 'checkbox') {
+      values[config.name] = false
+    } else if (config.kind === 'custom') {
+      values[config.name] = []
+    } else {
+      values[config.name] = ''
+    }
   }
   return values
 }
