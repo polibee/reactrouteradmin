@@ -32,6 +32,10 @@ export const common = {
     confirmDelete: 'Confirm delete',
     columnSettings: 'Column settings',
     showColumns: 'Show columns',
+    sortAsc: 'Asc',
+    sortDesc: 'Desc',
+    hideColumn: 'Hide',
+    clearFilters: 'Clear filters',
     processing: 'Processing...',
     loading: 'Loading...',
     loadingTable: 'Loading table data...',
@@ -103,6 +107,7 @@ export const common = {
     operationFailed: 'Operation failed',
     loadFailed: 'Failed to load data',
     unauthorized: 'You do not have permission to perform this action',
+    noResults: 'No results found.',
   },
   pagination: {
     selectedOf: '{{selected}} / {{total}} selected',

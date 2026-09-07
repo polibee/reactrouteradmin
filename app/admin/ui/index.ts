@@ -13,16 +13,16 @@ export * from '~/components/admin'
 
 // 数据表格类
 /** @deprecated 请使用 AdminBulkActions */
-export { AdminBulkActions as BulkActionsBar } from '~/components/admin/table/admin-bulk-actions'
+export { AdminBulkActions as BulkActionsBar } from '~/components/admin/table/data-table-bulk-actions'
 /** @deprecated 请使用 AdminTable */
 export {
   AdminTable as DataTable,
   type AdminTableProps as DataTableProps,
-} from '~/components/admin/table/admin-table'
+} from '~/components/admin/table/data-table'
 /** @deprecated 请使用 AdminTablePagination */
-export { AdminTablePagination as DataTablePagination } from '~/components/admin/table/admin-table-pagination'
+export { AdminTablePagination as DataTablePagination } from '~/components/admin/table/data-table-pagination'
 /** @deprecated 请使用 AdminTableToolbar */
-export { AdminTableToolbar as DataTableToolbar } from '~/components/admin/table/admin-table-toolbar'
+export { AdminTableToolbar as DataTableToolbar } from '~/components/admin/table/data-table-toolbar'
 
 // 表单引擎类
 /** @deprecated 请使用 AdminForm */

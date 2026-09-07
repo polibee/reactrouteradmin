@@ -26,9 +26,9 @@ import {
 import { i18n } from '~/core/i18n'
 import { AdminEmpty } from '../feedback/admin-empty'
 import { AdminLoading } from '../feedback/admin-loading'
-import { AdminBulkActions } from './admin-bulk-actions'
-import { AdminTablePagination } from './admin-table-pagination'
-import { AdminTableToolbar } from './admin-table-toolbar'
+import { AdminBulkActions } from './data-table-bulk-actions'
+import { AdminTablePagination } from './data-table-pagination'
+import { AdminTableToolbar } from './data-table-toolbar'
 
 export interface AdminTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -44,6 +44,8 @@ export interface AdminTableProps<TData, TValue> {
   onRowClick?: (row: TData) => void
   emptyTitle?: string
   emptyDescription?: string
+  manualPagination?: boolean
+  pageCount?: number
 }
 
 export function createSelectColumn<TData>(): ColumnDef<TData, unknown> {
@@ -87,6 +89,8 @@ export function AdminTable<TData, TValue>({
   onRowClick,
   emptyTitle,
   emptyDescription,
+  manualPagination,
+  pageCount,
 }: AdminTableProps<TData, TValue>) {
   const { t } = useTranslation()
   const [rowSelection, setRowSelection] = useState({})
@@ -116,6 +120,8 @@ export function AdminTable<TData, TValue>({
       globalFilter,
     },
     enableRowSelection,
+    manualPagination,
+    pageCount,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -123,7 +129,9 @@ export function AdminTable<TData, TValue>({
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getPaginationRowModel: manualPagination
+      ? undefined
+      : getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
   })
 
