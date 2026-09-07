@@ -11,6 +11,8 @@ const STORAGE_KEY_MEDIA = 'site_media_items_v1'
 const STORAGE_KEY_CATEGORIES = 'site_media_categories_v1'
 const STORAGE_KEY_META = 'site_media_meta_v1'
 
+const FALLBACK_STORAGE_QUOTA = 500 * 1024 * 1024
+
 const SEED_MEDIA_CATEGORIES: MediaCategoryDef[] = [
   {
     id: 'mcat-1',
@@ -505,10 +507,23 @@ export class MediaRepository {
 
     return {
       totalBytes,
-      maxBytes: 500 * 1024 * 1024, // 500 MB quota
+      maxBytes: await this.resolveStorageQuota(),
       totalCount: items.length,
       byType,
     }
+  }
+
+  // navigator.storage.estimate() reports a browser-calculated quota derived
+  // from the machine's free disk space; fall back to a preset when unsupported
+  private async resolveStorageQuota(): Promise<number> {
+    if (typeof window === 'undefined') return FALLBACK_STORAGE_QUOTA
+    try {
+      const estimate = await navigator.storage?.estimate?.()
+      if (estimate?.quota && estimate.quota > 0) return estimate.quota
+    } catch {
+      // unsupported or denied — fall back to the preset quota
+    }
+    return FALLBACK_STORAGE_QUOTA
   }
 
   async getFolders(): Promise<string[]> {

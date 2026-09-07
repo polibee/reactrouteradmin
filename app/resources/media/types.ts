@@ -45,7 +45,7 @@ export interface MediaFolder {
 
 export interface MediaStorageStats {
   totalBytes: number
-  maxBytes: number // e.g. 500MB (524288000)
+  maxBytes: number // browser disk-derived quota (StorageManager), preset fallback
   totalCount: number
   byType: Record<MediaType, { bytes: number; count: number }>
 }
