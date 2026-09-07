@@ -12,12 +12,12 @@ import {
   CardTitle,
 } from '~/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
+import { AnalyticsTab } from '~/features/dashboard/components/analytics-tab'
+import { NotificationsTab } from '~/features/dashboard/components/notifications-tab'
+import { Overview } from '~/features/dashboard/components/overview'
+import { RecentSales } from '~/features/dashboard/components/recent-sales'
+import { ReportsTab } from '~/features/dashboard/components/reports-tab'
 import type { RouteHandle } from '~/routes/_authenticated/_layout'
-import { AnalyticsTab } from './+components/analytics-tab'
-import { NotificationsTab } from './+components/notifications-tab'
-import { Overview } from './+components/overview'
-import { RecentSales } from './+components/recent-sales'
-import { ReportsTab } from './+components/reports-tab'
 
 export const handle: RouteHandle = {
   breadcrumb: () => ({ label: 'Dashboard' }),
