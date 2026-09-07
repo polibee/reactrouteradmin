@@ -1,8 +1,8 @@
+import { resourceRegistry } from '~/admin/core/resource/registry'
 import type { AuthUser } from '~/core/auth/auth.types'
 import { hasPermission } from '~/core/permissions/permission.service'
-import { resourceRegistry } from '../resource/registry'
-import { navigationRegistry } from './registry'
-import type { NavGroup, NavItem } from './types'
+import { navigationRegistry } from './navigation-registry'
+import type { NavGroup, NavItem } from './navigation.types'
 
 export function buildNavigation(user: AuthUser | null): NavGroup[] {
   // 1. Group map to collect items

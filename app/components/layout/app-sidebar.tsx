@@ -1,6 +1,3 @@
-import { buildNavigation } from '~/admin/core/navigation/navigation-builder'
-import { navigationRegistry } from '~/admin/core/navigation/registry'
-import type { NavItem as RegistryNavItem } from '~/admin/core/navigation/types'
 import {
   Sidebar,
   SidebarContent,
@@ -9,21 +6,11 @@ import {
   SidebarRail,
 } from '~/components/ui/sidebar'
 import { useAuth } from '~/core/auth'
+import { buildNavigation } from '~/core/navigation/navigation-builder'
 import { sidebarData } from '~/data/sidebar-data'
-import '~/modules'
 import { NavGroup } from './nav-group'
 import { NavUser } from './nav-user'
 import { TeamSwitcher } from './team-switcher'
-
-// Seed static groups from sidebarData if not yet initialized
-if (navigationRegistry.getGroups().length === 0) {
-  for (const group of sidebarData.navGroups) {
-    navigationRegistry.registerGroup({
-      title: group.title,
-      items: group.items as unknown as RegistryNavItem[],
-    })
-  }
-}
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAuth()

@@ -4,11 +4,6 @@ export class ResourceRegistry {
   private resources: Map<string, AdminResource> = new Map()
 
   register(resource: AdminResource): void {
-    if (this.resources.has(resource.name)) {
-      console.warn(
-        `[ResourceRegistry] Resource with name "${resource.name}" is already registered. Overwriting.`,
-      )
-    }
     this.resources.set(resource.name, resource)
   }
 

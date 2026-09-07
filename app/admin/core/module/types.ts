@@ -1,4 +1,4 @@
-import type { NavGroup } from '../navigation/types'
+import type { NavGroup } from '~/core/navigation/navigation.types'
 import type { AdminResource } from '../resource/types'
 
 export interface AdminModule {
