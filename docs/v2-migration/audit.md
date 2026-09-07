@@ -82,3 +82,10 @@ Verdicts: **KEEP** (stable, untouched) · **REFACTOR** (behavior preserved, loca
 3. Import churn ~90 files across moves — barrel re-exports bridge; typecheck-enforced; grep audits per phase.
 4. Chinese→English visible copy change — mandated; seed _data content_ excluded; CJK grep whitelist maintained.
 5. Splat route ranking — static routes win by RR ranking; URL matrix verified in P17.
+
+## 7. Phase execution log
+
+- **P0** — baseline audit (this document); branch `refactor/v2-admin-foundation`.
+- **P1** — AppProvider chain (Query → I18n(pending) → Theme → Auth) + `app/config/admin.config.ts`; `@tanstack/react-query` added; `app/root.tsx` mounted.
+- **P2** — i18next inline `en` locale (strict key typing via `i18next.d.ts`); all UI copy migrated to `t()`; CJK whitelist = seed data + code comments only.
+- **P3** — shadcn collection re-verified: `app/components/ui/` holds 49 files; doc Phase 3 checklist items (form/calendar/command/chart/carousel/drawer/input-otp/menubar/context-menu/navigation-menu/resizable/sonner/sidebar) all present. Deleted dead `app/admin/ui/layout/` (AdminLayout/AdminHeader/AdminSidebar — zero consumers outside the barrel) and `app/admin/ui/manifest/features.ts` (superseded by `adminConfig.features`). Semantic aliases in `app/admin/ui/index.ts` marked `@deprecated`; removal scheduled P20.
