@@ -8,9 +8,9 @@ import {
   DashboardPageHeader,
 } from '~/admin/ui'
 import { i18n } from '~/core/i18n'
-import { RoleTable } from '~/modules/role/components/role-table'
-import { roleService } from '~/modules/role/service'
-import type { Role } from '~/modules/role/types'
+import { RoleTable } from '~/resources/roles/components/role-table'
+import { roleService } from '~/resources/roles/service'
+import type { Role } from '~/resources/roles/types'
 
 export const meta = () => {
   return [{ title: i18n.t('pages.admin.roles.metaTitle') }]

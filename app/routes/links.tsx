@@ -19,9 +19,9 @@ import {
   CardHeader,
   CardTitle,
 } from '~/components/ui/card'
-import { ApplyLinkDialog } from '~/modules/site/links/components/apply-link-dialog'
-import { siteService } from '~/modules/site/service'
-import type { FriendLink, FriendLinkGuidelines } from '~/modules/site/types'
+import { ApplyLinkDialog } from '~/resources/site/links/components/apply-link-dialog'
+import { siteService } from '~/resources/site/service'
+import type { FriendLink, FriendLinkGuidelines } from '~/resources/site/types'
 
 export default function FriendLinksPage() {
   const { t } = useTranslation()

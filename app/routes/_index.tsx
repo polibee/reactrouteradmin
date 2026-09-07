@@ -14,13 +14,13 @@ import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { i18n } from '~/core/i18n'
-import { siteService } from '~/modules/site/service'
+import { siteService } from '~/resources/site/service'
 import type {
   SiteAdSlot,
   SitePage,
   SiteWidgetGlobalSettings,
-} from '~/modules/site/types'
-import { WidgetRenderer } from '~/modules/site/widgets/components/widget-renderer'
+} from '~/resources/site/types'
+import { WidgetRenderer } from '~/resources/site/widgets/components/widget-renderer'
 
 export const meta = () => {
   return [

@@ -19,7 +19,7 @@ import {
   type MediaCategory,
   type MediaItem,
   type MediaStorageStats,
-} from '~/modules/media'
+} from '~/resources/media'
 
 export const meta = () => {
   return [{ title: i18n.t('pages.admin.media.metaTitle') }]

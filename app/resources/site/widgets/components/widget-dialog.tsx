@@ -20,7 +20,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '~/components/ui/dialog'
-import { MediaPickerModal } from '~/modules/media/components/media-picker-modal'
+import { MediaPickerModal } from '~/resources/media/components/media-picker-modal'
 import {
   siteWidgetFormSchema,
   type SiteWidgetConfig,

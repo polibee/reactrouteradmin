@@ -4,7 +4,7 @@ import {
   DashboardPageContent,
   DashboardPageHeader,
 } from '~/admin/ui'
-import { LinkTable } from '~/modules/site/links'
+import { LinkTable } from '~/resources/site/links'
 
 export default function AdminLinksRoute() {
   const { t } = useTranslation()

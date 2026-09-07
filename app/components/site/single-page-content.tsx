@@ -6,9 +6,9 @@ import { PublicSiteLayout } from '~/components/layout/public-site-layout'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
-import { siteService } from '~/modules/site/service'
-import type { SitePage, SiteWidgetGlobalSettings } from '~/modules/site/types'
-import { WidgetRenderer } from '~/modules/site/widgets/components/widget-renderer'
+import { siteService } from '~/resources/site/service'
+import type { SitePage, SiteWidgetGlobalSettings } from '~/resources/site/types'
+import { WidgetRenderer } from '~/resources/site/widgets/components/widget-renderer'
 
 export interface SinglePageViewProps {
   slug?: string

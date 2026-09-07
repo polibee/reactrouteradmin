@@ -89,3 +89,16 @@ Verdicts: **KEEP** (stable, untouched) · **REFACTOR** (behavior preserved, loca
 - **P1** — AppProvider chain (Query → I18n(pending) → Theme → Auth) + `app/config/admin.config.ts`; `@tanstack/react-query` added; `app/root.tsx` mounted.
 - **P2** — i18next inline `en` locale (strict key typing via `i18next.d.ts`); all UI copy migrated to `t()`; CJK whitelist = seed data + code comments only.
 - **P3** — shadcn collection re-verified: `app/components/ui/` holds 49 files; doc Phase 3 checklist items (form/calendar/command/chart/carousel/drawer/input-otp/menubar/context-menu/navigation-menu/resizable/sonner/sidebar) all present. Deleted dead `app/admin/ui/layout/` (AdminLayout/AdminHeader/AdminSidebar — zero consumers outside the barrel) and `app/admin/ui/manifest/features.ts` (superseded by `adminConfig.features`). Semantic aliases in `app/admin/ui/index.ts` marked `@deprecated`; removal scheduled P20.
+- **P4** — `app/admin/ui/*` physically moved to `app/components/admin/*` (kebab-case files, exports unchanged); `~/admin/ui` barrel now a pure re-export bridge; `page-toolbar.tsx` added.
+- **P5** — `app/core/admin` (AdminContextValue: config/user/locale/features) replaces PanelProvider; AdminProvider mounted in AppProvider chain.
+- **P6** — `app/core/api` (client/request/response/errors); infrastructure only, no runtime consumers yet.
+- **P7** — auth moved to `app/core/auth` (AuthService interface + MockAuthService + useSyncExternalStore store); AuthGuard in `app/router/guards.tsx`; mock user = zero behavior change.
+- **P8** — permissions unified in `app/core/permissions` (single `hasPermission`, `<Can>`, usePermission); ProtectedAction deleted; AdminButton/AdminAction/navigation-builder delegate.
+- **P9** — navigation moved to `app/core/navigation`; `registerStaticNavigation()` + `registerAllResources()` idempotent; app-sidebar module-level side effects removed; bootstrapAdmin() runs in AdminProvider render body.
+- **P10** — table files renamed `data-table*`; added column-header, filter; manualPagination/pageCount passthrough.
+- **P11** — form fields normalized; FormSection/FormActions added.
+- **P12** — resource-engine core: `defineResource` in `app/resource-engine/resource` (labelKey/groupKey/data adapter/customPages; no Chinese defaults); generic `Registry<T>` + `ResourceRegistry` in `app/core/registry`; old `app/admin/core/resource` deleted.
+- **P13** — ColumnBuilder (text/number/badge/date/boolean/image/custom) producing tanstack ColumnDef with sortable headers.
+- **P14** — FieldBuilder (10 kinds) + FormFieldRenderer on RHF FormProvider.
+- **P15** — ActionBuilder (page/row/bulk) + ResourceActions renderer (Can + Button + AdminConfirmDialog; default labels/variants per kind; bulk delete defaults).
+- **P16** — `app/modules/*` → `app/resources/{users,roles,media,site}`; module machinery (`defineModule`/`ModuleRegistry`/`app/admin/core`) deleted; `registerAllResources()` registers resources directly into `resourceRegistry` (AnyAdminResource escape moved to resource.registry.ts); side-effect registrations removed. Route matrix verified incl. /p/:slug and single sidebar registration.

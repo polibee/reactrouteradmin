@@ -5,7 +5,7 @@ import {
   DashboardPageHeader,
 } from '~/admin/ui'
 import { i18n } from '~/core/i18n'
-import { NavigationEditor } from '~/modules/site/navigation/components/navigation-editor'
+import { NavigationEditor } from '~/resources/site/navigation/components/navigation-editor'
 
 export const meta = () => {
   return [{ title: i18n.t('pages.admin.navigation.metaTitle') }]

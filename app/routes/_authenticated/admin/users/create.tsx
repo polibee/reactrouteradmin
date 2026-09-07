@@ -9,9 +9,9 @@ import {
   notify,
 } from '~/admin/ui'
 import { i18n } from '~/core/i18n'
-import { UserForm } from '~/modules/user/components/user-form'
-import { userService } from '~/modules/user/service'
-import type { UserFormData } from '~/modules/user/types'
+import { UserForm } from '~/resources/users/components/user-form'
+import { userService } from '~/resources/users/service'
+import type { UserFormData } from '~/resources/users/types'
 
 export const meta = () => {
   return [{ title: i18n.t('pages.admin.users.createMetaTitle') }]

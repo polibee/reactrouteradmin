@@ -7,8 +7,8 @@ import {
 } from '~/admin/ui'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { i18n } from '~/core/i18n'
-import { AdSlotManager } from '~/modules/site/operations/components/ad-slot-manager'
-import { AnnouncementManager } from '~/modules/site/operations/components/announcement-manager'
+import { AdSlotManager } from '~/resources/site/operations/components/ad-slot-manager'
+import { AnnouncementManager } from '~/resources/site/operations/components/announcement-manager'
 
 export const meta = () => {
   return [{ title: i18n.t('pages.admin.operations.metaTitle') }]

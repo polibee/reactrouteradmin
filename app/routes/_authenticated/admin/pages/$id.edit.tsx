@@ -11,9 +11,9 @@ import {
   notify,
 } from '~/admin/ui'
 import { i18n } from '~/core/i18n'
-import { PageForm } from '~/modules/site/pages/components/page-form'
-import { siteService } from '~/modules/site/service'
-import type { SitePage, SitePageFormValues } from '~/modules/site/types'
+import { PageForm } from '~/resources/site/pages/components/page-form'
+import { siteService } from '~/resources/site/service'
+import type { SitePage, SitePageFormValues } from '~/resources/site/types'
 
 export const meta = () => {
   return [{ title: i18n.t('pages.admin.sitePages.editMetaTitle') }]

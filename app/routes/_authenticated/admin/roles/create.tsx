@@ -9,9 +9,9 @@ import {
   notify,
 } from '~/admin/ui'
 import { i18n } from '~/core/i18n'
-import { RoleForm } from '~/modules/role/components/role-form'
-import { roleService } from '~/modules/role/service'
-import type { RoleFormValues } from '~/modules/role/types'
+import { RoleForm } from '~/resources/roles/components/role-form'
+import { roleService } from '~/resources/roles/service'
+import type { RoleFormValues } from '~/resources/roles/types'
 
 export const meta = () => {
   return [{ title: i18n.t('pages.admin.roles.createMetaTitle') }]

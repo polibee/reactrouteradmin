@@ -20,8 +20,8 @@ import {
   AdminPageHeader,
 } from '~/admin/ui'
 import { i18n } from '~/core/i18n'
-import { userService } from '~/modules/user/service'
-import type { User } from '~/modules/user/types'
+import { userService } from '~/resources/users/service'
+import type { User } from '~/resources/users/types'
 
 export const meta = () => {
   return [{ title: i18n.t('pages.admin.users.detailMetaTitle') }]

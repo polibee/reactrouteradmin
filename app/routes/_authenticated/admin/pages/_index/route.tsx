@@ -8,9 +8,9 @@ import {
   DashboardPageHeader,
 } from '~/admin/ui'
 import { i18n } from '~/core/i18n'
-import { PageTable } from '~/modules/site/pages/components/page-table'
-import { siteService } from '~/modules/site/service'
-import type { SitePage } from '~/modules/site/types'
+import { PageTable } from '~/resources/site/pages/components/page-table'
+import { siteService } from '~/resources/site/service'
+import type { SitePage } from '~/resources/site/types'
 
 export const meta = () => {
   return [{ title: i18n.t('pages.admin.sitePages.metaTitle') }]

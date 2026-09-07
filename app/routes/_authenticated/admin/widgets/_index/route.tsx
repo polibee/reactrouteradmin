@@ -5,7 +5,7 @@ import {
   DashboardPageHeader,
 } from '~/admin/ui'
 import { i18n } from '~/core/i18n'
-import { WidgetManager } from '~/modules/site/widgets/components/widget-manager'
+import { WidgetManager } from '~/resources/site/widgets/components/widget-manager'
 
 export const meta = () => {
   return [{ title: i18n.t('pages.admin.widgets.metaTitle') }]

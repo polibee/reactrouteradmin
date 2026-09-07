@@ -50,7 +50,7 @@ import {
   Unlink,
 } from 'lucide-react'
 import { htmlToMarkdown, markdownToHtml } from '~/lib/markdown'
-import { MediaPickerModal } from '~/modules/media/components/media-picker-modal'
+import { MediaPickerModal } from '~/resources/media/components/media-picker-modal'
 import { Button } from './button'
 import {
   Dialog,

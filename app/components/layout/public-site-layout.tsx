@@ -14,9 +14,9 @@ import {
   BottomMarqueeNotice,
   OverlayNotices,
   TopBannerNotice,
-} from '~/modules/site/operations/components/floating-notices'
-import { siteService } from '~/modules/site/service'
-import type { SiteNavGroup, SiteNavItem } from '~/modules/site/types'
+} from '~/resources/site/operations/components/floating-notices'
+import { siteService } from '~/resources/site/service'
+import type { SiteNavGroup, SiteNavItem } from '~/resources/site/types'
 
 export interface PublicSiteLayoutProps {
   children: React.ReactNode

@@ -1,8 +1,14 @@
-import { moduleRegistry } from '~/admin/core/module/registry'
-import { MediaModule } from '~/modules/media'
-import { RoleModule } from '~/modules/role'
-import { SiteModule } from '~/modules/site'
-import { UserModule } from '~/modules/user'
+import { resourceRegistry } from '~/core/registry/resource.registry'
+import { MediaResource } from './media/resource'
+import { RoleResource } from './roles/resource'
+import {
+  SiteLinksResource,
+  SiteNavResource,
+  SiteOperationsResource,
+  SitePagesResource,
+  SiteWidgetsResource,
+} from './site/resource'
+import { UserResource } from './users/resource'
 
 let resourcesRegistered = false
 
@@ -10,8 +16,12 @@ export function registerAllResources(): void {
   if (resourcesRegistered) return
   resourcesRegistered = true
 
-  moduleRegistry.register(UserModule)
-  moduleRegistry.register(RoleModule)
-  moduleRegistry.register(MediaModule)
-  moduleRegistry.register(SiteModule)
+  resourceRegistry.register(UserResource)
+  resourceRegistry.register(RoleResource)
+  resourceRegistry.register(MediaResource)
+  resourceRegistry.register(SitePagesResource)
+  resourceRegistry.register(SiteNavResource)
+  resourceRegistry.register(SiteWidgetsResource)
+  resourceRegistry.register(SiteOperationsResource)
+  resourceRegistry.register(SiteLinksResource)
 }

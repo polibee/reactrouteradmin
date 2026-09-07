@@ -8,9 +8,9 @@ import {
   CreateAction,
 } from '~/admin/ui'
 import { i18n } from '~/core/i18n'
-import { UserTable } from '~/modules/user/components/user-table'
-import { userService } from '~/modules/user/service'
-import type { User } from '~/modules/user/types'
+import { UserTable } from '~/resources/users/components/user-table'
+import { userService } from '~/resources/users/service'
+import type { User } from '~/resources/users/types'
 
 export const meta = () => {
   return [{ title: i18n.t('pages.admin.users.metaTitle') }]
