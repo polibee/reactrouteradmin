@@ -7,6 +7,7 @@ import {
   X,
 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
@@ -52,6 +53,7 @@ export interface FloatingNoticesProps {
 }
 
 export function FloatingNotices({ placement = 'all' }: FloatingNoticesProps) {
+  const { t } = useTranslation()
   const [announcements, setAnnouncements] = useState<SiteAnnouncement[]>([])
   const [dismissedMap, setDismissedMap] = useState<Record<string, boolean>>({})
   const [modalOpen, setModalOpen] = useState(false)
@@ -156,7 +158,8 @@ export function FloatingNotices({ placement = 'all' }: FloatingNoticesProps) {
                   to={cleanUrl(bannerAnn.linkUrl)}
                   className="bg-primary-foreground/15 hover:bg-primary-foreground/25 inline-flex items-center gap-1 rounded px-2 py-0.5 text-[11px] font-medium transition-colors"
                 >
-                  {bannerAnn.linkText || '查看'}
+                  {bannerAnn.linkText ||
+                    t('resources.site.operations.notices.viewLink')}
                   <ArrowRight className="size-3" />
                 </Link>
               )}
@@ -164,8 +167,8 @@ export function FloatingNotices({ placement = 'all' }: FloatingNoticesProps) {
                 type="button"
                 onClick={() => handleDismissItem(bannerAnn.id)}
                 className="cursor-pointer p-1 opacity-70 transition-opacity hover:opacity-100"
-                title="关闭通告 (24小时内不再显示)"
-                aria-label="关闭通告"
+                title={t('resources.site.operations.notices.dismissTitle')}
+                aria-label={t('resources.site.operations.notices.dismiss')}
               >
                 <X className="size-3.5" />
               </button>
@@ -182,7 +185,7 @@ export function FloatingNotices({ placement = 'all' }: FloatingNoticesProps) {
               <div className="text-primary mb-1 flex items-center gap-2">
                 <BellRing className="size-5" />
                 <span className="text-xs font-semibold tracking-wider uppercase">
-                  重要运营通告
+                  {t('resources.site.operations.notices.modalKicker')}
                 </span>
               </div>
               <DialogTitle className="text-base font-bold">
@@ -194,12 +197,13 @@ export function FloatingNotices({ placement = 'all' }: FloatingNoticesProps) {
             </DialogHeader>
             <DialogFooter className="gap-2 pt-3">
               <Button variant="outline" size="sm" onClick={handleDismissModal}>
-                今日已知晓 (24小时不再提示)
+                {t('resources.site.operations.notices.modalDismiss')}
               </Button>
               {activeModal.linkUrl && (
                 <Button size="sm" asChild onClick={handleDismissModal}>
                   <Link to={cleanUrl(activeModal.linkUrl)}>
-                    {activeModal.linkText || '立即前往'}
+                    {activeModal.linkText ||
+                      t('resources.site.operations.notices.goLink')}
                   </Link>
                 </Button>
               )}
@@ -217,12 +221,12 @@ export function FloatingNotices({ placement = 'all' }: FloatingNoticesProps) {
               type="button"
               onClick={() => setCornerMinimized(false)}
               className="bg-primary/95 hover:bg-primary text-primary-foreground border-primary-foreground/20 flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium shadow-lg backdrop-blur-xs transition-all hover:scale-105"
-              title="点击展开运营通告"
+              title={t('resources.site.operations.notices.expandTitle')}
             >
               <BellRing className="size-3.5 animate-pulse text-amber-300" />
               <span className="max-w-[150px] truncate">{cornerAnn.title}</span>
               <span className="bg-primary-foreground/20 rounded-full px-1.5 py-0.5 text-[10px]">
-                展开
+                {t('resources.site.operations.notices.expand')}
               </span>
             </button>
           </div>
@@ -241,8 +245,8 @@ export function FloatingNotices({ placement = 'all' }: FloatingNoticesProps) {
                     type="button"
                     onClick={() => setCornerMinimized(true)}
                     className="text-muted-foreground hover:text-foreground hover:bg-muted/80 cursor-pointer rounded p-1 transition-colors"
-                    title="最小化为悬浮胶囊"
-                    aria-label="最小化为悬浮胶囊"
+                    title={t('resources.site.operations.notices.minimize')}
+                    aria-label={t('resources.site.operations.notices.minimize')}
                   >
                     <Minus className="size-3" />
                   </button>
@@ -250,8 +254,8 @@ export function FloatingNotices({ placement = 'all' }: FloatingNoticesProps) {
                     type="button"
                     onClick={() => handleDismissItem(cornerAnn.id)}
                     className="text-muted-foreground hover:text-foreground hover:bg-muted/80 cursor-pointer rounded p-1 transition-colors"
-                    title="关闭通告 (24小时内不再显示)"
-                    aria-label="关闭通告"
+                    title={t('resources.site.operations.notices.dismissTitle')}
+                    aria-label={t('resources.site.operations.notices.dismiss')}
                   >
                     <X className="size-3" />
                   </button>
@@ -267,7 +271,8 @@ export function FloatingNotices({ placement = 'all' }: FloatingNoticesProps) {
                       to={cleanUrl(cornerAnn.linkUrl)}
                       className="text-primary inline-flex items-center gap-1 text-xs font-medium hover:underline"
                     >
-                      {cornerAnn.linkText || '立即查看'}
+                      {cornerAnn.linkText ||
+                        t('resources.site.operations.notices.viewNow')}
                       <ArrowRight className="size-3" />
                     </Link>
                   </div>
@@ -293,7 +298,8 @@ export function FloatingNotices({ placement = 'all' }: FloatingNoticesProps) {
                   to={cleanUrl(marqueeAnn.linkUrl)}
                   className="text-primary hover:text-primary/80 ml-3 font-medium underline"
                 >
-                  {marqueeAnn.linkText || '立即查看'}
+                  {marqueeAnn.linkText ||
+                    t('resources.site.operations.notices.viewNow')}
                 </Link>
               )}
             </div>
@@ -303,8 +309,8 @@ export function FloatingNotices({ placement = 'all' }: FloatingNoticesProps) {
             type="button"
             onClick={() => handleDismissItem(marqueeAnn.id)}
             className="ml-2 shrink-0 cursor-pointer p-1 text-zinc-400 transition-colors hover:text-zinc-100"
-            title="关闭跑马灯 (24小时内不再显示)"
-            aria-label="关闭跑马灯"
+            title={t('resources.site.operations.notices.dismissMarqueeTitle')}
+            aria-label={t('resources.site.operations.notices.dismissMarquee')}
           >
             <X className="size-3.5" />
           </button>

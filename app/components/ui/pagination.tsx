@@ -4,6 +4,7 @@ import {
   MoreHorizontalIcon,
 } from 'lucide-react'
 import type * as React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { buttonVariants } from '~/components/ui/button'
 import { cn } from '~/lib/utils'
@@ -73,15 +74,18 @@ function PaginationPrevious({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const { t } = useTranslation()
   return (
     <PaginationLink
-      aria-label="Go to previous page"
+      aria-label={t('common.pagination.previousPage')}
       size="default"
       className={cn('gap-1 px-2.5 sm:pl-2.5', className)}
       {...props}
     >
       <ChevronLeftIcon />
-      <span className="hidden sm:block">上一页</span>
+      <span className="hidden sm:block">
+        {t('common.pagination.previousPage')}
+      </span>
     </PaginationLink>
   )
 }
@@ -90,14 +94,15 @@ function PaginationNext({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const { t } = useTranslation()
   return (
     <PaginationLink
-      aria-label="Go to next page"
+      aria-label={t('common.pagination.nextPage')}
       size="default"
       className={cn('gap-1 px-2.5 sm:pr-2.5', className)}
       {...props}
     >
-      <span className="hidden sm:block">下一页</span>
+      <span className="hidden sm:block">{t('common.pagination.nextPage')}</span>
       <ChevronRightIcon />
     </PaginationLink>
   )

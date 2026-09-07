@@ -1,14 +1,15 @@
 import { ShieldCheck } from 'lucide-react'
+import { i18n } from '~/core/i18n'
 import { defineResource } from '../../admin/core/resource/resource'
 import type { Role } from './types'
 
 export const RoleResource = defineResource<Role>({
   name: 'roles',
-  label: '角色权限',
-  pluralLabel: '角色列表',
+  label: i18n.t('resources.roles.label'),
+  pluralLabel: i18n.t('resources.roles.pluralLabel'),
   icon: ShieldCheck,
   navigation: {
-    group: '系统管理',
+    group: i18n.t('resources.roles.navigationGroup'),
     sort: 20,
   },
   permissions: {

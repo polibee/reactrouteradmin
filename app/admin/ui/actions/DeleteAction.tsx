@@ -1,5 +1,6 @@
 import { Trash2 } from 'lucide-react'
 import type React from 'react'
+import { useTranslation } from 'react-i18next'
 import { AdminAction, type AdminActionProps } from './AdminAction'
 
 export interface DeleteActionProps extends Omit<AdminActionProps, 'icon'> {
@@ -10,7 +11,7 @@ export interface DeleteActionProps extends Omit<AdminActionProps, 'icon'> {
 }
 
 export function DeleteAction({
-  label = '删除',
+  label,
   icon = Trash2,
   children,
   variant = 'ghost',
@@ -20,6 +21,15 @@ export function DeleteAction({
   confirmDescription,
   ...props
 }: DeleteActionProps) {
+  const { t } = useTranslation()
+  const resolvedLabel = label ?? t('common.actions.delete')
+  const resolvedConfirmTitle =
+    confirmTitle ||
+    (itemTitle
+      ? t('common.confirm.deleteTitle', { title: itemTitle })
+      : t('common.confirm.deleteItemTitle'))
+  const resolvedConfirmDescription =
+    confirmDescription || t('common.confirm.deleteDescription')
   return (
     <AdminAction
       icon={icon}
@@ -27,17 +37,12 @@ export function DeleteAction({
       size={size}
       className="text-destructive hover:text-destructive hover:bg-destructive/10"
       confirm={true}
-      confirmTitle={
-        confirmTitle ||
-        (itemTitle ? `确认删除“${itemTitle}”？` : '确认删除此条数据？')
-      }
-      confirmDescription={
-        confirmDescription || '删除后该数据将无法恢复，请谨慎操作。'
-      }
-      confirmText="确定删除"
+      confirmTitle={resolvedConfirmTitle}
+      confirmDescription={resolvedConfirmDescription}
+      confirmText={t('common.actions.confirmDelete')}
       {...props}
     >
-      {children || label}
+      {children || resolvedLabel}
     </AdminAction>
   )
 }

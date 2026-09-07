@@ -1,8 +1,9 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { Archive, Check, Copy, File, FileText, Film } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { AdminBadge, DataTable, DeleteAction, ViewAction } from '~/admin/ui'
-import type { MediaItem } from '../types'
+import type { MediaItem, MediaType } from '../types'
 
 export interface MediaTableProps {
   data: MediaItem[]
@@ -14,6 +15,32 @@ export interface MediaTableProps {
   onCopyUrl: (url: string) => void
 }
 
+const typeBadgeKeys: Record<
+  MediaType,
+  | 'resources.media.table.badges.image'
+  | 'resources.media.table.badges.document'
+  | 'resources.media.table.badges.video'
+  | 'resources.media.table.badges.archive'
+  | 'resources.media.table.badges.other'
+> = {
+  image: 'resources.media.table.badges.image',
+  document: 'resources.media.table.badges.document',
+  video: 'resources.media.table.badges.video',
+  archive: 'resources.media.table.badges.archive',
+  other: 'resources.media.table.badges.other',
+}
+
+const typeBadgeStatus: Record<
+  MediaType,
+  'success' | 'info' | 'warning' | 'default'
+> = {
+  image: 'success',
+  document: 'info',
+  video: 'warning',
+  archive: 'default',
+  other: 'default',
+}
+
 export function MediaTable({
   data,
   loading,
@@ -23,6 +50,7 @@ export function MediaTable({
   onDeleteItem,
   onCopyUrl,
 }: MediaTableProps) {
+  const { t } = useTranslation()
   const [copiedId, setCopiedId] = useState<string | null>(null)
 
   const formatSize = (bytes: number): string => {
@@ -66,7 +94,7 @@ export function MediaTable({
     },
     {
       accessorKey: 'name',
-      header: '文件名称与缩略图',
+      header: t('resources.media.table.nameHeader'),
       cell: ({ row }) => {
         const item = row.original
         return (
@@ -107,26 +135,19 @@ export function MediaTable({
     },
     {
       accessorKey: 'type',
-      header: '资产类型',
+      header: t('common.labels.type'),
       cell: ({ row }) => {
-        const t = row.original.type
-        switch (t) {
-          case 'image':
-            return <AdminBadge status="success">图片素材</AdminBadge>
-          case 'document':
-            return <AdminBadge status="info">文档文件</AdminBadge>
-          case 'video':
-            return <AdminBadge status="warning">音视频</AdminBadge>
-          case 'archive':
-            return <AdminBadge status="default">压缩包</AdminBadge>
-          default:
-            return <AdminBadge status="default">其他文件</AdminBadge>
-        }
+        const mediaType = row.original.type
+        return (
+          <AdminBadge status={typeBadgeStatus[mediaType]}>
+            {t(typeBadgeKeys[mediaType])}
+          </AdminBadge>
+        )
       },
     },
     {
       accessorKey: 'size',
-      header: '文件大小',
+      header: t('common.labels.size'),
       cell: ({ row }) => (
         <span className="text-muted-foreground font-mono text-xs">
           {formatSize(row.original.size)}
@@ -135,16 +156,16 @@ export function MediaTable({
     },
     {
       accessorKey: 'folder',
-      header: '存储分组',
+      header: t('resources.media.table.folderHeader'),
       cell: ({ row }) => (
         <span className="bg-muted/60 text-muted-foreground rounded px-2 py-0.5 text-xs">
-          {row.original.folder || '未分组'}
+          {row.original.folder || t('resources.media.folders.ungrouped')}
         </span>
       ),
     },
     {
       accessorKey: 'createdAt',
-      header: '上传时间',
+      header: t('resources.media.table.uploadedAtHeader'),
       cell: ({ row }) => {
         const d = row.original.createdAt
         return (
@@ -156,7 +177,9 @@ export function MediaTable({
     },
     {
       id: 'actions',
-      header: () => <div className="text-right">操作</div>,
+      header: () => (
+        <div className="text-right">{t('common.labels.actions')}</div>
+      ),
       cell: ({ row }) => {
         const item = row.original
         return (
@@ -165,7 +188,7 @@ export function MediaTable({
               type="button"
               onClick={() => handleCopy(item)}
               className="hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer rounded p-1.5 transition-colors"
-              title="复制外链"
+              title={t('resources.media.table.copyUrl')}
             >
               {copiedId === item.id ? (
                 <Check className="size-3.5 text-emerald-500" />
@@ -177,7 +200,12 @@ export function MediaTable({
             <DeleteAction
               permission="media.delete"
               itemTitle={item.name}
-              confirmDescription={`确定要删除文件「${item.name}」吗？已引用该文件的页面链接可能会失效。`}
+              confirmDescription={t(
+                'resources.media.table.deleteConfirmDescription',
+                {
+                  name: item.name,
+                },
+              )}
               onAction={() => onDeleteItem(item)}
             />
           </div>
@@ -192,7 +220,7 @@ export function MediaTable({
       data={data}
       loading={loading}
       searchKey="name"
-      searchPlaceholder="输入文件名搜索..."
+      searchPlaceholder={t('resources.media.table.searchPlaceholder')}
     />
   )
 }

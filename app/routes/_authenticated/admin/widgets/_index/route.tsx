@@ -1,24 +1,27 @@
+import { useTranslation } from 'react-i18next'
 import {
   DashboardPage,
   DashboardPageContent,
   DashboardPageHeader,
 } from '~/admin/ui'
+import { i18n } from '~/core/i18n'
 import { WidgetManager } from '~/modules/site/widgets/components/widget-manager'
 
 export const meta = () => {
-  return [{ title: '卡片小工具配置 - Admin Framework' }]
+  return [{ title: i18n.t('pages.admin.widgets.metaTitle') }]
 }
 
 export const handle = {
-  breadcrumb: () => ({ label: '卡片小工具' }),
+  breadcrumb: () => ({ label: i18n.t('pages.admin.widgets.title') }),
 }
 
 export default function SiteWidgetsPage() {
+  const { t } = useTranslation()
   return (
     <DashboardPage>
       <DashboardPageHeader
-        title="卡片小工具装配中心"
-        description="新增、编辑、删除以及配置后台 Dashboard 与前台门户侧边栏展示的动态微模块卡片"
+        title={t('pages.admin.widgets.heading')}
+        description={t('pages.admin.widgets.description')}
       />
 
       <DashboardPageContent>

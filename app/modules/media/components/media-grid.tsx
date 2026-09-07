@@ -9,6 +9,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { MediaItem } from '../types'
 
 export interface MediaGridProps {
@@ -28,6 +29,7 @@ export function MediaGrid({
   onDeleteItem,
   onCopyUrl,
 }: MediaGridProps) {
+  const { t } = useTranslation()
   const [copiedId, setCopiedId] = useState<string | null>(null)
 
   const formatSize = (bytes: number): string => {
@@ -52,10 +54,10 @@ export function MediaGrid({
           <File className="size-6" />
         </div>
         <div className="text-foreground text-sm font-semibold">
-          暂无符合条件的媒体资产
+          {t('resources.media.grid.emptyTitle')}
         </div>
         <div className="text-muted-foreground mt-1 max-w-xs text-xs">
-          当前分类或搜索条件下未检索到文件，您可以点击上方「上传文件」添加素材。
+          {t('resources.media.grid.emptyDescription')}
         </div>
       </div>
     )
@@ -165,7 +167,7 @@ export function MediaGrid({
                   type="button"
                   onClick={(e) => handleCopy(e, item)}
                   className="bg-background/80 hover:bg-background text-foreground flex size-7 cursor-pointer items-center justify-center rounded transition-colors"
-                  title="复制外链"
+                  title={t('resources.media.grid.copyUrl')}
                 >
                   {copiedId === item.id ? (
                     <Check className="size-3.5 text-emerald-500" />
@@ -180,7 +182,7 @@ export function MediaGrid({
                     onSelectItem(item)
                   }}
                   className="bg-background/80 hover:bg-background text-foreground flex size-7 cursor-pointer items-center justify-center rounded transition-colors"
-                  title="检视详情"
+                  title={t('resources.media.grid.viewDetails')}
                 >
                   <Eye className="size-3.5" />
                 </button>
@@ -191,7 +193,7 @@ export function MediaGrid({
                     onDeleteItem(item)
                   }}
                   className="bg-destructive/80 hover:bg-destructive text-destructive-foreground flex size-7 cursor-pointer items-center justify-center rounded transition-colors"
-                  title="删除"
+                  title={t('common.actions.delete')}
                 >
                   <Trash2 className="size-3.5" />
                 </button>
@@ -209,7 +211,7 @@ export function MediaGrid({
               <div className="text-muted-foreground flex items-center justify-between pt-1 font-mono text-[11px]">
                 <span>{formatSize(item.size)}</span>
                 <span className="max-w-[70px] truncate">
-                  {item.folder || '默认'}
+                  {item.folder || t('common.labels.default')}
                 </span>
               </div>
             </div>

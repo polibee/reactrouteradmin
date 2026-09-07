@@ -14,6 +14,7 @@ import {
   Quote,
 } from 'lucide-react'
 import { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { Textarea } from '~/components/ui/textarea'
@@ -29,10 +30,13 @@ export interface MarkdownEditorProps {
 export function MarkdownEditor({
   value,
   onChange,
-  placeholder = '在此编写 Markdown 内容...',
+  placeholder,
   minHeight = '320px',
   className = '',
 }: MarkdownEditorProps) {
+  const { t } = useTranslation()
+  const resolvedPlaceholder =
+    placeholder ?? t('common.editor.markdownPlaceholder')
   const [mode, setMode] = useState<'edit' | 'preview' | 'split'>('edit')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -62,7 +66,7 @@ export function MarkdownEditor({
     if (!content.trim()) {
       return (
         <div className="text-muted-foreground py-8 text-center text-xs italic">
-          暂无预览内容，请在左侧编辑器中输入文本...
+          {t('common.editor.previewEmpty')}
         </div>
       )
     }
@@ -159,8 +163,10 @@ export function MarkdownEditor({
             variant="ghost"
             size="icon"
             className="size-7"
-            onClick={() => insertText('**', '**', '粗体文字')}
-            title="加粗 (Bold)"
+            onClick={() =>
+              insertText('**', '**', t('common.editor.insertBoldText'))
+            }
+            title={t('common.editor.bold')}
           >
             <Bold className="size-3.5" />
           </Button>
@@ -169,8 +175,10 @@ export function MarkdownEditor({
             variant="ghost"
             size="icon"
             className="size-7"
-            onClick={() => insertText('*', '*', '斜体文字')}
-            title="斜体 (Italic)"
+            onClick={() =>
+              insertText('*', '*', t('common.editor.insertItalicText'))
+            }
+            title={t('common.editor.italic')}
           >
             <Italic className="size-3.5" />
           </Button>
@@ -180,8 +188,10 @@ export function MarkdownEditor({
             variant="ghost"
             size="icon"
             className="size-7"
-            onClick={() => insertText('# ', '', '主标题')}
-            title="一级标题 (H1)"
+            onClick={() =>
+              insertText('# ', '', t('common.editor.insertHeading1Text'))
+            }
+            title={t('common.editor.heading1')}
           >
             <Heading1 className="size-3.5" />
           </Button>
@@ -190,8 +200,10 @@ export function MarkdownEditor({
             variant="ghost"
             size="icon"
             className="size-7"
-            onClick={() => insertText('## ', '', '二级标题')}
-            title="二级标题 (H2)"
+            onClick={() =>
+              insertText('## ', '', t('common.editor.insertHeading2Text'))
+            }
+            title={t('common.editor.heading2')}
           >
             <Heading2 className="size-3.5" />
           </Button>
@@ -200,8 +212,10 @@ export function MarkdownEditor({
             variant="ghost"
             size="icon"
             className="size-7"
-            onClick={() => insertText('### ', '', '三级标题')}
-            title="三级标题 (H3)"
+            onClick={() =>
+              insertText('### ', '', t('common.editor.insertHeading3Text'))
+            }
+            title={t('common.editor.heading3')}
           >
             <Heading3 className="size-3.5" />
           </Button>
@@ -212,9 +226,13 @@ export function MarkdownEditor({
             size="icon"
             className="size-7"
             onClick={() =>
-              insertText('[', '](https://example.com)', '链接文本')
+              insertText(
+                '[',
+                '](https://example.com)',
+                t('common.editor.insertLinkText'),
+              )
             }
-            title="超链接"
+            title={t('common.editor.link')}
           >
             <LinkIcon className="size-3.5" />
           </Button>
@@ -223,8 +241,10 @@ export function MarkdownEditor({
             variant="ghost"
             size="icon"
             className="size-7"
-            onClick={() => insertText('> ', '', '引用说明文字')}
-            title="引用块"
+            onClick={() =>
+              insertText('> ', '', t('common.editor.insertQuoteText'))
+            }
+            title={t('common.editor.blockquote')}
           >
             <Quote className="size-3.5" />
           </Button>
@@ -233,8 +253,10 @@ export function MarkdownEditor({
             variant="ghost"
             size="icon"
             className="size-7"
-            onClick={() => insertText('```ts\n', '\n```', '// 代码内容')}
-            title="代码块"
+            onClick={() =>
+              insertText('```ts\n', '\n```', t('common.editor.insertCodeText'))
+            }
+            title={t('common.editor.codeBlock')}
           >
             <Code className="size-3.5" />
           </Button>
@@ -243,8 +265,10 @@ export function MarkdownEditor({
             variant="ghost"
             size="icon"
             className="size-7"
-            onClick={() => insertText('- ', '', '列表项内容')}
-            title="无序列表"
+            onClick={() =>
+              insertText('- ', '', t('common.editor.insertListItemText'))
+            }
+            title={t('common.editor.bulletList')}
           >
             <List className="size-3.5" />
           </Button>
@@ -254,7 +278,7 @@ export function MarkdownEditor({
             size="icon"
             className="size-7"
             onClick={() => insertText('\n---\n', '')}
-            title="分割线"
+            title={t('common.editor.horizontalRule')}
           >
             <Minus className="size-3.5" />
           </Button>
@@ -269,15 +293,15 @@ export function MarkdownEditor({
           <TabsList className="h-7 p-0.5">
             <TabsTrigger value="edit" className="h-6 gap-1 px-2 text-[11px]">
               <Edit3 className="size-3" />
-              编辑
+              {t('common.editor.edit')}
             </TabsTrigger>
             <TabsTrigger value="preview" className="h-6 gap-1 px-2 text-[11px]">
               <Eye className="size-3" />
-              预览
+              {t('common.editor.preview')}
             </TabsTrigger>
             <TabsTrigger value="split" className="h-6 gap-1 px-2 text-[11px]">
               <Columns2 className="size-3" />
-              分屏
+              {t('common.editor.split')}
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -299,7 +323,7 @@ export function MarkdownEditor({
               ref={textareaRef}
               value={value}
               onChange={(e) => onChange(e.target.value)}
-              placeholder={placeholder}
+              placeholder={resolvedPlaceholder}
               className="w-full flex-1 resize-y border-none p-2 font-mono text-xs shadow-none focus-visible:ring-0 sm:text-sm"
               style={{ minHeight }}
             />

@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import { ActionButton, SmartForm, TextField, TextareaField } from '~/admin/ui'
 import { roleFormSchema, type Role, type RoleFormValues } from '../types'
@@ -16,9 +17,12 @@ export function RoleForm({
   initialData,
   onSubmit,
   loading = false,
-  submitText = '保存角色',
+  submitText,
 }: RoleFormProps) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
+  const resolvedSubmitText =
+    submitText ?? t('resources.roles.form.submitDefault')
   const isSystem = initialData?.isSystem ?? false
 
   const form = useForm<RoleFormValues>({
@@ -45,11 +49,11 @@ export function RoleForm({
       form={form}
       onSubmit={onSubmit}
       loading={loading}
-      submitText={submitText}
+      submitText={resolvedSubmitText}
       actions={
         <div className="flex items-center gap-3">
           <ActionButton type="submit" loading={loading}>
-            {submitText}
+            {resolvedSubmitText}
           </ActionButton>
           <ActionButton
             type="button"
@@ -57,7 +61,7 @@ export function RoleForm({
             onClick={() => navigate('/admin/roles')}
             disabled={loading}
           >
-            取消返回
+            {t('resources.roles.form.cancelBack')}
           </ActionButton>
         </div>
       }
@@ -65,15 +69,15 @@ export function RoleForm({
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <TextField
           name="name"
-          label="角色名称"
-          placeholder="例如：运营主管、财务专员"
+          label={t('resources.roles.fields.name')}
+          placeholder={t('resources.roles.fields.namePlaceholder')}
           required
         />
         <TextField
           name="code"
-          label="角色标识"
-          placeholder="例如：operation_manager"
-          description="英文唯一标识符，创建后通常不建议随意修改"
+          label={t('resources.roles.fields.code')}
+          placeholder={t('resources.roles.fields.codePlaceholder')}
+          description={t('resources.roles.fields.codeDescription')}
           disabled={isSystem}
           required
         />
@@ -81,8 +85,8 @@ export function RoleForm({
 
       <TextareaField
         name="description"
-        label="角色定位与职能说明"
-        placeholder="简要描述该角色的工作职责与权限边界..."
+        label={t('resources.roles.fields.description')}
+        placeholder={t('resources.roles.fields.descriptionPlaceholder')}
       />
 
       <div className="pt-2">

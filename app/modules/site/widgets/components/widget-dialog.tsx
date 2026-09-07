@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FolderOpen } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import {
   ActionButton,
   NumberField,
@@ -41,6 +42,7 @@ export function WidgetDialog({
   onSubmit,
   loading = false,
 }: WidgetDialogProps) {
+  const { t } = useTranslation()
   const isEditing = Boolean(widget)
   const [mediaPickerOpen, setMediaPickerOpen] = useState(false)
 
@@ -108,10 +110,12 @@ export function WidgetDialog({
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>
-              {isEditing ? '编辑卡片小工具' : '新增卡片小工具'}
+              {isEditing
+                ? t('resources.site.widgets.dialog.editTitle')
+                : t('resources.site.widgets.dialog.createTitle')}
             </DialogTitle>
             <DialogDescription>
-              配置小工具的标识、展示位置、卡片类型以及自定义展示内容。
+              {t('resources.site.widgets.dialog.description')}
             </DialogDescription>
           </DialogHeader>
 
@@ -127,10 +131,12 @@ export function WidgetDialog({
                   onClick={() => onOpenChange(false)}
                   disabled={loading}
                 >
-                  取消
+                  {t('common.actions.cancel')}
                 </ActionButton>
                 <ActionButton type="submit" loading={loading}>
-                  {isEditing ? '保存修改' : '立即创建'}
+                  {isEditing
+                    ? t('resources.site.shared.saveChanges')
+                    : t('resources.site.shared.createNow')}
                 </ActionButton>
               </div>
             }
@@ -138,15 +144,15 @@ export function WidgetDialog({
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <TextField
                 name="title"
-                label="卡片名称"
-                placeholder="例如：开发指南、赞助支持"
+                label={t('resources.site.widgets.dialog.nameLabel')}
+                placeholder={t('resources.site.widgets.dialog.namePlaceholder')}
                 required
               />
               <TextField
                 name="key"
-                label="唯一键标识 (Key)"
-                placeholder="例如：dev_guide, sponsor"
-                description="内置卡片需对应专属键"
+                label={t('resources.site.widgets.dialog.keyLabel')}
+                placeholder={t('resources.site.widgets.dialog.keyPlaceholder')}
+                description={t('resources.site.widgets.dialog.keyHint')}
                 required
               />
             </div>
@@ -154,23 +160,28 @@ export function WidgetDialog({
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <SelectField
                 name="placement"
-                label="投放展示位置"
+                label={t('resources.site.widgets.dialog.placementLabel')}
                 options={[
-                  { label: '全域通用 (后台 + 首页 + 内容单页)', value: 'both' },
                   {
-                    label: '仅首页侧边栏 (Home Sidebar)',
+                    label: t('resources.site.widgets.dialog.placementBoth'),
+                    value: 'both',
+                  },
+                  {
+                    label: t('resources.site.widgets.dialog.placementHome'),
                     value: 'home_sidebar',
                   },
                   {
-                    label: '仅内容单页侧边栏 (Page Sidebar)',
+                    label: t('resources.site.widgets.dialog.placementPage'),
                     value: 'page_sidebar',
                   },
                   {
-                    label: '全前台侧边栏 (首页与单页均展示)',
+                    label: t('resources.site.widgets.dialog.placementSite'),
                     value: 'site_sidebar',
                   },
                   {
-                    label: '仅后台仪表盘 (Admin Dashboard)',
+                    label: t(
+                      'resources.site.widgets.dialog.placementDashboard',
+                    ),
                     value: 'dashboard',
                   },
                 ]}
@@ -178,40 +189,70 @@ export function WidgetDialog({
               />
               <SelectField
                 name="cardType"
-                label="卡片形态类型"
+                label={t('resources.site.widgets.dialog.cardTypeLabel')}
                 options={[
-                  { label: '预置业务组件 (Preset)', value: 'preset' },
                   {
-                    label: '图片超链接海报 (Image Banner)',
+                    label: t('resources.site.widgets.dialog.cardTypePreset'),
+                    value: 'preset',
+                  },
+                  {
+                    label: t(
+                      'resources.site.widgets.dialog.cardTypeImageBanner',
+                    ),
                     value: 'image_banner',
                   },
-                  { label: '文本超链接列表 (Link List)', value: 'link_list' },
-                  { label: '自定义 HTML 片段', value: 'custom_html' },
-                  { label: '自定义 JS / 嵌入式脚本', value: 'custom_js' },
-                  { label: '自定义纯文本 / Markdown', value: 'custom_text' },
+                  {
+                    label: t('resources.site.widgets.dialog.cardTypeLinkList'),
+                    value: 'link_list',
+                  },
+                  {
+                    label: t(
+                      'resources.site.widgets.dialog.cardTypeCustomHtml',
+                    ),
+                    value: 'custom_html',
+                  },
+                  {
+                    label: t('resources.site.widgets.dialog.cardTypeCustomJs'),
+                    value: 'custom_js',
+                  },
+                  {
+                    label: t(
+                      'resources.site.widgets.dialog.cardTypeCustomText',
+                    ),
+                    value: 'custom_text',
+                  },
                 ]}
                 required
               />
             </div>
 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <NumberField name="sort" label="排序权重 (越小越靠前)" required />
+              <NumberField
+                name="sort"
+                label={t('resources.site.widgets.dialog.sortLabel')}
+                required
+              />
               <div className="pt-6">
-                <SwitchField name="enabled" label="立即启用此小工具" />
+                <SwitchField
+                  name="enabled"
+                  label={t('resources.site.widgets.dialog.enabledLabel')}
+                />
               </div>
             </div>
 
             <TextField
               name="description"
-              label="简短说明或副标题 (可选)"
-              placeholder="简述卡片用途..."
+              label={t('resources.site.widgets.dialog.descriptionLabel')}
+              placeholder={t(
+                'resources.site.widgets.dialog.descriptionPlaceholder',
+              )}
             />
 
             {cardType === 'image_banner' && (
               <div className="bg-muted/30 space-y-3 rounded-lg border p-3">
                 <div className="flex items-center justify-between">
                   <span className="text-foreground text-xs font-medium">
-                    横幅海报图片
+                    {t('resources.site.widgets.dialog.imageSection')}
                   </span>
                   <Button
                     type="button"
@@ -221,27 +262,37 @@ export function WidgetDialog({
                     onClick={() => setMediaPickerOpen(true)}
                   >
                     <FolderOpen className="size-3" />
-                    从媒体库选取
+                    {t('resources.site.widgets.dialog.pickFromMedia')}
                   </Button>
                 </div>
                 <TextField
                   name="imageUrl"
-                  label="图片链接 URL"
-                  placeholder="https://images.unsplash.com/... 或 /images/banner.png"
+                  label={t('resources.site.widgets.dialog.imageUrlLabel')}
+                  placeholder={t(
+                    'resources.site.widgets.dialog.imageUrlPlaceholder',
+                  )}
                   required
                 />
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <TextField
                     name="targetUrl"
-                    label="点击跳转链接"
-                    placeholder="https://... 或 /about"
+                    label={t('resources.site.widgets.dialog.targetUrlLabel')}
+                    placeholder={t(
+                      'resources.site.widgets.dialog.targetUrlPlaceholder',
+                    )}
                   />
                   <SelectField
                     name="targetWindow"
-                    label="打开方式"
+                    label={t('resources.site.widgets.dialog.targetWindowLabel')}
                     options={[
-                      { label: '新标签页打开 (_blank)', value: '_blank' },
-                      { label: '当前窗口打开 (_self)', value: '_self' },
+                      {
+                        label: t('resources.site.widgets.dialog.targetBlank'),
+                        value: '_blank',
+                      },
+                      {
+                        label: t('resources.site.widgets.dialog.targetSelf'),
+                        value: '_self',
+                      },
                     ]}
                   />
                 </div>
@@ -252,16 +303,24 @@ export function WidgetDialog({
               <div className="bg-muted/30 space-y-3 rounded-lg border p-3">
                 <TextareaField
                   name="linkItemsText"
-                  label="超链接列表 (格式：标题 | URL | 徽标标签，每行一项)"
-                  placeholder="官方仓库 | https://github.com/... | GitHub&#10;技术文档 | /about | 推荐&#10;开发支持 | mailto:support@example.com | 咨询"
+                  label={t('resources.site.widgets.dialog.linkItemsLabel')}
+                  placeholder={t(
+                    'resources.site.widgets.dialog.linkItemsPlaceholder',
+                  )}
                   rows={4}
                 />
                 <SelectField
                   name="targetWindow"
-                  label="打开方式"
+                  label={t('resources.site.widgets.dialog.targetWindowLabel')}
                   options={[
-                    { label: '新标签页打开 (_blank)', value: '_blank' },
-                    { label: '当前窗口打开 (_self)', value: '_self' },
+                    {
+                      label: t('resources.site.widgets.dialog.targetBlank'),
+                      value: '_blank',
+                    },
+                    {
+                      label: t('resources.site.widgets.dialog.targetSelf'),
+                      value: '_self',
+                    },
                   ]}
                 />
               </div>
@@ -270,7 +329,7 @@ export function WidgetDialog({
             {cardType === 'custom_html' && (
               <TextareaField
                 name="customContent"
-                label="自定义 HTML 代码片段"
+                label={t('resources.site.widgets.dialog.customHtmlLabel')}
                 placeholder="<div class='p-3 bg-muted/50 rounded-lg border text-xs'>...</div>"
                 rows={5}
               />
@@ -280,14 +339,18 @@ export function WidgetDialog({
               <div className="bg-muted/30 space-y-3 rounded-lg border p-3">
                 <TextareaField
                   name="jsCode"
-                  label="自定义 JavaScript 代码 (脚本将安全沙箱执行)"
-                  placeholder="// 示例：动态更新容器内容&#10;if (container) {&#10;  container.innerHTML = '<p class=\'text-xs text-primary font-mono\'>JS 动态渲染已就绪</p>';&#10;}"
+                  label={t('resources.site.widgets.dialog.jsCodeLabel')}
+                  placeholder={t(
+                    'resources.site.widgets.dialog.jsCodePlaceholder',
+                  )}
                   rows={5}
                 />
                 <TextareaField
                   name="customContent"
-                  label="初始 HTML 结构 (可选)"
-                  placeholder="<div id='my-js-widget'>载入中...</div>"
+                  label={t('resources.site.widgets.dialog.initialHtmlLabel')}
+                  placeholder={t(
+                    'resources.site.widgets.dialog.initialHtmlPlaceholder',
+                  )}
                   rows={3}
                 />
               </div>
@@ -296,8 +359,10 @@ export function WidgetDialog({
             {cardType === 'custom_text' && (
               <TextareaField
                 name="customContent"
-                label="自定义 Markdown / 文本内容"
-                placeholder="在此输入需要展示的自定义文字说明，支持基础 Markdown..."
+                label={t('resources.site.widgets.dialog.customTextLabel')}
+                placeholder={t(
+                  'resources.site.widgets.dialog.customTextPlaceholder',
+                )}
                 rows={5}
               />
             )}
@@ -309,7 +374,7 @@ export function WidgetDialog({
         open={mediaPickerOpen}
         onOpenChange={setMediaPickerOpen}
         allowedTypes={['image']}
-        title="选择小工具图片素材"
+        title={t('resources.site.widgets.dialog.mediaPickerTitle')}
         onSelect={(item) => {
           form.setValue('imageUrl', item.url, {
             shouldValidate: true,

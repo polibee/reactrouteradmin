@@ -6,7 +6,7 @@ export function defineResource<T = unknown>(
   const defaultPath = `/admin/${config.name}`
   return {
     ...config,
-    pluralLabel: config.pluralLabel || `${config.label}列表`,
+    pluralLabel: config.pluralLabel || `${config.label} list`,
     routes: {
       path: defaultPath,
       listPath: defaultPath,
@@ -16,7 +16,7 @@ export function defineResource<T = unknown>(
       ...config.routes,
     },
     navigation: {
-      group: '默认分组',
+      group: 'Default group',
       sort: 10,
       icon: config.icon,
       ...config.navigation,

@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { i18n } from '~/core/i18n'
 
 export interface Role {
   id: string
@@ -22,15 +23,15 @@ export interface PermissionGroup {
   module: string
   title: string
   description?: string
-  permissions: PermissionDefinition[]
+  permissions: readonly PermissionDefinition[]
 }
 
 export const roleFormSchema = z.object({
-  name: z.string().min(2, '角色名称至少需要 2 个字符'),
+  name: z.string().min(2, i18n.t('resources.roles.validation.nameMin')),
   code: z
     .string()
-    .min(2, '角色标识至少需要 2 个字符')
-    .regex(/^[a-zA-Z0-9_-]+$/, '角色标识仅支持英文字母、数字、下划线和连字符'),
+    .min(2, i18n.t('resources.roles.validation.codeMin'))
+    .regex(/^[a-zA-Z0-9_-]+$/, i18n.t('resources.roles.validation.codeFormat')),
   description: z.string().optional(),
   permissions: z.array(z.string()).default([]),
 })

@@ -1,5 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { ExternalLink, Eye, FileText } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
   AdminBadge,
@@ -19,23 +20,26 @@ export interface PageTableProps {
 }
 
 export function PageTable({ data, loading, onDataChange }: PageTableProps) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const handleDelete = async (page: SitePage) => {
     try {
       await siteService.deletePage(page.id)
-      notify.success(`页面「${page.title}」已删除`)
+      notify.success(
+        t('resources.site.pages.table.deleted', { name: page.title }),
+      )
       if (onDataChange) onDataChange()
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '删除失败')
+      notify.error(err?.message || t('resources.site.shared.deleteFailed'))
     }
   }
 
   const columns: ColumnDef<SitePage>[] = [
     {
       accessorKey: 'title',
-      header: '页面标题与路径',
+      header: t('resources.site.pages.table.columnTitle'),
       cell: ({ row }) => {
         const page = row.original
         return (
@@ -63,19 +67,21 @@ export function PageTable({ data, loading, onDataChange }: PageTableProps) {
     },
     {
       accessorKey: 'status',
-      header: '发布状态',
+      header: t('resources.site.pages.table.columnStatus'),
       cell: ({ row }) => {
         const status = row.original.status
         return (
           <AdminBadge status={status === 'published' ? 'success' : 'warning'}>
-            {status === 'published' ? '已发布上线' : '草稿暂存'}
+            {status === 'published'
+              ? t('resources.site.pages.table.published')
+              : t('resources.site.pages.table.draft')}
           </AdminBadge>
         )
       },
     },
     {
       accessorKey: 'views',
-      header: '浏览量',
+      header: t('resources.site.pages.table.columnViews'),
       cell: ({ row }) => (
         <span className="text-muted-foreground flex items-center gap-1 font-mono text-xs">
           <Eye className="size-3" />
@@ -85,7 +91,7 @@ export function PageTable({ data, loading, onDataChange }: PageTableProps) {
     },
     {
       accessorKey: 'updatedAt',
-      header: '最后更新',
+      header: t('resources.site.pages.table.columnUpdatedAt'),
       cell: ({ row }) => {
         const dateStr = row.getValue('updatedAt') as string
         return (
@@ -97,7 +103,9 @@ export function PageTable({ data, loading, onDataChange }: PageTableProps) {
     },
     {
       id: 'actions',
-      header: () => <div className="text-right">操作</div>,
+      header: () => (
+        <div className="text-right">{t('common.labels.actions')}</div>
+      ),
       cell: ({ row }) => {
         const page = row.original
 
@@ -117,7 +125,10 @@ export function PageTable({ data, loading, onDataChange }: PageTableProps) {
             <DeleteAction
               permission="site.pages"
               itemTitle={page.title}
-              confirmDescription={`确定要删除单页面「${page.title}」吗？已配置的前台链接访问将变为 404。`}
+              confirmDescription={t(
+                'resources.site.pages.table.deleteDescription',
+                { name: page.title },
+              )}
               onAction={() => handleDelete(page)}
             />
           </div>
@@ -132,7 +143,7 @@ export function PageTable({ data, loading, onDataChange }: PageTableProps) {
       data={data}
       loading={loading}
       searchKey="title"
-      searchPlaceholder="输入页面标题或路径搜索..."
+      searchPlaceholder={t('resources.site.pages.table.searchPlaceholder')}
     />
   )
 }

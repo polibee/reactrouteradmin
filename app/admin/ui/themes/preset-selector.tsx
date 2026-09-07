@@ -1,4 +1,5 @@
 import { Check, Palette } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
 import {
   DropdownMenu,
@@ -12,6 +13,7 @@ import { themePresets, type ThemePreset } from './presets'
 import { useThemePreset } from './theme-context'
 
 export function PresetSelector() {
+  const { t } = useTranslation()
   const { preset, setPreset } = useThemePreset()
 
   return (
@@ -21,14 +23,14 @@ export function PresetSelector() {
           variant="ghost"
           size="icon"
           className="scale-95 rounded-full"
-          title="设计预设风格"
+          title={t('common.presets.title')}
         >
           <Palette className="h-4 w-4" />
-          <span className="sr-only">切换设计预设</span>
+          <span className="sr-only">{t('common.presets.switchToPreset')}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuLabel>设计预设 (Presets)</DropdownMenuLabel>
+        <DropdownMenuLabel>{t('common.presets.menuLabel')}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {(Object.keys(themePresets) as ThemePreset[]).map((key) => {
           const item = themePresets[key]
@@ -40,9 +42,11 @@ export function PresetSelector() {
               className="flex cursor-pointer items-center justify-between"
             >
               <div>
-                <div className="text-xs font-medium">{item.name}</div>
+                <div className="text-xs font-medium">{t(item.name)}</div>
                 <div className="text-muted-foreground text-[10px]">
-                  {item.density === 'compact' ? '紧凑密度' : '适中密度'}
+                  {item.density === 'compact'
+                    ? t('common.presets.densityCompact')
+                    : t('common.presets.densityComfortable')}
                 </div>
               </div>
               {isSelected && <Check className="text-primary h-4 w-4" />}

@@ -14,6 +14,7 @@ import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   AlignCenter,
@@ -68,6 +69,28 @@ import {
 import { Input } from './input'
 import { Label } from './label'
 
+const textColorSwatches = [
+  { color: '#09090b', title: 'common.editor.colorBlack' },
+  { color: '#2563eb', title: 'common.editor.colorBlue' },
+  { color: '#16a34a', title: 'common.editor.colorGreen' },
+  { color: '#dc2626', title: 'common.editor.colorRed' },
+  { color: '#d97706', title: 'common.editor.colorAmber' },
+  { color: '#9333ea', title: 'common.editor.colorPurple' },
+  { color: '#64748b', title: 'common.editor.colorGray' },
+  { color: '#0284c7', title: 'common.editor.colorSkyBlue' },
+] as const
+
+const highlightSwatches = [
+  { color: '#fef08a', title: 'common.editor.highlightYellow' },
+  { color: '#bbf7d0', title: 'common.editor.highlightMint' },
+  { color: '#bae6fd', title: 'common.editor.highlightSky' },
+  { color: '#fbcfe8', title: 'common.editor.highlightPink' },
+  { color: '#fed7aa', title: 'common.editor.highlightOrange' },
+  { color: '#e9d5ff', title: 'common.editor.highlightLilac' },
+  { color: '#e2e8f0', title: 'common.editor.highlightLightGray' },
+  { color: 'transparent', title: 'common.editor.clearHighlight' },
+] as const
+
 export interface RichTextEditorProps {
   value: string
   onChange: (value: string) => void
@@ -80,11 +103,13 @@ export interface RichTextEditorProps {
 export function RichTextEditor({
   value,
   onChange,
-  placeholder = '请在此输入正文内容，支持 Markdown 语法与可视化排版...',
+  placeholder,
   minHeight = '360px',
   disabled = false,
   className = '',
 }: RichTextEditorProps) {
+  const { t } = useTranslation()
+  const resolvedPlaceholder = placeholder ?? t('common.editor.richPlaceholder')
   const [isMarkdownMode, setIsMarkdownMode] = useState(false)
   const [markdownContent, setMarkdownContent] = useState('')
   const canvasRef = useRef<HTMLDivElement>(null)
@@ -148,7 +173,7 @@ export function RichTextEditor({
         },
       }),
       Placeholder.configure({
-        placeholder,
+        placeholder: resolvedPlaceholder,
         emptyEditorClass: 'is-editor-empty',
       }),
     ],
@@ -299,7 +324,7 @@ export function RichTextEditor({
         style={{ minHeight }}
         className="bg-muted/20 text-muted-foreground flex items-center justify-center rounded-lg border text-xs"
       >
-        <span>正在载入 TipTap 官方编辑器...</span>
+        <span>{t('common.editor.loadingTipTap')}</span>
       </div>
     )
   }
@@ -331,16 +356,16 @@ export function RichTextEditor({
               <Type className="text-primary size-3.5" />
               <span className="font-medium">
                 {editor.isActive('heading', { level: 1 })
-                  ? '一级标题 (H1)'
+                  ? t('common.editor.heading1')
                   : editor.isActive('heading', { level: 2 })
-                    ? '二级标题 (H2)'
+                    ? t('common.editor.heading2')
                     : editor.isActive('heading', { level: 3 })
-                      ? '三级标题 (H3)'
+                      ? t('common.editor.heading3')
                       : editor.isActive('blockquote')
-                        ? '引用块'
+                        ? t('common.editor.blockquote')
                         : editor.isActive('codeBlock')
-                          ? '代码块'
-                          : '常规正文'}
+                          ? t('common.editor.codeBlock')
+                          : t('common.editor.paragraph')}
               </span>
             </Button>
           </DropdownMenuTrigger>
@@ -351,7 +376,7 @@ export function RichTextEditor({
                 editor.isActive('paragraph') ? 'bg-muted font-semibold' : ''
               }
             >
-              <span>常规正文 (Paragraph)</span>
+              <span>{t('common.editor.paragraph')}</span>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
@@ -364,7 +389,9 @@ export function RichTextEditor({
               }
             >
               <Heading1 className="text-primary mr-2 size-4" />
-              <span className="text-sm font-bold">一级大标题 (H1)</span>
+              <span className="text-sm font-bold">
+                {t('common.editor.heading1')}
+              </span>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
@@ -377,7 +404,9 @@ export function RichTextEditor({
               }
             >
               <Heading2 className="text-primary mr-2 size-4" />
-              <span className="text-xs font-semibold">二级副标题 (H2)</span>
+              <span className="text-xs font-semibold">
+                {t('common.editor.heading2')}
+              </span>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
@@ -390,7 +419,9 @@ export function RichTextEditor({
               }
             >
               <Heading3 className="text-primary mr-2 size-4" />
-              <span className="text-xs font-medium">三级小标题 (H3)</span>
+              <span className="text-xs font-medium">
+                {t('common.editor.heading3')}
+              </span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
@@ -400,7 +431,7 @@ export function RichTextEditor({
               }
             >
               <Quote className="text-muted-foreground mr-2 size-3.5" />
-              <span>引用块 (Blockquote)</span>
+              <span>{t('common.editor.blockquote')}</span>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => editor.chain().focus().toggleCodeBlock().run()}
@@ -409,7 +440,9 @@ export function RichTextEditor({
               }
             >
               <Code className="text-muted-foreground mr-2 size-3.5" />
-              <span className="font-mono text-xs">代码块 (Code Block)</span>
+              <span className="font-mono text-xs">
+                {t('common.editor.codeBlock')}
+              </span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -422,7 +455,7 @@ export function RichTextEditor({
           variant={editor.isActive('bold') ? 'secondary' : 'ghost'}
           size="sm"
           className={`h-8 w-8 p-0 ${editor.isActive('bold') ? 'bg-muted text-foreground font-bold' : ''}`}
-          title="粗体 (Bold)"
+          title={t('common.editor.bold')}
           disabled={disabled || isMarkdownMode}
           onClick={() => editor.chain().focus().toggleBold().run()}
         >
@@ -434,7 +467,7 @@ export function RichTextEditor({
           variant={editor.isActive('italic') ? 'secondary' : 'ghost'}
           size="sm"
           className={`h-8 w-8 p-0 ${editor.isActive('italic') ? 'bg-muted text-foreground' : ''}`}
-          title="斜体 (Italic)"
+          title={t('common.editor.italic')}
           disabled={disabled || isMarkdownMode}
           onClick={() => editor.chain().focus().toggleItalic().run()}
         >
@@ -446,7 +479,7 @@ export function RichTextEditor({
           variant={editor.isActive('underline') ? 'secondary' : 'ghost'}
           size="sm"
           className={`h-8 w-8 p-0 ${editor.isActive('underline') ? 'bg-muted text-foreground' : ''}`}
-          title="下划线 (Underline)"
+          title={t('common.editor.underline')}
           disabled={disabled || isMarkdownMode}
           onClick={() => editor.chain().focus().toggleUnderline().run()}
         >
@@ -458,7 +491,7 @@ export function RichTextEditor({
           variant={editor.isActive('strike') ? 'secondary' : 'ghost'}
           size="sm"
           className={`h-8 w-8 p-0 ${editor.isActive('strike') ? 'bg-muted text-foreground' : ''}`}
-          title="删除线 (Strikethrough)"
+          title={t('common.editor.strikethrough')}
           disabled={disabled || isMarkdownMode}
           onClick={() => editor.chain().focus().toggleStrike().run()}
         >
@@ -470,7 +503,7 @@ export function RichTextEditor({
           variant={editor.isActive('code') ? 'secondary' : 'ghost'}
           size="sm"
           className={`h-8 w-8 p-0 font-mono text-xs ${editor.isActive('code') ? 'bg-muted text-foreground' : ''}`}
-          title="行内代码 (Inline Code)"
+          title={t('common.editor.inlineCode')}
           disabled={disabled || isMarkdownMode}
           onClick={() => editor.chain().focus().toggleCode().run()}
         >
@@ -485,7 +518,7 @@ export function RichTextEditor({
               variant="ghost"
               size="sm"
               className="h-8 w-8 p-0"
-              title="文字颜色"
+              title={t('common.editor.textColor')}
             >
               <Palette className="size-3.5" />
             </Button>
@@ -494,22 +527,13 @@ export function RichTextEditor({
             align="start"
             className="grid w-36 grid-cols-4 gap-1 p-2"
           >
-            {[
-              { color: '#09090b', title: '默认黑' },
-              { color: '#2563eb', title: '科技蓝' },
-              { color: '#16a34a', title: '成功绿' },
-              { color: '#dc2626', title: '警示红' },
-              { color: '#d97706', title: '琥珀橙' },
-              { color: '#9333ea', title: '优雅紫' },
-              { color: '#64748b', title: '次级灰' },
-              { color: '#0284c7', title: '天空蓝' },
-            ].map((c) => (
+            {textColorSwatches.map((c) => (
               <button
                 key={c.color}
                 type="button"
                 className="border-border/60 size-6 cursor-pointer rounded-full border transition-transform hover:scale-110"
                 style={{ backgroundColor: c.color }}
-                title={c.title}
+                title={t(c.title)}
                 onClick={() => editor.chain().focus().setColor(c.color).run()}
               />
             ))}
@@ -524,7 +548,7 @@ export function RichTextEditor({
               variant={editor.isActive('highlight') ? 'secondary' : 'ghost'}
               size="sm"
               className="h-8 w-8 p-0"
-              title="荧光高亮"
+              title={t('common.editor.highlight')}
             >
               <Highlighter className="size-3.5" />
             </Button>
@@ -533,22 +557,13 @@ export function RichTextEditor({
             align="start"
             className="grid w-36 grid-cols-4 gap-1 p-2"
           >
-            {[
-              { color: '#fef08a', title: '柠檬黄' },
-              { color: '#bbf7d0', title: '薄荷绿' },
-              { color: '#bae6fd', title: '海盐蓝' },
-              { color: '#fbcfe8', title: '樱花粉' },
-              { color: '#fed7aa', title: '暖阳橙' },
-              { color: '#e9d5ff', title: '丁香紫' },
-              { color: '#e2e8f0', title: '浅灰' },
-              { color: 'transparent', title: '清除高亮' },
-            ].map((c) => (
+            {highlightSwatches.map((c) => (
               <button
                 key={c.color}
                 type="button"
                 className="border-border/60 size-6 cursor-pointer rounded-full border transition-transform hover:scale-110"
                 style={{ backgroundColor: c.color }}
-                title={c.title}
+                title={t(c.title)}
                 onClick={() =>
                   c.color === 'transparent'
                     ? editor.chain().focus().unsetHighlight().run()
@@ -573,7 +588,7 @@ export function RichTextEditor({
           }
           size="sm"
           className="h-8 w-8 p-0"
-          title="居左对齐"
+          title={t('common.editor.alignLeft')}
           disabled={disabled || isMarkdownMode}
           onClick={() => editor.chain().focus().setTextAlign('left').run()}
         >
@@ -587,7 +602,7 @@ export function RichTextEditor({
           }
           size="sm"
           className="h-8 w-8 p-0"
-          title="居中对齐"
+          title={t('common.editor.alignCenter')}
           disabled={disabled || isMarkdownMode}
           onClick={() => editor.chain().focus().setTextAlign('center').run()}
         >
@@ -601,7 +616,7 @@ export function RichTextEditor({
           }
           size="sm"
           className="h-8 w-8 p-0"
-          title="居右对齐"
+          title={t('common.editor.alignRight')}
           disabled={disabled || isMarkdownMode}
           onClick={() => editor.chain().focus().setTextAlign('right').run()}
         >
@@ -615,7 +630,7 @@ export function RichTextEditor({
           }
           size="sm"
           className="h-8 w-8 p-0"
-          title="两端对齐"
+          title={t('common.editor.alignJustify')}
           disabled={disabled || isMarkdownMode}
           onClick={() => editor.chain().focus().setTextAlign('justify').run()}
         >
@@ -630,7 +645,7 @@ export function RichTextEditor({
           variant={editor.isActive('bulletList') ? 'secondary' : 'ghost'}
           size="sm"
           className="h-8 w-8 p-0"
-          title="无序列表"
+          title={t('common.editor.bulletList')}
           disabled={disabled || isMarkdownMode}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
         >
@@ -642,7 +657,7 @@ export function RichTextEditor({
           variant={editor.isActive('orderedList') ? 'secondary' : 'ghost'}
           size="sm"
           className="h-8 w-8 p-0"
-          title="有序列表"
+          title={t('common.editor.orderedList')}
           disabled={disabled || isMarkdownMode}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
         >
@@ -657,7 +672,7 @@ export function RichTextEditor({
           variant={editor.isActive('link') ? 'secondary' : 'ghost'}
           size="sm"
           className="h-8 w-8 p-0"
-          title="插入/修改超链接"
+          title={t('common.editor.insertLink')}
           disabled={disabled || isMarkdownMode}
           onClick={handleOpenLinkDialog}
         >
@@ -670,7 +685,7 @@ export function RichTextEditor({
           variant="ghost"
           size="sm"
           className="h-8 w-8 p-0"
-          title="插入网络图片"
+          title={t('common.editor.insertImage')}
           disabled={disabled || isMarkdownMode}
           onClick={handleOpenImageDialog}
         >
@@ -685,7 +700,7 @@ export function RichTextEditor({
               variant={editor.isActive('table') ? 'secondary' : 'ghost'}
               size="sm"
               className="h-8 w-8 p-0"
-              title="表格管理"
+              title={t('common.editor.table')}
             >
               <TableIcon className="size-3.5" />
             </Button>
@@ -701,32 +716,32 @@ export function RichTextEditor({
               }
             >
               <Plus className="text-primary mr-2 size-3.5" />
-              <span>插入 3x3 表格</span>
+              <span>{t('common.editor.insertTable')}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               disabled={!editor.isActive('table')}
               onClick={() => editor.chain().focus().addRowAfter().run()}
             >
-              在下方插入一行
+              {t('common.editor.insertRowBelow')}
             </DropdownMenuItem>
             <DropdownMenuItem
               disabled={!editor.isActive('table')}
               onClick={() => editor.chain().focus().deleteRow().run()}
             >
-              删除当前行
+              {t('common.editor.deleteRow')}
             </DropdownMenuItem>
             <DropdownMenuItem
               disabled={!editor.isActive('table')}
               onClick={() => editor.chain().focus().addColumnAfter().run()}
             >
-              在右侧插入一列
+              {t('common.editor.insertColumnRight')}
             </DropdownMenuItem>
             <DropdownMenuItem
               disabled={!editor.isActive('table')}
               onClick={() => editor.chain().focus().deleteColumn().run()}
             >
-              删除当前列
+              {t('common.editor.deleteColumn')}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
@@ -735,7 +750,7 @@ export function RichTextEditor({
               onClick={() => editor.chain().focus().deleteTable().run()}
             >
               <Trash2 className="mr-2 size-3.5" />
-              删除整个表格
+              {t('common.editor.deleteTable')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -746,7 +761,7 @@ export function RichTextEditor({
           variant="ghost"
           size="sm"
           className="h-8 w-8 p-0"
-          title="插入水平分割线"
+          title={t('common.editor.insertHorizontalRule')}
           disabled={disabled || isMarkdownMode}
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
         >
@@ -759,7 +774,7 @@ export function RichTextEditor({
           variant="ghost"
           size="sm"
           className="h-8 w-8 p-0"
-          title="清除所选格式"
+          title={t('common.editor.clearFormatting')}
           disabled={disabled || isMarkdownMode}
           onClick={() =>
             editor.chain().focus().unsetAllMarks().clearNodes().run()
@@ -776,7 +791,7 @@ export function RichTextEditor({
           variant="ghost"
           size="sm"
           className="h-8 w-8 p-0"
-          title="撤销 (Ctrl+Z)"
+          title={t('common.editor.undo')}
           disabled={disabled || isMarkdownMode || !editor.can().undo()}
           onClick={() => editor.chain().focus().undo().run()}
         >
@@ -788,7 +803,7 @@ export function RichTextEditor({
           variant="ghost"
           size="sm"
           className="h-8 w-8 p-0"
-          title="重做 (Ctrl+Y)"
+          title={t('common.editor.redo')}
           disabled={disabled || isMarkdownMode || !editor.can().redo()}
           onClick={() => editor.chain().focus().redo().run()}
         >
@@ -805,12 +820,16 @@ export function RichTextEditor({
             onClick={handleToggleMarkdownMode}
             title={
               isMarkdownMode
-                ? '返回所见即所得可视化模式'
-                : '切换到 Markdown 代码模式'
+                ? t('common.editor.backToVisual')
+                : t('common.editor.switchToMarkdown')
             }
           >
             <FileText className="size-3.5" />
-            <span>{isMarkdownMode ? '所见即所得模式' : 'Markdown 模式'}</span>
+            <span>
+              {isMarkdownMode
+                ? t('common.editor.visualMode')
+                : t('common.editor.markdownMode')}
+            </span>
           </Button>
         </div>
       </div>
@@ -827,7 +846,7 @@ export function RichTextEditor({
             value={markdownContent}
             onChange={handleMarkdownTextareaChange}
             disabled={disabled}
-            placeholder="使用标准 Markdown 语法撰写正文（如 # 大标题，**粗体**，- 列表，| 表格 | 等）..."
+            placeholder={t('common.editor.markdownTextareaPlaceholder')}
             style={{ minHeight }}
             className="text-foreground w-full flex-1 resize-y border-0 bg-transparent p-4 font-mono text-xs leading-relaxed focus:outline-none"
           />
@@ -853,16 +872,23 @@ export function RichTextEditor({
         <div className="flex items-center gap-2">
           <span className="text-foreground font-semibold">TipTap</span>
           <span>·</span>
-          <span>{isMarkdownMode ? 'Markdown 模式' : '所见即所得排版'}</span>
+          <span>
+            {isMarkdownMode
+              ? t('common.editor.markdownMode')
+              : t('common.editor.visualMode')}
+          </span>
           <span>·</span>
           <span>
-            统计：{charCount} 字符 ({wordCount} 词)
+            {t('common.editor.stats', {
+              chars: charCount,
+              words: wordCount,
+            })}
           </span>
         </div>
         <div className="text-[10px] opacity-75">
           {isMarkdownMode
-            ? '支持标准 Markdown 语法，保存时自动解析为富文本'
-            : '点击任意区域即可编辑，支持键盘快捷键'}
+            ? t('common.editor.markdownHint')
+            : t('common.editor.visualHint')}
         </div>
       </div>
 
@@ -872,25 +898,25 @@ export function RichTextEditor({
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-sm font-semibold">
               <LinkIcon className="text-primary size-4" />
-              插入/编辑超链接
+              {t('common.editor.linkDialogTitle')}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-3 py-2 text-xs">
             <div className="space-y-1">
-              <Label htmlFor="link-text">显示文本</Label>
+              <Label htmlFor="link-text">{t('common.editor.linkText')}</Label>
               <Input
                 id="link-text"
-                placeholder="例如：了解平台更新日志"
+                placeholder={t('common.editor.linkTextPlaceholder')}
                 value={linkText}
                 onChange={(e) => setLinkText(e.target.value)}
                 className="h-8 text-xs"
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="link-url">目标链接 (URL)</Label>
+              <Label htmlFor="link-url">{t('common.editor.linkUrl')}</Label>
               <Input
                 id="link-url"
-                placeholder="https://... 或 /about"
+                placeholder={t('common.editor.linkUrlPlaceholder')}
                 value={linkUrl}
                 onChange={(e) => setLinkUrl(e.target.value)}
                 className="h-8 text-xs"
@@ -908,7 +934,7 @@ export function RichTextEditor({
                 htmlFor="link-newtab"
                 className="cursor-pointer text-xs font-normal"
               >
-                在新标签页中打开 (_blank)
+                {t('common.editor.openInNewTab')}
               </Label>
             </div>
           </div>
@@ -922,7 +948,7 @@ export function RichTextEditor({
                 onClick={handleRemoveLink}
               >
                 <Unlink className="size-3.5" />
-                移除链接
+                {t('common.editor.removeLink')}
               </Button>
             ) : (
               <div />
@@ -934,7 +960,7 @@ export function RichTextEditor({
                 size="sm"
                 onClick={() => setLinkDialogOpen(false)}
               >
-                取消
+                {t('common.actions.cancel')}
               </Button>
               <Button
                 type="button"
@@ -943,7 +969,7 @@ export function RichTextEditor({
                 disabled={!linkUrl.trim()}
               >
                 <Check className="mr-1 size-3.5" />
-                应用链接
+                {t('common.editor.applyLink')}
               </Button>
             </div>
           </DialogFooter>
@@ -956,7 +982,7 @@ export function RichTextEditor({
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-sm font-semibold">
               <ImageIcon className="text-primary size-4" />
-              插入网络图片
+              {t('common.editor.insertImage')}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-3 py-2 text-xs">
@@ -964,10 +990,10 @@ export function RichTextEditor({
             <div className="bg-muted/40 flex items-center justify-between gap-2 rounded-lg border border-dashed p-2.5">
               <div>
                 <div className="text-foreground text-xs font-medium">
-                  从系统媒体库选取
+                  {t('common.editor.fromMediaLibrary')}
                 </div>
                 <div className="text-muted-foreground text-[11px]">
-                  一键选用已上传的高清插图或海报
+                  {t('common.editor.mediaLibraryHint')}
                 </div>
               </div>
               <Button
@@ -978,20 +1004,20 @@ export function RichTextEditor({
                 onClick={() => setMediaPickerOpen(true)}
               >
                 <FolderOpen className="size-3.5" />
-                打开媒体库
+                {t('common.editor.openMediaLibrary')}
               </Button>
             </div>
 
             <div className="relative flex items-center py-0.5">
               <div className="border-border/60 flex-grow border-t"></div>
               <span className="text-muted-foreground mx-2 flex-shrink text-[10px]">
-                或输入外链地址
+                {t('common.editor.orEnterUrl')}
               </span>
               <div className="border-border/60 flex-grow border-t"></div>
             </div>
 
             <div className="space-y-1">
-              <Label htmlFor="img-url">图片网址 (URL)</Label>
+              <Label htmlFor="img-url">{t('common.editor.imageUrl')}</Label>
               <Input
                 id="img-url"
                 placeholder="https://images.unsplash.com/..."
@@ -1001,10 +1027,10 @@ export function RichTextEditor({
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="img-alt">图片替代描述 (Alt)</Label>
+              <Label htmlFor="img-alt">{t('common.editor.imageAlt')}</Label>
               <Input
                 id="img-alt"
-                placeholder="例如：系统拓扑全景图"
+                placeholder={t('common.editor.imageAltPlaceholder')}
                 value={imageAlt}
                 onChange={(e) => setImageAlt(e.target.value)}
                 className="h-8 text-xs"
@@ -1018,7 +1044,7 @@ export function RichTextEditor({
               size="sm"
               onClick={() => setImageDialogOpen(false)}
             >
-              取消
+              {t('common.actions.cancel')}
             </Button>
             <Button
               type="button"
@@ -1027,7 +1053,7 @@ export function RichTextEditor({
               disabled={!imageUrl.trim()}
             >
               <Check className="mr-1 size-3.5" />
-              插入图片
+              {t('common.editor.insertImageAction')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -1038,7 +1064,7 @@ export function RichTextEditor({
         open={mediaPickerOpen}
         onOpenChange={setMediaPickerOpen}
         allowedTypes={['image']}
-        title="从媒体库选择图片插入正文"
+        title={t('common.editor.mediaPickerTitle')}
         onSelect={(item) => {
           if (editor) {
             editor

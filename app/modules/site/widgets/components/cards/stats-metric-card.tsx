@@ -1,36 +1,38 @@
 import { FileCode2, Shield, TrendingUp, Users } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { useWidgetContext } from '../widget-context'
 
 export function StatsMetricCard() {
+  const { t } = useTranslation()
   const { density, showCardDividers } = useWidgetContext()
   const isCompact = density === 'compact'
 
   const metrics = [
     {
-      label: '系统用户量',
+      label: t('resources.site.widgets.cards.stats.usersLabel'),
       value: '1,280',
       change: '+12%',
       icon: Users,
       positive: true,
     },
     {
-      label: '角色权限项',
-      value: '14 项',
-      change: '100% 覆盖',
+      label: t('resources.site.widgets.cards.stats.rolesLabel'),
+      value: t('resources.site.widgets.cards.stats.rolesValue'),
+      change: t('resources.site.widgets.cards.stats.rolesChange'),
       icon: Shield,
       positive: true,
     },
     {
-      label: 'shadcn 组件',
-      value: '47 套',
-      change: '全量实现',
+      label: t('resources.site.widgets.cards.stats.componentsLabel'),
+      value: t('resources.site.widgets.cards.stats.componentsValue'),
+      change: t('resources.site.widgets.cards.stats.componentsChange'),
       icon: FileCode2,
       positive: true,
     },
     {
-      label: '单页面浏览量',
-      value: '726 次',
+      label: t('resources.site.widgets.cards.stats.pagesLabel'),
+      value: t('resources.site.widgets.cards.stats.pagesValue'),
       change: '+28%',
       icon: TrendingUp,
       positive: true,
@@ -43,7 +45,7 @@ export function StatsMetricCard() {
         className={`${isCompact ? 'p-2 px-2.5 pb-1' : 'p-3 pb-2'} ${showCardDividers ? 'border-b' : ''}`}
       >
         <CardTitle className="flex items-center justify-between text-xs font-semibold">
-          <span>平台核心概览</span>
+          <span>{t('resources.site.widgets.cards.stats.title')}</span>
           <span className="text-muted-foreground font-mono text-[10px] font-normal">
             Realtime
           </span>

@@ -14,6 +14,7 @@ import {
   X,
 } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import type { MediaItem } from '../types'
@@ -35,6 +36,7 @@ export function MediaInspector({
   onDelete,
   onCopyUrl,
 }: MediaInspectorProps) {
+  const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
   const [editingName, setEditingName] = useState(false)
   const [nameVal, setNameVal] = useState('')
@@ -73,7 +75,7 @@ export function MediaInspector({
       <div className="flex items-center justify-between border-b p-4">
         <div className="flex items-center gap-2">
           <span className="text-foreground text-sm font-semibold">
-            资产详情检视
+            {t('resources.media.inspector.title')}
           </span>
           <span className="bg-muted text-muted-foreground rounded px-2 py-0.5 font-mono text-[10px] uppercase">
             {item.type}
@@ -83,7 +85,7 @@ export function MediaInspector({
           type="button"
           onClick={onClose}
           className="hover:bg-muted text-muted-foreground hover:text-foreground flex size-7 cursor-pointer items-center justify-center rounded-md transition-colors"
-          title="关闭"
+          title={t('common.actions.close')}
         >
           <X className="size-4" />
         </button>
@@ -100,22 +102,30 @@ export function MediaInspector({
         ) : item.type === 'document' ? (
           <div className="flex flex-col items-center gap-2 py-6 text-emerald-600 dark:text-emerald-400">
             <FileText className="size-16" />
-            <span className="font-mono text-xs font-semibold">文档资产</span>
+            <span className="font-mono text-xs font-semibold">
+              {t('resources.media.inspector.preview.document')}
+            </span>
           </div>
         ) : item.type === 'video' ? (
           <div className="flex flex-col items-center gap-2 py-6 text-purple-600 dark:text-purple-400">
             <Film className="size-16" />
-            <span className="font-mono text-xs font-semibold">音视频媒体</span>
+            <span className="font-mono text-xs font-semibold">
+              {t('resources.media.inspector.preview.video')}
+            </span>
           </div>
         ) : item.type === 'archive' ? (
           <div className="flex flex-col items-center gap-2 py-6 text-amber-600 dark:text-amber-400">
             <Archive className="size-16" />
-            <span className="font-mono text-xs font-semibold">压缩包附件</span>
+            <span className="font-mono text-xs font-semibold">
+              {t('resources.media.inspector.preview.archive')}
+            </span>
           </div>
         ) : (
           <div className="text-muted-foreground flex flex-col items-center gap-2 py-6">
             <File className="size-16" />
-            <span className="font-mono text-xs">通用文件</span>
+            <span className="font-mono text-xs">
+              {t('resources.media.inspector.preview.file')}
+            </span>
           </div>
         )}
       </div>
@@ -125,14 +135,14 @@ export function MediaInspector({
         {/* 文件名（支持就地修改） */}
         <div className="space-y-1">
           <div className="text-muted-foreground flex items-center justify-between font-medium">
-            <span>文件名称</span>
+            <span>{t('resources.media.inspector.nameLabel')}</span>
             {!editingName && (
               <button
                 type="button"
                 onClick={handleStartRename}
                 className="text-primary cursor-pointer text-[11px] hover:underline"
               >
-                重命名
+                {t('resources.media.inspector.rename')}
               </button>
             )}
           </div>
@@ -163,7 +173,7 @@ export function MediaInspector({
         {/* 外链直达与快速复制 */}
         <div className="space-y-1">
           <div className="text-muted-foreground font-medium">
-            资源外链 (URL)
+            {t('resources.media.inspector.urlLabel')}
           </div>
           <div className="flex items-center gap-1">
             <Input
@@ -177,7 +187,7 @@ export function MediaInspector({
               size="sm"
               className="h-8 shrink-0 px-2.5"
               onClick={handleCopy}
-              title="复制直链"
+              title={t('resources.media.inspector.copyLink')}
             >
               {copied ? (
                 <Check className="size-3.5 text-emerald-500" />
@@ -193,7 +203,7 @@ export function MediaInspector({
           <div className="space-y-0.5">
             <div className="flex items-center gap-1 text-[11px]">
               <HardDrive className="size-3" />
-              <span>文件大小</span>
+              <span>{t('resources.media.inspector.sizeLabel')}</span>
             </div>
             <div className="text-foreground font-mono font-medium">
               {formatSize(item.size)}
@@ -203,7 +213,7 @@ export function MediaInspector({
           <div className="space-y-0.5">
             <div className="flex items-center gap-1 text-[11px]">
               <Layers className="size-3" />
-              <span>MIME 类型</span>
+              <span>{t('resources.media.inspector.mimeLabel')}</span>
             </div>
             <div
               className="text-foreground truncate font-mono font-medium"
@@ -217,7 +227,7 @@ export function MediaInspector({
             <div className="space-y-0.5">
               <div className="flex items-center gap-1 text-[11px]">
                 <Maximize2 className="size-3" />
-                <span>分辨率尺寸</span>
+                <span>{t('resources.media.inspector.dimensionsLabel')}</span>
               </div>
               <div className="text-foreground font-mono font-medium">
                 {item.dimensions.width} × {item.dimensions.height} px
@@ -228,7 +238,7 @@ export function MediaInspector({
           <div className="space-y-0.5">
             <div className="flex items-center gap-1 text-[11px]">
               <Calendar className="size-3" />
-              <span>上传日期</span>
+              <span>{t('resources.media.inspector.uploadedAtLabel')}</span>
             </div>
             <div className="text-foreground font-mono font-medium">
               {item.createdAt.slice(0, 10)}
@@ -239,7 +249,9 @@ export function MediaInspector({
         {/* 标签 */}
         {item.tags && item.tags.length > 0 && (
           <div className="space-y-1.5 border-t pt-2">
-            <div className="text-muted-foreground font-medium">分类标签</div>
+            <div className="text-muted-foreground font-medium">
+              {t('common.labels.tags')}
+            </div>
             <div className="flex flex-wrap gap-1.5">
               {item.tags.map((tag) => (
                 <span
@@ -267,7 +279,7 @@ export function MediaInspector({
           }}
         >
           <Trash2 className="size-3.5" />
-          <span>删除文件</span>
+          <span>{t('resources.media.inspector.deleteFile')}</span>
         </Button>
 
         <div className="flex items-center gap-2">
@@ -285,7 +297,7 @@ export function MediaInspector({
               download={item.name}
             >
               <ExternalLink className="size-3.5" />
-              <span>新窗口打开</span>
+              <span>{t('resources.media.inspector.openInNewWindow')}</span>
             </a>
           </Button>
         </div>

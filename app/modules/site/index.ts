@@ -1,3 +1,4 @@
+import { i18n } from '~/core/i18n'
 import { defineModule } from '../../admin/core/module/module'
 import { moduleRegistry } from '../../admin/core/module/registry'
 import {
@@ -20,9 +21,8 @@ export * from './widgets'
 
 export const SiteModule = defineModule({
   name: 'site',
-  label: '通用站点与门户系统',
-  description:
-    '提供单页面管理、页眉页脚导航配置、卡片小工具体系、运营通告广告位与友情链接管理',
+  label: i18n.t('resources.site.module.label'),
+  description: i18n.t('resources.site.module.description'),
   version: '1.0.0',
   resources: [
     SitePagesResource,

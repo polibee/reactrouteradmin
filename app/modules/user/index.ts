@@ -1,3 +1,4 @@
+import { i18n } from '~/core/i18n'
 import { defineModule } from '../../admin/core/module/module'
 import { moduleRegistry } from '../../admin/core/module/registry'
 import { UserResource } from './resource'
@@ -11,8 +12,8 @@ export * from './types'
 
 export const UserModule = defineModule({
   name: 'user',
-  label: '用户中心模块',
-  description: '提供用户管理、角色分配、账号状态变更等系统基础业务',
+  label: i18n.t('resources.users.module.label'),
+  description: i18n.t('resources.users.module.description'),
   version: '1.0.0',
   resources: [UserResource],
   features: ['table', 'forms'],

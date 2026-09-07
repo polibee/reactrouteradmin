@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
 import {
   Dialog,
@@ -27,6 +28,7 @@ export function RejectDialog({
   onConfirm,
   loading = false,
 }: RejectDialogProps) {
+  const { t } = useTranslation()
   const [reason, setReason] = useState('')
 
   const handleConfirm = async () => {
@@ -38,21 +40,21 @@ export function RejectDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>驳回友链申请</DialogTitle>
+          <DialogTitle>{t('resources.site.links.reject.title')}</DialogTitle>
           <DialogDescription>
-            驳回来自「{link?.name}」的友链互换申请，可填写理由便于后续核对。
+            {t('resources.site.links.reject.description', { name: link?.name })}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-2 py-2">
           <Label htmlFor="reject-reason" className="text-xs">
-            驳回理由 (可选)
+            {t('resources.site.links.reject.reasonLabel')}
           </Label>
           <Textarea
             id="reject-reason"
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            placeholder="例如：贵站未提前添加我方链接、站点内容不符合收录规范等..."
+            placeholder={t('resources.site.links.reject.reasonPlaceholder')}
             rows={3}
             className="text-xs"
           />
@@ -65,7 +67,7 @@ export function RejectDialog({
             onClick={() => onOpenChange(false)}
             disabled={loading}
           >
-            取消
+            {t('common.actions.cancel')}
           </Button>
           <Button
             type="button"
@@ -73,7 +75,9 @@ export function RejectDialog({
             onClick={handleConfirm}
             disabled={loading}
           >
-            {loading ? '处理中...' : '确认驳回'}
+            {loading
+              ? t('common.actions.processing')
+              : t('resources.site.links.reject.confirm')}
           </Button>
         </DialogFooter>
       </DialogContent>

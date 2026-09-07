@@ -8,6 +8,7 @@ import {
   Zap,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { PublicSiteLayout } from '~/components/layout/public-site-layout'
 import { Badge } from '~/components/ui/badge'
@@ -23,6 +24,7 @@ import { siteService } from '~/modules/site/service'
 import type { FriendLink, FriendLinkGuidelines } from '~/modules/site/types'
 
 export default function FriendLinksPage() {
+  const { t } = useTranslation()
   const [links, setLinks] = useState<FriendLink[]>([])
   const [guidelines, setGuidelines] = useState<FriendLinkGuidelines | null>(
     null,
@@ -60,13 +62,13 @@ export default function FriendLinksPage() {
               className="bg-background/80 gap-1.5 px-3 py-1 text-xs"
             >
               <Link2 className="text-primary size-3.5" />
-              伙伴网络与生态互联
+              {t('pages.links.hero.badge')}
             </Badge>
             <h1 className="text-foreground text-2xl font-bold tracking-tight sm:text-4xl">
-              友情链接 · 伙伴网络
+              {t('pages.links.hero.title')}
             </h1>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              开放共赢，共同成长。汇聚前沿全栈技术团队、开源软件项目、优秀开发者个人博客与技术资讯门户。
+              {t('pages.links.hero.description')}
             </p>
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <Button
@@ -74,10 +76,10 @@ export default function FriendLinksPage() {
                 className="h-9 gap-1.5 text-xs"
               >
                 <Plus className="size-3.5" />
-                申请加入友链
+                {t('pages.links.hero.apply')}
               </Button>
               <Button variant="outline" asChild className="h-9 text-xs">
-                <Link to="/">返回门户首页</Link>
+                <Link to="/">{t('pages.links.hero.backHome')}</Link>
               </Button>
             </div>
           </div>
@@ -88,21 +90,21 @@ export default function FriendLinksPage() {
           <div className="flex items-center justify-between">
             <h2 className="text-foreground flex items-center gap-2 text-base font-semibold">
               <Globe className="text-primary size-4" />
-              已入驻伙伴站点
+              {t('pages.links.sites.title')}
             </h2>
             <span className="text-muted-foreground text-xs">
-              共 {links.length} 个技术站点
+              {t('pages.links.sites.count', { count: links.length })}
             </span>
           </div>
 
           {loading ? (
             <div className="text-muted-foreground py-16 text-center text-xs">
-              加载伙伴站点中...
+              {t('pages.links.sites.loading')}
             </div>
           ) : links.length === 0 ? (
             <div className="rounded-xl border border-dashed py-16 text-center">
               <p className="text-muted-foreground text-xs">
-                暂无已展示的友情链接
+                {t('pages.links.sites.empty')}
               </p>
               <Button
                 size="sm"
@@ -110,7 +112,7 @@ export default function FriendLinksPage() {
                 onClick={() => setApplyOpen(true)}
                 className="mt-3 text-xs"
               >
-                成为第一个互换友链的伙伴
+                {t('pages.links.sites.emptyCta')}
               </Button>
             </div>
           ) : (
@@ -148,7 +150,8 @@ export default function FriendLinksPage() {
                         <ExternalLink className="text-muted-foreground group-hover:text-primary size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                       </div>
                       <CardDescription className="line-clamp-2 text-xs leading-relaxed">
-                        {link.description || '优质技术交流与开放互联站点'}
+                        {link.description ||
+                          t('pages.links.sites.fallbackDescription')}
                       </CardDescription>
                     </CardHeader>
                   </Card>

@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { i18n } from '~/core/i18n'
 
 // ==========================================
 // 1. 单页面 (SitePage)
@@ -18,12 +19,16 @@ export interface SitePage {
 }
 
 export const sitePageFormSchema = z.object({
-  title: z.string().min(2, '页面标题至少需要 2 个字符'),
+  title: z
+    .string()
+    .min(2, i18n.t('resources.site.validation.pageTitleMin', { count: 2 })),
   slug: z
     .string()
-    .min(2, '页面路径别名 (Slug) 至少需要 2 个字符')
-    .regex(/^[a-zA-Z0-9_-]+$/, '仅支持英文、数字、下划线及连字符'),
-  content: z.string().min(5, '页面内容不能为空'),
+    .min(2, i18n.t('resources.site.validation.pageSlugMin', { count: 2 }))
+    .regex(/^[a-zA-Z0-9_-]+$/, i18n.t('resources.site.validation.slugPattern')),
+  content: z
+    .string()
+    .min(5, i18n.t('resources.site.validation.pageContentMin')),
   seoTitle: z.string().optional(),
   seoDescription: z.string().optional(),
   seoKeywords: z.string().optional(),
@@ -47,7 +52,7 @@ export interface SiteNavGroup {
 }
 
 export const siteNavGroupSchema = z.object({
-  name: z.string().min(1, '分类名字不能为空'),
+  name: z.string().min(1, i18n.t('resources.site.validation.categoryNameMin')),
   location: z.enum(['header', 'footer']),
   sort: z.coerce.number().default(10),
   enabled: z.boolean().default(true),
@@ -73,7 +78,9 @@ export interface SiteNavItem {
 
 export const siteNavItemSchema = z.object({
   location: z.enum(['header', 'footer']),
-  title: z.string().min(1, '导航名称必填'),
+  title: z
+    .string()
+    .min(1, i18n.t('resources.site.validation.navTitleRequired')),
   url: z.string().default('#'),
   target: z.enum(['_self', '_blank']).default('_self'),
   sort: z.coerce.number().default(10),
@@ -124,9 +131,11 @@ export interface SiteWidgetConfig {
 export const siteWidgetFormSchema = z.object({
   key: z
     .string()
-    .min(2, '小工具唯一标识至少 2 个字符')
-    .regex(/^[a-zA-Z0-9_-]+$/, '仅支持英文、数字与连字符/下划线'),
-  title: z.string().min(2, '卡片标题至少 2 个字符'),
+    .min(2, i18n.t('resources.site.validation.widgetIdMin', { count: 2 }))
+    .regex(/^[a-zA-Z0-9_-]+$/, i18n.t('resources.site.validation.slugPattern')),
+  title: z
+    .string()
+    .min(2, i18n.t('resources.site.validation.widgetTitleMin', { count: 2 })),
   description: z.string().optional(),
   placement: z
     .enum(['dashboard', 'home_sidebar', 'page_sidebar', 'site_sidebar', 'both'])
@@ -179,8 +188,18 @@ export interface SiteAnnouncement {
 
 export const siteAnnouncementSchema = z.object({
   type: z.enum(['modal', 'banner', 'corner', 'marquee']),
-  title: z.string().min(2, '通告标题至少 2 个字符'),
-  content: z.string().min(2, '通告文案正文至少 2 个字符'),
+  title: z
+    .string()
+    .min(
+      2,
+      i18n.t('resources.site.validation.announcementTitleMin', { count: 2 }),
+    ),
+  content: z
+    .string()
+    .min(
+      2,
+      i18n.t('resources.site.validation.announcementContentMin', { count: 2 }),
+    ),
   linkText: z.string().optional(),
   linkUrl: z.string().optional(),
   enabled: z.boolean().default(true),
@@ -211,9 +230,11 @@ export interface SiteAdSlot {
 export const siteAdSlotSchema = z.object({
   slotKey: z
     .string()
-    .min(2, '广告位唯一标识至少 2 个字符')
-    .regex(/^[a-zA-Z0-9_-]+$/, '仅支持英文、数字与下划线'),
-  title: z.string().min(2, '广告位名称至少 2 个字符'),
+    .min(2, i18n.t('resources.site.validation.adSlotIdMin', { count: 2 }))
+    .regex(/^[a-zA-Z0-9_-]+$/, i18n.t('resources.site.validation.slugPattern')),
+  title: z
+    .string()
+    .min(2, i18n.t('resources.site.validation.adSlotTitleMin', { count: 2 })),
   adType: z.enum(['image', 'text', 'html']).default('image'),
   imageUrl: z.string().optional(),
   targetUrl: z.string().optional(),
@@ -253,15 +274,34 @@ export interface FriendLink {
 }
 
 export const friendLinkFormSchema = z.object({
-  name: z.string().min(2, '网站名称至少 2 个字符'),
-  url: z.string().url('请输入有效的网址 (包含 http:// 或 https://)'),
+  name: z
+    .string()
+    .min(
+      2,
+      i18n.t('resources.site.validation.friendLinkNameMin', { count: 2 }),
+    ),
+  url: z
+    .string()
+    .url(i18n.t('resources.site.links.apply.validation.urlInvalid')),
   logo: z
     .string()
-    .url('请输入有效的 Logo 图标网址')
+    .url(i18n.t('resources.site.links.apply.validation.logoUrlInvalid'))
     .optional()
     .or(z.literal('')),
-  description: z.string().max(200, '网站描述在 200 字以内').optional(),
-  email: z.string().email('请输入有效的通知邮箱').optional().or(z.literal('')),
+  description: z
+    .string()
+    .max(
+      200,
+      i18n.t('resources.site.links.apply.validation.descriptionMaxLength', {
+        count: 200,
+      }),
+    )
+    .optional(),
+  email: z
+    .string()
+    .email(i18n.t('resources.site.validation.friendLinkEmailInvalid'))
+    .optional()
+    .or(z.literal('')),
   sort: z.coerce.number().default(10),
   status: z.enum(['pending', 'approved', 'rejected']).default('pending'),
   rejectReason: z.string().optional(),
@@ -285,13 +325,30 @@ export interface FriendLinkGuidelines {
 }
 
 export const friendLinkGuidelinesSchema = z.object({
-  title: z.string().min(2, '准则标题至少 2 个字符'),
-  rule1Title: z.string().min(2, '规则一标题必填'),
-  rule1Desc: z.string().min(5, '规则一细则必填'),
-  rule2Title: z.string().min(2, '规则二标题必填'),
-  rule2Desc: z.string().min(5, '规则二细则必填'),
-  rule3Title: z.string().min(2, '规则三标题必填'),
-  rule3Desc: z.string().min(5, '规则三细则必填'),
+  title: z
+    .string()
+    .min(
+      2,
+      i18n.t('resources.site.validation.guidelinesTitleMin', { count: 2 }),
+    ),
+  rule1Title: z
+    .string()
+    .min(2, i18n.t('resources.site.validation.ruleTitleRequired')),
+  rule1Desc: z
+    .string()
+    .min(5, i18n.t('resources.site.validation.ruleDescRequired')),
+  rule2Title: z
+    .string()
+    .min(2, i18n.t('resources.site.validation.ruleTitleRequired')),
+  rule2Desc: z
+    .string()
+    .min(5, i18n.t('resources.site.validation.ruleDescRequired')),
+  rule3Title: z
+    .string()
+    .min(2, i18n.t('resources.site.validation.ruleTitleRequired')),
+  rule3Desc: z
+    .string()
+    .min(5, i18n.t('resources.site.validation.ruleDescRequired')),
   customNotice: z.string().optional(),
 })
 

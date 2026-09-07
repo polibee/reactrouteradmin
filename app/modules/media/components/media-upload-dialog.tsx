@@ -1,5 +1,6 @@
 import { Check, File, Loader2, UploadCloud, X } from 'lucide-react'
 import { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { notify } from '~/admin/ui'
 import { Button } from '~/components/ui/button'
 import {
@@ -20,15 +21,39 @@ export interface MediaUploadDialogProps {
   onUploaded: () => void
 }
 
+// Preset folder values mirror the seed data folders stored in the repository
+const presetFolderOptions = [
+  {
+    value: '站点配图',
+    labelKey: 'resources.media.upload.presetFolders.siteImages',
+  },
+  {
+    value: '系统架构',
+    labelKey: 'resources.media.upload.presetFolders.systemArchitecture',
+  },
+  {
+    value: '开发规范',
+    labelKey: 'resources.media.upload.presetFolders.devGuidelines',
+  },
+  {
+    value: '业务报表',
+    labelKey: 'resources.media.upload.presetFolders.businessReports',
+  },
+  { value: '未分组', labelKey: 'resources.media.folders.ungrouped' },
+] as const
+
 export function MediaUploadDialog({
   open,
   onOpenChange,
   folders,
   onUploaded,
 }: MediaUploadDialogProps) {
+  const { t } = useTranslation()
   const [dragActive, setDragActive] = useState(false)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
-  const [targetFolder, setTargetFolder] = useState('站点配图')
+  const [targetFolder, setTargetFolder] = useState<string>(
+    presetFolderOptions[0].value,
+  )
   const [customFolder, setCustomFolder] = useState('')
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -80,7 +105,10 @@ export function MediaUploadDialog({
     setProgress(10)
 
     try {
-      const folder = customFolder.trim() || targetFolder || '未分组'
+      const folder =
+        customFolder.trim() ||
+        targetFolder ||
+        t('resources.media.folders.ungrouped')
 
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i]
@@ -88,14 +116,18 @@ export function MediaUploadDialog({
         setProgress(Math.round(((i + 1) / selectedFiles.length) * 100))
       }
 
-      notify.success(`成功上传 ${selectedFiles.length} 个媒体资产！`)
+      notify.success(
+        t('resources.media.upload.successToast', {
+          total: selectedFiles.length,
+        }),
+      )
       setSelectedFiles([])
       setCustomFolder('')
       onUploaded()
       onOpenChange(false)
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '文件上传失败')
+      notify.error(err?.message || t('resources.media.upload.failedToast'))
     } finally {
       setUploading(false)
       setProgress(0)
@@ -108,7 +140,7 @@ export function MediaUploadDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-sm font-semibold">
             <UploadCloud className="text-primary size-4" />
-            上传媒体资产文件
+            {t('resources.media.upload.title')}
           </DialogTitle>
         </DialogHeader>
 
@@ -140,11 +172,10 @@ export function MediaUploadDialog({
             </div>
             <div className="space-y-0.5">
               <div className="text-foreground text-xs font-semibold">
-                点击选择文件，或将文件拖放到此处
+                {t('resources.media.upload.dropzoneTitle')}
               </div>
               <div className="text-muted-foreground text-[11px]">
-                支持图片 (PNG/JPG/WebP/SVG)、文档
-                (PDF/Word/Excel)、视频与压缩包，单文件最大 50MB
+                {t('resources.media.upload.dropzoneDescription')}
               </div>
             </div>
           </div>
@@ -152,27 +183,22 @@ export function MediaUploadDialog({
           {/* 分组归类选择 */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <Label className="text-xs">存入分组</Label>
+              <Label className="text-xs">
+                {t('resources.media.upload.folderLabel')}
+              </Label>
               <select
                 value={targetFolder}
                 onChange={(e) => setTargetFolder(e.target.value)}
                 className="border-input bg-background focus:ring-ring h-8 w-full rounded-md border px-2 text-xs focus:ring-1 focus:outline-none"
               >
-                <option value="站点配图">站点配图</option>
-                <option value="系统架构">系统架构</option>
-                <option value="开发规范">开发规范</option>
-                <option value="业务报表">业务报表</option>
-                <option value="未分组">未分组</option>
+                {presetFolderOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {t(option.labelKey)}
+                  </option>
+                ))}
                 {folders
                   .filter(
-                    (f) =>
-                      ![
-                        '站点配图',
-                        '系统架构',
-                        '开发规范',
-                        '业务报表',
-                        '未分组',
-                      ].includes(f),
+                    (f) => !presetFolderOptions.some((o) => o.value === f),
                   )
                   .map((f) => (
                     <option key={f} value={f}>
@@ -182,9 +208,11 @@ export function MediaUploadDialog({
               </select>
             </div>
             <div className="space-y-1">
-              <Label className="text-xs">或新建分组</Label>
+              <Label className="text-xs">
+                {t('resources.media.upload.newFolderLabel')}
+              </Label>
               <Input
-                placeholder="输入新分组名称..."
+                placeholder={t('resources.media.upload.newFolderPlaceholder')}
                 value={customFolder}
                 onChange={(e) => setCustomFolder(e.target.value)}
                 className="h-8 text-xs"
@@ -196,13 +224,17 @@ export function MediaUploadDialog({
           {selectedFiles.length > 0 && (
             <div className="space-y-2">
               <div className="text-muted-foreground flex items-center justify-between font-medium">
-                <span>待上传列表 ({selectedFiles.length})</span>
+                <span>
+                  {t('resources.media.upload.pendingList', {
+                    total: selectedFiles.length,
+                  })}
+                </span>
                 <button
                   type="button"
                   onClick={() => setSelectedFiles([])}
                   className="text-destructive cursor-pointer text-[11px] hover:underline"
                 >
-                  清空全部
+                  {t('resources.media.upload.clearAll')}
                 </button>
               </div>
 
@@ -238,7 +270,7 @@ export function MediaUploadDialog({
           {uploading && (
             <div className="space-y-1.5 pt-1">
               <div className="text-muted-foreground flex items-center justify-between text-[11px]">
-                <span>正在上传中...</span>
+                <span>{t('resources.media.upload.uploading')}</span>
                 <span>{progress}%</span>
               </div>
               <div className="bg-muted h-1.5 w-full overflow-hidden rounded-full">
@@ -259,7 +291,7 @@ export function MediaUploadDialog({
             onClick={() => onOpenChange(false)}
             disabled={uploading}
           >
-            取消
+            {t('common.actions.cancel')}
           </Button>
           <Button
             type="button"
@@ -271,12 +303,16 @@ export function MediaUploadDialog({
             {uploading ? (
               <>
                 <Loader2 className="size-3.5 animate-spin" />
-                <span>上传中...</span>
+                <span>{t('resources.media.upload.uploading')}</span>
               </>
             ) : (
               <>
                 <Check className="size-3.5" />
-                <span>开始上传 ({selectedFiles.length})</span>
+                <span>
+                  {t('resources.media.upload.startUpload', {
+                    total: selectedFiles.length,
+                  })}
+                </span>
               </>
             )}
           </Button>

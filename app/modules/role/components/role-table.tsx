@@ -1,5 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { KeyRound, ShieldAlert, ShieldCheck } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
   AdminBadge,
@@ -18,16 +19,19 @@ export interface RoleTableProps {
 }
 
 export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const handleDelete = async (role: Role) => {
     try {
       await roleService.deleteRole(role.id)
-      notify.success(`角色「${role.name}」已成功删除`)
+      notify.success(
+        t('resources.roles.messages.deleteSuccess', { name: role.name }),
+      )
       if (onDataChange) onDataChange()
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '删除角色失败')
+      notify.error(err?.message || t('resources.roles.messages.deleteFailed'))
     }
   }
 
@@ -35,22 +39,32 @@ export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
     try {
       const res = await roleService.deleteRoles(selected.map((r) => r.id))
       if (res.successCount > 0) {
-        notify.success(`成功删除 ${res.successCount} 个自定义角色`)
+        notify.success(
+          t('resources.roles.messages.bulkDeleteSuccess', {
+            count: res.successCount,
+          }),
+        )
       }
       if (res.skippedCount > 0) {
-        notify.warning(`${res.skippedCount} 个系统内置角色受保护已跳过`)
+        notify.warning(
+          t('resources.roles.messages.bulkDeleteSkipped', {
+            count: res.skippedCount,
+          }),
+        )
       }
       if (onDataChange) onDataChange()
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '批量删除失败')
+      notify.error(
+        err?.message || t('resources.roles.messages.bulkDeleteFailed'),
+      )
     }
   }
 
   const columns: ColumnDef<Role>[] = [
     {
       accessorKey: 'name',
-      header: '角色名称',
+      header: t('resources.roles.table.name'),
       cell: ({ row }) => {
         const role = row.original
         return (
@@ -67,7 +81,7 @@ export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
                 {role.name}
                 {role.isSystem && (
                   <span className="rounded-xs bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-800 dark:bg-amber-950 dark:text-amber-300">
-                    系统内置
+                    {t('resources.roles.table.systemBadge')}
                   </span>
                 )}
               </div>
@@ -81,7 +95,7 @@ export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
     },
     {
       accessorKey: 'description',
-      header: '功能定位与描述',
+      header: t('resources.roles.table.description'),
       cell: ({ row }) => (
         <span className="text-muted-foreground line-clamp-2 max-w-[320px] text-xs">
           {row.getValue('description') || '-'}
@@ -90,7 +104,7 @@ export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
     },
     {
       accessorKey: 'permissions',
-      header: '权限配置',
+      header: t('resources.roles.table.permissions'),
       cell: ({ row }) => {
         const perms = row.original.permissions
         const isSuper = perms.includes('*')
@@ -99,21 +113,23 @@ export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
           return (
             <AdminBadge status="warning">
               <KeyRound className="mr-1 h-3 w-3" />
-              全部特权 (*)
+              {t('resources.roles.table.fullAccess')}
             </AdminBadge>
           )
         }
 
         return (
           <AdminBadge status={perms.length > 0 ? 'info' : 'default'}>
-            {perms.length} 项权限
+            {t('resources.roles.table.permissionCount', {
+              count: perms.length,
+            })}
           </AdminBadge>
         )
       },
     },
     {
       accessorKey: 'updatedAt',
-      header: '更新时间',
+      header: t('common.labels.updatedAt'),
       cell: ({ row }) => {
         const dateStr = row.getValue('updatedAt') as string
         return (
@@ -125,7 +141,9 @@ export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
     },
     {
       id: 'actions',
-      header: () => <div className="text-right">操作</div>,
+      header: () => (
+        <div className="text-right">{t('common.labels.actions')}</div>
+      ),
       cell: ({ row }) => {
         const role = row.original
 
@@ -139,7 +157,9 @@ export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
               <DeleteAction
                 permission="roles.delete"
                 itemTitle={role.name}
-                confirmDescription="确定要彻底删除该角色吗？已分配此角色的用户将失去对应的操作权限。"
+                confirmDescription={t(
+                  'resources.roles.messages.deleteConfirmDescription',
+                )}
                 onAction={() => handleDelete(role)}
               />
             )}
@@ -155,7 +175,7 @@ export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
       data={data}
       loading={loading}
       searchKey="name"
-      searchPlaceholder="输入角色名称或标识搜索..."
+      searchPlaceholder={t('resources.roles.table.searchPlaceholder')}
       enableRowSelection
       onBulkDelete={handleBulkDelete}
     />

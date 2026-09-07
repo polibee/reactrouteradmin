@@ -1,5 +1,6 @@
 import { Edit2, LayoutTemplate, MonitorPlay, Plus, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ConfirmDialog, notify } from '~/admin/ui'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
@@ -19,6 +20,7 @@ import type { AdType, SiteAdSlot, SiteAdSlotFormValues } from '../../types'
 import { AdSlotDialog } from './ad-slot-dialog'
 
 export function AdSlotManager() {
+  const { t } = useTranslation()
   const [adSlots, setAdSlots] = useState<SiteAdSlot[]>([])
   const [loading, setLoading] = useState(true)
   const [savingId, setSavingId] = useState<string | null>(null)
@@ -51,9 +53,16 @@ export function AdSlotManager() {
     try {
       await siteService.updateAdSlot(slot.id, { enabled })
       setAdSlots(adSlots.map((s) => (s.id === slot.id ? { ...s, enabled } : s)))
-      notify.success(`已${enabled ? '启用' : '关闭'}广告位「${slot.title}」`)
+      notify.success(
+        t(
+          enabled
+            ? 'resources.site.operations.ads.toasts.enabled'
+            : 'resources.site.operations.ads.toasts.disabled',
+          { name: slot.title },
+        ),
+      )
     } catch {
-      notify.error('状态更新失败')
+      notify.error(t('resources.site.shared.statusUpdateFailed'))
     }
   }
 
@@ -61,10 +70,14 @@ export function AdSlotManager() {
     setSavingId(slot.id)
     try {
       await siteService.updateAdSlot(slot.id, slot)
-      notify.success(`广告位「${slot.title}」配置已保存！`)
+      notify.success(
+        t('resources.site.operations.ads.toasts.quickSaved', {
+          name: slot.title,
+        }),
+      )
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '保存失败')
+      notify.error(err?.message || t('resources.site.shared.saveFailed'))
     } finally {
       setSavingId(null)
     }
@@ -85,16 +98,24 @@ export function AdSlotManager() {
     try {
       if (editingSlot) {
         await siteService.saveAdSlot({ ...values, id: editingSlot.id })
-        notify.success(`广告位「${values.title}」已成功更新`)
+        notify.success(
+          t('resources.site.operations.ads.toasts.updated', {
+            name: values.title,
+          }),
+        )
       } else {
         await siteService.saveAdSlot(values)
-        notify.success(`广告位「${values.title}」创建成功`)
+        notify.success(
+          t('resources.site.operations.ads.toasts.created', {
+            name: values.title,
+          }),
+        )
       }
       setDialogOpen(false)
       await loadData()
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '保存失败')
+      notify.error(err?.message || t('resources.site.shared.saveFailed'))
     } finally {
       setDialogLoading(false)
     }
@@ -105,11 +126,15 @@ export function AdSlotManager() {
     setDeleteLoading(true)
     try {
       await siteService.deleteAdSlot(deleteTarget.id)
-      notify.success(`广告位「${deleteTarget.title}」已删除`)
+      notify.success(
+        t('resources.site.operations.ads.toasts.deleted', {
+          name: deleteTarget.title,
+        }),
+      )
       setDeleteTarget(null)
       await loadData()
     } catch {
-      notify.error('删除失败')
+      notify.error(t('resources.site.shared.deleteFailed'))
     } finally {
       setDeleteLoading(false)
     }
@@ -118,7 +143,7 @@ export function AdSlotManager() {
   if (loading) {
     return (
       <div className="text-muted-foreground py-8 text-center text-xs">
-        加载广告位配置中...
+        {t('resources.site.operations.ads.loading')}
       </div>
     )
   }
@@ -129,21 +154,25 @@ export function AdSlotManager() {
         <div>
           <h4 className="flex items-center gap-1.5 text-sm font-semibold">
             <MonitorPlay className="text-primary size-4" />
-            前台广告位与推广内容管理
+            {t('resources.site.operations.ads.title')}
           </h4>
           <p className="text-muted-foreground mt-0.5 text-xs">
-            支持新增、编辑、删除预留槽位，投放文字推广、海报图片或联盟代码
+            {t('resources.site.operations.ads.description')}
           </p>
         </div>
         <div className="flex items-center gap-2 self-end sm:self-center">
-          <Badge variant="secondary">共 {adSlots.length} 个广告位</Badge>
+          <Badge variant="secondary">
+            {t('resources.site.operations.ads.count', {
+              total: adSlots.length,
+            })}
+          </Badge>
           <Button
             size="sm"
             onClick={handleOpenCreate}
             className="h-8 gap-1.5 text-xs"
           >
             <Plus className="size-3.5" />
-            新增广告位
+            {t('resources.site.operations.ads.actions.create')}
           </Button>
         </div>
       </div>
@@ -151,14 +180,16 @@ export function AdSlotManager() {
       <div className="grid grid-cols-1 gap-4">
         {adSlots.length === 0 ? (
           <div className="rounded-lg border border-dashed py-10 text-center">
-            <p className="text-muted-foreground text-xs">暂无广告位配置</p>
+            <p className="text-muted-foreground text-xs">
+              {t('resources.site.operations.ads.empty')}
+            </p>
             <Button
               size="sm"
               variant="outline"
               onClick={handleOpenCreate}
               className="mt-3 text-xs"
             >
-              添加第一个广告位
+              {t('resources.site.operations.ads.actions.addFirst')}
             </Button>
           </div>
         ) : (
@@ -190,7 +221,9 @@ export function AdSlotManager() {
                       htmlFor={`ad-switch-${slot.id}`}
                       className="cursor-pointer text-xs font-medium"
                     >
-                      {slot.enabled ? '投放中' : '已暂停'}
+                      {slot.enabled
+                        ? t('resources.site.operations.ads.running')
+                        : t('resources.site.operations.ads.paused')}
                     </Label>
                   </div>
 
@@ -200,13 +233,15 @@ export function AdSlotManager() {
                     disabled={savingId === slot.id}
                     className="h-8 text-xs"
                   >
-                    {savingId === slot.id ? '保存中...' : '保存修改'}
+                    {savingId === slot.id
+                      ? t('common.actions.saving')
+                      : t('resources.site.shared.saveChanges')}
                   </Button>
                   <Button
                     size="sm"
                     variant="ghost"
                     className="text-muted-foreground hover:text-foreground h-8 w-8 p-0"
-                    title="详细编辑"
+                    title={t('resources.site.operations.ads.tooltips.edit')}
                     onClick={() => handleOpenEdit(slot)}
                   >
                     <Edit2 className="size-3.5" />
@@ -215,7 +250,7 @@ export function AdSlotManager() {
                     size="sm"
                     variant="ghost"
                     className="text-destructive hover:text-destructive hover:bg-destructive/10 h-8 w-8 p-0"
-                    title="删除广告位"
+                    title={t('resources.site.operations.ads.tooltips.delete')}
                     onClick={() => setDeleteTarget(slot)}
                   >
                     <Trash2 className="size-3.5" />
@@ -226,7 +261,9 @@ export function AdSlotManager() {
               <CardContent className="space-y-3 p-4">
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                   <div className="space-y-1">
-                    <Label className="text-xs">广告形式类型</Label>
+                    <Label className="text-xs">
+                      {t('resources.site.operations.ads.fields.adType')}
+                    </Label>
                     <Select
                       value={slot.adType}
                       onValueChange={(val) =>
@@ -244,13 +281,13 @@ export function AdSlotManager() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="text" className="text-xs">
-                          纯文字链接 (Text)
+                          {t('resources.site.operations.ads.adTypes.text')}
                         </SelectItem>
                         <SelectItem value="image" className="text-xs">
-                          图片海报 (Image)
+                          {t('resources.site.operations.ads.adTypes.image')}
                         </SelectItem>
                         <SelectItem value="html" className="text-xs">
-                          第三方 HTML 代码
+                          {t('resources.site.operations.ads.adTypes.html')}
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -258,7 +295,7 @@ export function AdSlotManager() {
 
                   <div className="space-y-1 md:col-span-2">
                     <Label className="text-xs">
-                      目标点击跳转链接 (Target URL)
+                      {t('resources.site.operations.ads.fields.targetUrl')}
                     </Label>
                     <Input
                       value={slot.targetUrl || ''}
@@ -272,7 +309,9 @@ export function AdSlotManager() {
                         )
                       }
                       className="h-8 font-mono text-xs"
-                      placeholder="https://... 或 /portal"
+                      placeholder={t(
+                        'resources.site.operations.ads.placeholders.targetUrl',
+                      )}
                       disabled={slot.adType === 'html'}
                     />
                   </div>
@@ -280,7 +319,9 @@ export function AdSlotManager() {
 
                 {slot.adType === 'text' && (
                   <div className="space-y-1">
-                    <Label className="text-xs">推广展示文字</Label>
+                    <Label className="text-xs">
+                      {t('resources.site.operations.ads.fields.text')}
+                    </Label>
                     <Input
                       value={slot.text || ''}
                       onChange={(e) =>
@@ -293,14 +334,18 @@ export function AdSlotManager() {
                         )
                       }
                       className="h-8 text-xs"
-                      placeholder="例如：⚡ 架构升级全栈指南，即刻查阅..."
+                      placeholder={t(
+                        'resources.site.operations.ads.placeholders.text',
+                      )}
                     />
                   </div>
                 )}
 
                 {slot.adType === 'image' && (
                   <div className="space-y-1">
-                    <Label className="text-xs">海报图片 URL</Label>
+                    <Label className="text-xs">
+                      {t('resources.site.operations.ads.fields.imageUrl')}
+                    </Label>
                     <Input
                       value={slot.imageUrl || ''}
                       onChange={(e) =>
@@ -320,7 +365,9 @@ export function AdSlotManager() {
 
                 {slot.adType === 'html' && (
                   <div className="space-y-1">
-                    <Label className="text-xs">自定义 HTML / 联盟脚本</Label>
+                    <Label className="text-xs">
+                      {t('resources.site.operations.ads.fields.html')}
+                    </Label>
                     <Input
                       value={slot.htmlContent || ''}
                       onChange={(e) =>
@@ -356,9 +403,11 @@ export function AdSlotManager() {
       <ConfirmDialog
         open={Boolean(deleteTarget)}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
-        title="确认删除广告位"
-        content={`确定要删除广告位「${deleteTarget?.title}」吗？删除后前台对应位置将不再展示此广告位。`}
-        confirmText="确认删除"
+        title={t('resources.site.operations.ads.delete.title')}
+        content={t('resources.site.operations.ads.delete.description', {
+          name: deleteTarget?.title,
+        })}
+        confirmText={t('common.actions.confirmDelete')}
         variant="destructive"
         loading={deleteLoading}
         onConfirm={handleDelete}

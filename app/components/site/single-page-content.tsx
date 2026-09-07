@@ -1,5 +1,6 @@
 import { ArrowLeft, Clock, Eye, FileText, Home } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { PublicSiteLayout } from '~/components/layout/public-site-layout'
 import { Badge } from '~/components/ui/badge'
@@ -14,6 +15,7 @@ export interface SinglePageViewProps {
 }
 
 export function SinglePageView({ slug }: SinglePageViewProps) {
+  const { t } = useTranslation()
   const [page, setPage] = useState<SitePage | null>(null)
   const [loading, setLoading] = useState(true)
   const [globalSettings, setGlobalSettings] =
@@ -59,7 +61,7 @@ export function SinglePageView({ slug }: SinglePageViewProps) {
       <PublicSiteLayout>
         <div className="text-muted-foreground flex flex-col items-center justify-center py-24 text-xs">
           <div className="border-primary mb-3 size-6 animate-spin rounded-full border-2 border-t-transparent" />
-          <span>正在加载页面内容...</span>
+          <span>{t('pages.singlePage.loading')}</span>
         </div>
       </PublicSiteLayout>
     )
@@ -72,19 +74,21 @@ export function SinglePageView({ slug }: SinglePageViewProps) {
           <div className="bg-muted text-muted-foreground mx-auto flex size-12 items-center justify-center rounded-full">
             <FileText className="size-6" />
           </div>
-          <h2 className="text-xl font-bold">404 - 页面未找到</h2>
+          <h2 className="text-xl font-bold">
+            {t('pages.singlePage.notFoundTitle')}
+          </h2>
           <p className="text-muted-foreground text-sm">
-            该单页面不存在或尚未对外公开上线，请核对访问路径。
+            {t('pages.singlePage.notFoundDescription')}
           </p>
           <div className="flex items-center justify-center gap-3 pt-2">
             <Button asChild size="sm" variant="outline">
               <Link to="/">
                 <Home className="mr-1 size-3.5" />
-                返回平台首页
+                {t('pages.singlePage.backHome')}
               </Link>
             </Button>
             <Button asChild size="sm">
-              <Link to="/admin/pages">前往后台管理</Link>
+              <Link to="/admin/pages">{t('pages.singlePage.goAdmin')}</Link>
             </Button>
           </div>
         </div>
@@ -106,7 +110,7 @@ export function SinglePageView({ slug }: SinglePageViewProps) {
             className="hover:text-foreground flex items-center gap-1"
           >
             <Home className="size-3" />
-            平台首页
+            {t('pages.singlePage.breadcrumbHome')}
           </Link>
           <span>/</span>
           <span className="text-foreground font-medium">{page.title}</span>
@@ -126,18 +130,21 @@ export function SinglePageView({ slug }: SinglePageViewProps) {
                     <div className="text-muted-foreground mt-2 flex flex-wrap items-center gap-3 font-mono text-xs">
                       <span className="flex items-center gap-1">
                         <Clock className="size-3" />
-                        更新于{' '}
-                        {page.updatedAt ? page.updatedAt.slice(0, 10) : '-'}
+                        {t('pages.singlePage.updatedAt', {
+                          date: page.updatedAt
+                            ? page.updatedAt.slice(0, 10)
+                            : '-',
+                        })}
                       </span>
                       <span className="flex items-center gap-1">
                         <Eye className="size-3" />
-                        {page.views} 次阅读
+                        {t('pages.singlePage.views', { views: page.views })}
                       </span>
                       <Badge
                         variant="outline"
                         className="text-[10px] font-normal"
                       >
-                        别名: /{page.slug}
+                        {t('pages.singlePage.slugLabel', { slug: page.slug })}
                       </Badge>
                     </div>
                   </div>
@@ -150,7 +157,7 @@ export function SinglePageView({ slug }: SinglePageViewProps) {
                   >
                     <Link to="/">
                       <ArrowLeft className="mr-1 size-3.5" />
-                      返回首页
+                      {t('pages.singlePage.backHome')}
                     </Link>
                   </Button>
                 </div>

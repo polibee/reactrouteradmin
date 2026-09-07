@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
   CreateAction,
@@ -6,19 +7,21 @@ import {
   DashboardPageContent,
   DashboardPageHeader,
 } from '~/admin/ui'
+import { i18n } from '~/core/i18n'
 import { PageTable } from '~/modules/site/pages/components/page-table'
 import { siteService } from '~/modules/site/service'
 import type { SitePage } from '~/modules/site/types'
 
 export const meta = () => {
-  return [{ title: '单页面管理 - Admin Framework' }]
+  return [{ title: i18n.t('pages.admin.sitePages.metaTitle') }]
 }
 
 export const handle = {
-  breadcrumb: () => ({ label: '单页面管理' }),
+  breadcrumb: () => ({ label: i18n.t('pages.admin.sitePages.title') }),
 }
 
 export default function SitePagesIndexPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [pages, setPages] = useState<SitePage[]>([])
   const [loading, setLoading] = useState(true)
@@ -41,11 +44,11 @@ export default function SitePagesIndexPage() {
   return (
     <DashboardPage>
       <DashboardPageHeader
-        title="单页面管理"
-        description="维护隐私政策、使用条款、关于我们、免责声明等公开独立静态单页"
+        title={t('pages.admin.sitePages.title')}
+        description={t('pages.admin.sitePages.description')}
         actions={
           <CreateAction
-            label="新建单页面"
+            label={t('pages.admin.sitePages.createAction')}
             onClick={() => navigate('/admin/pages/create')}
             permission="site.pages"
           />

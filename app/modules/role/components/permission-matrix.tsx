@@ -1,4 +1,5 @@
 import { CheckCheck, XCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
 import {
@@ -23,6 +24,7 @@ export function PermissionMatrix({
   onChange,
   disabled = false,
 }: PermissionMatrixProps) {
+  const { t } = useTranslation()
   const isSuperAdmin = selectedPermissions.includes('*')
 
   const togglePermission = (code: string) => {
@@ -46,7 +48,7 @@ export function PermissionMatrix({
     const group = SYSTEM_PERMISSION_GROUPS.find((g) => g.module === moduleKey)
     if (!group) return
 
-    const groupCodes = group.permissions.map((p) => p.code)
+    const groupCodes: string[] = group.permissions.map((p) => p.code)
     const currentCodes = isSuperAdmin
       ? [...ALL_PERMISSION_CODES]
       : [...selectedPermissions]
@@ -83,19 +85,21 @@ export function PermissionMatrix({
       <div className="bg-muted/50 flex flex-col justify-between gap-2 rounded-lg border p-3 sm:flex-row sm:items-center">
         <div className="flex items-center gap-2">
           <span className="text-foreground text-sm font-medium">
-            权限分配矩阵
+            {t('resources.roles.matrix.title')}
           </span>
           {isSuperAdmin ? (
             <Badge
               variant="default"
               className="bg-amber-600 text-white hover:bg-amber-700"
             >
-              超级特权 (*)
+              {t('resources.roles.matrix.superBadge')}
             </Badge>
           ) : (
             <Badge variant="secondary">
-              已选 {effectivePermissions.length} / {ALL_PERMISSION_CODES.length}{' '}
-              项
+              {t('common.pagination.selectedOf', {
+                selected: effectivePermissions.length,
+                total: ALL_PERMISSION_CODES.length,
+              })}
             </Badge>
           )}
         </div>
@@ -110,7 +114,7 @@ export function PermissionMatrix({
               className="h-8 text-xs"
             >
               <CheckCheck className="mr-1 size-3.5" />
-              全部勾选
+              {t('common.actions.selectAll')}
             </Button>
             <Button
               type="button"
@@ -120,7 +124,7 @@ export function PermissionMatrix({
               className="text-muted-foreground hover:text-destructive h-8 text-xs"
             >
               <XCircle className="mr-1 size-3.5" />
-              清空重置
+              {t('resources.roles.matrix.clearAll')}
             </Button>
           </div>
         )}
@@ -138,11 +142,11 @@ export function PermissionMatrix({
               <CardHeader className="flex flex-row items-center justify-between space-y-0 border-b p-4 pb-3">
                 <div>
                   <CardTitle className="text-sm font-semibold">
-                    {group.title}
+                    {t(group.title)}
                   </CardTitle>
                   {group.description && (
                     <CardDescription className="mt-0.5 text-xs">
-                      {group.description}
+                      {t(group.description)}
                     </CardDescription>
                   )}
                 </div>
@@ -155,7 +159,9 @@ export function PermissionMatrix({
                     onClick={() => toggleGroup(group.module)}
                     className="text-primary h-7 px-2 text-xs font-normal"
                   >
-                    {allSelected ? '取消全选' : '全选本组'}
+                    {allSelected
+                      ? t('resources.roles.matrix.deselectGroup')
+                      : t('resources.roles.matrix.selectGroup')}
                   </Button>
                 )}
               </CardHeader>
@@ -182,14 +188,14 @@ export function PermissionMatrix({
                           htmlFor={`perm-${perm.code}`}
                           className="cursor-pointer text-xs font-medium"
                         >
-                          {perm.name}
+                          {t(perm.name)}
                           <span className="text-muted-foreground ml-1.5 font-mono text-[11px] font-normal">
                             ({perm.code})
                           </span>
                         </Label>
                         {perm.description && (
                           <p className="text-muted-foreground line-clamp-1 text-[11px]">
-                            {perm.description}
+                            {t(perm.description)}
                           </p>
                         )}
                       </div>

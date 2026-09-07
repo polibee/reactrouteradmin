@@ -1,5 +1,6 @@
 import { Eye } from 'lucide-react'
 import type React from 'react'
+import { useTranslation } from 'react-i18next'
 import { AdminAction, type AdminActionProps } from './AdminAction'
 
 export interface ViewActionProps extends Omit<AdminActionProps, 'icon'> {
@@ -9,16 +10,18 @@ export interface ViewActionProps extends Omit<AdminActionProps, 'icon'> {
 }
 
 export function ViewAction({
-  label = '查看',
+  label,
   icon = Eye,
   children,
   variant = 'ghost',
   size = 'sm',
   ...props
 }: ViewActionProps) {
+  const { t } = useTranslation()
+  const resolvedLabel = label ?? t('common.actions.view')
   return (
     <AdminAction icon={icon} variant={variant} size={size} {...props}>
-      {children || label}
+      {children || resolvedLabel}
     </AdminAction>
   )
 }

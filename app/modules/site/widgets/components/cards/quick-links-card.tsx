@@ -5,36 +5,38 @@ import {
   ShieldCheck,
   Users,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { useWidgetContext } from '../widget-context'
 
 export function QuickLinksCard() {
+  const { t } = useTranslation()
   const { density, showCardDividers } = useWidgetContext()
   const isCompact = density === 'compact'
 
   const links = [
     {
-      title: '用户中心',
-      desc: '管理账户与角色',
+      title: t('resources.site.widgets.cards.quickLinks.users.title'),
+      desc: t('resources.site.widgets.cards.quickLinks.users.desc'),
       icon: Users,
       to: '/admin/users',
     },
     {
-      title: '角色权限',
-      desc: 'RBAC 操作权限',
+      title: t('resources.site.widgets.cards.quickLinks.roles.title'),
+      desc: t('resources.site.widgets.cards.quickLinks.roles.desc'),
       icon: ShieldCheck,
       to: '/admin/roles',
     },
     {
-      title: '单页内容',
-      desc: '隐私政策条款',
+      title: t('resources.site.widgets.cards.quickLinks.pages.title'),
+      desc: t('resources.site.widgets.cards.quickLinks.pages.desc'),
       icon: FileText,
       to: '/admin/pages',
     },
     {
-      title: '前台主页',
-      desc: '进入公开展示端',
+      title: t('resources.site.widgets.cards.quickLinks.home.title'),
+      desc: t('resources.site.widgets.cards.quickLinks.home.desc'),
       icon: Compass,
       to: '/',
       external: true,
@@ -47,9 +49,9 @@ export function QuickLinksCard() {
         className={`${isCompact ? 'p-2 px-2.5 pb-1' : 'p-3 pb-2'} ${showCardDividers ? 'border-b' : ''}`}
       >
         <CardTitle className="flex items-center justify-between text-xs font-semibold">
-          <span>快捷导航通道</span>
+          <span>{t('resources.site.widgets.cards.quickLinks.title')}</span>
           <span className="text-muted-foreground text-[10px] font-normal">
-            快捷入口
+            {t('resources.site.widgets.cards.quickLinks.subtitle')}
           </span>
         </CardTitle>
       </CardHeader>

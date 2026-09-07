@@ -13,6 +13,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Checkbox } from '~/components/ui/checkbox'
 import {
   Table,
@@ -22,6 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from '~/components/ui/table'
+import { i18n } from '~/core/i18n'
 import { AdminEmpty } from '../feedback/AdminEmpty'
 import { AdminLoading } from '../feedback/AdminLoading'
 import { AdminBulkActions } from './AdminBulkActions'
@@ -54,7 +56,7 @@ export function createSelectColumn<TData>(): ColumnDef<TData, unknown> {
           (table.getIsSomePageRowsSelected() && 'indeterminate')
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="全选"
+        aria-label={i18n.t('common.actions.selectAll')}
         className="translate-y-[2px]"
       />
     ),
@@ -62,7 +64,7 @@ export function createSelectColumn<TData>(): ColumnDef<TData, unknown> {
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="选择行"
+        aria-label={i18n.t('common.actions.selectRow')}
         className="translate-y-[2px]"
       />
     ),
@@ -86,6 +88,7 @@ export function AdminTable<TData, TValue>({
   emptyTitle,
   emptyDescription,
 }: AdminTableProps<TData, TValue>) {
+  const { t } = useTranslation()
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -178,7 +181,7 @@ export function AdminTable<TData, TValue>({
                   colSpan={tableColumns.length}
                   className="h-48 text-center"
                 >
-                  <AdminLoading text="加载表格数据中..." />
+                  <AdminLoading text={t('common.actions.loadingTable')} />
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows?.length ? (
@@ -206,7 +209,7 @@ export function AdminTable<TData, TValue>({
                   className="h-48 text-center"
                 >
                   <AdminEmpty
-                    title={emptyTitle || '暂无匹配数据'}
+                    title={emptyTitle || t('common.messages.noMatchingData')}
                     description={emptyDescription}
                   />
                 </TableCell>

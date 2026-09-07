@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
 import {
   DashboardCard,
@@ -9,19 +10,21 @@ import {
   LoadingState,
   notify,
 } from '~/admin/ui'
+import { i18n } from '~/core/i18n'
 import { PageForm } from '~/modules/site/pages/components/page-form'
 import { siteService } from '~/modules/site/service'
 import type { SitePage, SitePageFormValues } from '~/modules/site/types'
 
 export const meta = () => {
-  return [{ title: '编辑单页面 - Admin Framework' }]
+  return [{ title: i18n.t('pages.admin.sitePages.editMetaTitle') }]
 }
 
 export const handle = {
-  breadcrumb: () => ({ label: '编辑单页面' }),
+  breadcrumb: () => ({ label: i18n.t('pages.admin.sitePages.editTitle') }),
 }
 
 export default function SitePageEdit() {
+  const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [page, setPage] = useState<SitePage | null>(null)
@@ -47,11 +50,11 @@ export default function SitePageEdit() {
     setSaving(true)
     try {
       await siteService.updatePage(id, data)
-      notify.success('单页面修改成功！')
+      notify.success(t('pages.admin.sitePages.updateSuccess'))
       navigate('/admin/pages')
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '保存页面失败')
+      notify.error(err?.message || t('pages.admin.sitePages.updateFailed'))
     } finally {
       setSaving(false)
     }
@@ -60,7 +63,7 @@ export default function SitePageEdit() {
   if (fetching) {
     return (
       <DashboardPage>
-        <LoadingState text="正在读取页面数据..." />
+        <LoadingState text={t('pages.admin.sitePages.loading')} />
       </DashboardPage>
     )
   }
@@ -69,15 +72,15 @@ export default function SitePageEdit() {
     return (
       <DashboardPage>
         <EmptyState
-          title="未找到该页面"
-          description="该页面可能已被删除或 ID 错误"
+          title={t('pages.admin.sitePages.notFoundTitle')}
+          description={t('pages.admin.sitePages.notFoundDescription')}
           action={
             <button
               type="button"
               onClick={() => navigate('/admin/pages')}
               className="text-primary cursor-pointer text-sm underline"
             >
-              返回单页面列表
+              {t('pages.admin.sitePages.backToList')}
             </button>
           }
         />
@@ -88,20 +91,25 @@ export default function SitePageEdit() {
   return (
     <DashboardPage>
       <DashboardPageHeader
-        title={`编辑单页面：${page.title}`}
-        description={`前台访问路径：/${page.slug} · 当前浏览量：${page.views} 次`}
+        title={t('pages.admin.sitePages.editHeading', { title: page.title })}
+        description={t('pages.admin.sitePages.viewMeta', {
+          slug: page.slug,
+          views: page.views,
+        })}
       />
 
       <DashboardPageContent>
         <DashboardCard
-          title="单页面属性与正文修改"
-          description={`页面标识: ${page.slug || page.id.replace(/^page-/, '')}`}
+          title={t('pages.admin.sitePages.editCardTitle')}
+          description={t('pages.admin.sitePages.idLabel', {
+            id: page.slug || page.id.replace(/^page-/, ''),
+          })}
         >
           <PageForm
             initialData={page}
             onSubmit={handleSubmit}
             loading={saving}
-            submitText="保存页面修改"
+            submitText={t('pages.admin.sitePages.editSubmit')}
           />
         </DashboardCard>
       </DashboardPageContent>

@@ -1,5 +1,6 @@
 import { Layers } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
 import {
   Dialog,
@@ -41,6 +42,7 @@ export function NavGroupDialog({
   defaultLocation = 'footer',
   onSave,
 }: NavGroupDialogProps) {
+  const { t } = useTranslation()
   const isEditing = Boolean(group)
   const [name, setName] = useState('')
   const [location, setLocation] = useState<NavLocation>(defaultLocation)
@@ -92,25 +94,29 @@ export function NavGroupDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-base">
             <Layers className="text-primary size-4" />
-            {isEditing ? '修改导航分类名字' : '新增导航分类/分组'}
+            {isEditing
+              ? t('resources.site.navigation.groupDialog.editTitle')
+              : t('resources.site.navigation.groupDialog.createTitle')}
           </DialogTitle>
           <DialogDescription className="text-xs">
             {location === 'footer'
-              ? '页脚分类将呈现为独立的列导航标题（如“核心产品”、“法律合规”等）'
-              : '页眉分类用于组织顶部主菜单及聚合下拉子项'}
+              ? t('resources.site.navigation.groupDialog.footerDescription')
+              : t('resources.site.navigation.groupDialog.headerDescription')}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 py-2 text-xs">
           <div className="space-y-1.5">
             <Label htmlFor="group-name" className="text-xs">
-              分类名称 *
+              {t('resources.site.navigation.groupDialog.nameLabel')}
             </Label>
             <Input
               id="group-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="例如：核心产品、关于与支持、开发者生态"
+              placeholder={t(
+                'resources.site.navigation.groupDialog.namePlaceholder',
+              )}
               className="h-8 text-xs"
               required
             />
@@ -118,7 +124,9 @@ export function NavGroupDialog({
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label className="text-xs">所属位置</Label>
+              <Label className="text-xs">
+                {t('resources.site.navigation.groupDialog.locationLabel')}
+              </Label>
               <Select
                 value={location}
                 onValueChange={(val) => setLocation(val as NavLocation)}
@@ -127,15 +135,19 @@ export function NavGroupDialog({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="text-xs">
-                  <SelectItem value="footer">页脚底部 (Footer)</SelectItem>
-                  <SelectItem value="header">页眉顶部 (Header)</SelectItem>
+                  <SelectItem value="footer">
+                    {t('resources.site.navigation.locationFooter')}
+                  </SelectItem>
+                  <SelectItem value="header">
+                    {t('resources.site.navigation.locationHeader')}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-1.5">
               <Label htmlFor="group-sort" className="text-xs">
-                排序权重 (越小越靠前)
+                {t('resources.site.navigation.sortLabel')}
               </Label>
               <Input
                 id="group-sort"
@@ -150,13 +162,15 @@ export function NavGroupDialog({
 
           <div className="space-y-1.5">
             <Label htmlFor="group-desc" className="text-xs">
-              分类描述说明 (可选)
+              {t('resources.site.navigation.groupDialog.descriptionLabel')}
             </Label>
             <Textarea
               id="group-desc"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="简述该分类的定位，例如：平台核心功能矩阵与业务能力"
+              placeholder={t(
+                'resources.site.navigation.groupDialog.descriptionPlaceholder',
+              )}
               rows={2}
               className="text-xs"
             />
@@ -170,7 +184,7 @@ export function NavGroupDialog({
                 onCheckedChange={setEnabled}
               />
               <Label htmlFor="group-enabled" className="cursor-pointer text-xs">
-                在前台启用此分类
+                {t('resources.site.navigation.groupDialog.enabledLabel')}
               </Label>
             </div>
           </div>
@@ -184,7 +198,7 @@ export function NavGroupDialog({
               onClick={() => onOpenChange(false)}
               disabled={submitting}
             >
-              取消
+              {t('common.actions.cancel')}
             </Button>
             <Button
               type="submit"
@@ -192,7 +206,9 @@ export function NavGroupDialog({
               className="h-8 gap-1 text-xs"
               disabled={submitting || !name.trim()}
             >
-              {submitting ? '保存中...' : '确定保存'}
+              {submitting
+                ? t('common.actions.saving')
+                : t('common.actions.save')}
             </Button>
           </DialogFooter>
         </form>

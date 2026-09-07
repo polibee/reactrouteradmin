@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import {
   ActionButton,
   SelectField,
@@ -37,6 +38,7 @@ export function AnnouncementDialog({
   onSubmit,
   loading = false,
 }: AnnouncementDialogProps) {
+  const { t } = useTranslation()
   const isEditing = Boolean(item)
 
   const form = useForm<SiteAnnouncementFormValues>({
@@ -85,11 +87,12 @@ export function AnnouncementDialog({
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>
-            {isEditing ? '编辑运营通知' : '新增运营通知'}
+            {isEditing
+              ? t('resources.site.operations.announcementDialog.editTitle')
+              : t('resources.site.operations.announcementDialog.createTitle')}
           </DialogTitle>
           <DialogDescription>
-            配置前台各类视觉公告形态（顶部
-            Banner、居中弹窗、右下角浮窗或底部走马灯）。
+            {t('resources.site.operations.announcementDialog.description')}
           </DialogDescription>
         </DialogHeader>
 
@@ -105,10 +108,14 @@ export function AnnouncementDialog({
                 onClick={() => onOpenChange(false)}
                 disabled={loading}
               >
-                取消
+                {t('common.actions.cancel')}
               </ActionButton>
               <ActionButton type="submit" loading={loading}>
-                {isEditing ? '保存修改' : '立即发布'}
+                {isEditing
+                  ? t('resources.site.shared.saveChanges')
+                  : t(
+                      'resources.site.operations.announcementDialog.publishNow',
+                    )}
               </ActionButton>
             </div>
           }
@@ -116,23 +123,67 @@ export function AnnouncementDialog({
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <SelectField
               name="type"
-              label="通知形态类型"
+              label={t(
+                'resources.site.operations.announcementDialog.typeLabel',
+              )}
               options={[
-                { label: '顶部通告条 (Banner)', value: 'banner' },
-                { label: '居中弹窗通知 (Modal)', value: 'modal' },
-                { label: '右下角浮动卡片 (Corner)', value: 'corner' },
-                { label: '底部流动走马灯 (Marquee)', value: 'marquee' },
+                {
+                  label: t(
+                    'resources.site.operations.announcementDialog.typeBanner',
+                  ),
+                  value: 'banner',
+                },
+                {
+                  label: t(
+                    'resources.site.operations.announcementDialog.typeModal',
+                  ),
+                  value: 'modal',
+                },
+                {
+                  label: t(
+                    'resources.site.operations.announcementDialog.typeCorner',
+                  ),
+                  value: 'corner',
+                },
+                {
+                  label: t(
+                    'resources.site.operations.announcementDialog.typeMarquee',
+                  ),
+                  value: 'marquee',
+                },
               ]}
               required
             />
             <SelectField
               name="style"
-              label="视觉高亮主题"
+              label={t(
+                'resources.site.operations.announcementDialog.styleLabel',
+              )}
               options={[
-                { label: '常规信息 (Info 蓝色)', value: 'info' },
-                { label: '默认简约 (Default 灰色)', value: 'default' },
-                { label: '警示提醒 (Warning 橙色)', value: 'warning' },
-                { label: '紧急告警 (Destructive 红色)', value: 'destructive' },
+                {
+                  label: t(
+                    'resources.site.operations.announcementDialog.styleInfo',
+                  ),
+                  value: 'info',
+                },
+                {
+                  label: t(
+                    'resources.site.operations.announcementDialog.styleDefault',
+                  ),
+                  value: 'default',
+                },
+                {
+                  label: t(
+                    'resources.site.operations.announcementDialog.styleWarning',
+                  ),
+                  value: 'warning',
+                },
+                {
+                  label: t(
+                    'resources.site.operations.announcementDialog.styleDestructive',
+                  ),
+                  value: 'destructive',
+                },
               ]}
               required
             />
@@ -140,15 +191,21 @@ export function AnnouncementDialog({
 
           <TextField
             name="title"
-            label="通告主标题"
-            placeholder="例如：系统维护通知、全新版本发布"
+            label={t('resources.site.operations.announcementDialog.titleLabel')}
+            placeholder={t(
+              'resources.site.operations.announcementDialog.titlePlaceholder',
+            )}
             required
           />
 
           <TextareaField
             name="content"
-            label="通告正文文案"
-            placeholder="输入通告详细内容..."
+            label={t(
+              'resources.site.operations.announcementDialog.contentLabel',
+            )}
+            placeholder={t(
+              'resources.site.operations.announcementDialog.contentPlaceholder',
+            )}
             rows={3}
             required
           />
@@ -156,21 +213,36 @@ export function AnnouncementDialog({
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <TextField
               name="linkText"
-              label="跳转按钮文案 (可选)"
-              placeholder="例如：查看详情、立即更新"
+              label={t(
+                'resources.site.operations.announcementDialog.linkTextLabel',
+              )}
+              placeholder={t(
+                'resources.site.operations.announcementDialog.linkTextPlaceholder',
+              )}
             />
             <TextField
               name="linkUrl"
-              label="跳转目标 URL (可选)"
-              placeholder="例如：/p/about 或 https://..."
+              label={t(
+                'resources.site.operations.announcementDialog.linkUrlLabel',
+              )}
+              placeholder={t(
+                'resources.site.operations.announcementDialog.linkUrlPlaceholder',
+              )}
             />
           </div>
 
           <div className="grid grid-cols-1 gap-3 pt-2 sm:grid-cols-2">
-            <SwitchField name="enabled" label="立即启用生效" />
+            <SwitchField
+              name="enabled"
+              label={t(
+                'resources.site.operations.announcementDialog.enabledLabel',
+              )}
+            />
             <SwitchField
               name="showOnce"
-              label="同一会话内仅提示一次 (防打扰)"
+              label={t(
+                'resources.site.operations.announcementDialog.showOnceLabel',
+              )}
             />
           </div>
         </SmartForm>

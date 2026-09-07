@@ -1,5 +1,6 @@
 import { Plus } from 'lucide-react'
 import type React from 'react'
+import { useTranslation } from 'react-i18next'
 import { AdminAction, type AdminActionProps } from './AdminAction'
 
 export interface CreateActionProps extends Omit<AdminActionProps, 'icon'> {
@@ -9,14 +10,16 @@ export interface CreateActionProps extends Omit<AdminActionProps, 'icon'> {
 }
 
 export function CreateAction({
-  label = '新建',
+  label,
   icon = Plus,
   children,
   ...props
 }: CreateActionProps) {
+  const { t } = useTranslation()
+  const resolvedLabel = label ?? t('common.actions.create')
   return (
     <AdminAction icon={icon} size="sm" {...props}>
-      {children || label}
+      {children || resolvedLabel}
     </AdminAction>
   )
 }

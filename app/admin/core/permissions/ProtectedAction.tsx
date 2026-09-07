@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../auth/auth-context'
 import { hasPermission } from './permission'
 
@@ -15,6 +16,7 @@ export function ProtectedAction({
   children,
   disableOnly = false,
 }: ProtectedActionProps) {
+  const { t } = useTranslation()
   const { user } = useAuth()
   const allowed = hasPermission(user, permission)
 
@@ -24,7 +26,7 @@ export function ProtectedAction({
         children as React.ReactElement<{ disabled?: boolean; title?: string }>,
         {
           disabled: true,
-          title: '您没有此操作权限',
+          title: t('common.messages.unauthorized'),
         },
       )
     }

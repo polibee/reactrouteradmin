@@ -1,4 +1,5 @@
 // biome-ignore-all lint/suspicious/useAwait: async signatures reserved for a future HTTP data source
+import { i18n } from '~/core/i18n'
 import { mediaRepository } from './repository'
 import type {
   MediaDimensions,
@@ -54,7 +55,7 @@ export class MediaService {
       url,
       thumbnailUrl: type === 'image' ? url : undefined,
       dimensions,
-      folder: folder || '未分组',
+      folder: folder || i18n.t('resources.media.folders.ungrouped'),
       tags: tags || [],
     }
 

@@ -1,5 +1,6 @@
 import { ArrowRight, ChevronDown, ExternalLink, Shield } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { ThemeSwitch } from '~/components/layout/theme-switch'
 import { Button } from '~/components/ui/button'
@@ -22,6 +23,7 @@ export interface PublicSiteLayoutProps {
 }
 
 export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
+  const { t } = useTranslation()
   const [headerNav, setHeaderNav] = useState<SiteNavItem[]>([])
   const [footerNav, setFooterNav] = useState<SiteNavItem[]>([])
   const [footerGroups, setFooterGroups] = useState<SiteNavGroup[]>([])
@@ -65,7 +67,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
   if (unassignedItems.length > 0) {
     footerSections.push({
       id: 'ungrouped',
-      title: '其他支持',
+      title: t('pages.layout.footer.ungroupedTitle'),
       items: unassignedItems.sort((a, b) => a.sort - b.sort),
     })
   }
@@ -167,7 +169,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
             <ThemeSwitch />
             <Button size="sm" asChild className="h-8 text-xs">
               <Link to="/admin">
-                进入后台控制台
+                {t('pages.layout.header.adminCta')}
                 <ArrowRight className="ml-1 size-3.5" />
               </Link>
             </Button>
@@ -204,9 +206,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
                 </div>
               </Link>
               <p className="text-muted-foreground max-w-sm text-xs leading-relaxed">
-                基于 React Router 8.3 + React 19
-                的现代化通用后台与门户引擎，支持 RBAC
-                细粒度权限控制与卡片小工具动态装配。
+                {t('pages.layout.footer.description')}
               </p>
               <div className="text-muted-foreground flex items-center gap-2 pt-1 text-xs">
                 <span className="relative flex h-2 w-2">
@@ -214,7 +214,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
                 </span>
                 <span className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
-                  系统所有服务运行正常
+                  {t('pages.layout.footer.statusOk')}
                 </span>
                 <span className="text-muted-foreground/40">·</span>
                 <span className="text-muted-foreground font-mono text-[11px]">
@@ -232,7 +232,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
                 <ul className="text-muted-foreground space-y-2 text-xs">
                   {section.items.length === 0 ? (
                     <li className="text-muted-foreground/50 text-[11px]">
-                      暂无链接
+                      {t('pages.layout.footer.noLinks')}
                     </li>
                   ) : (
                     section.items.map((item) => (
@@ -273,7 +273,7 @@ export function PublicSiteLayout({ children }: PublicSiteLayoutProps) {
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 className="hover:text-foreground cursor-pointer text-xs transition-colors"
               >
-                回到顶部 ↑
+                {t('pages.layout.footer.backToTop')}
               </button>
             </div>
           </div>

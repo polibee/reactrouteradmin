@@ -1,4 +1,5 @@
 // biome-ignore-all lint/suspicious/useAwait: async signatures reserved for a future HTTP data source
+import { i18n } from '~/core/i18n'
 import type { Role } from './types'
 
 export interface IRoleRepository {
@@ -172,7 +173,11 @@ export class RoleRepository implements IRoleRepository {
 
     // 系统内置角色不可删除
     if (target.isSystem) {
-      throw new Error(`系统内置角色「${target.name}」受保护，不可被删除！`)
+      throw new Error(
+        i18n.t('resources.roles.errors.systemProtected', {
+          name: target.name,
+        }),
+      )
     }
 
     const nextRoles = roles.filter((r) => r.id !== id)

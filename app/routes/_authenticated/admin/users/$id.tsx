@@ -7,6 +7,7 @@ import {
   User as UserIcon,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
 import {
   AdminBadge,
@@ -18,34 +19,33 @@ import {
   AdminPageContent,
   AdminPageHeader,
 } from '~/admin/ui'
+import { i18n } from '~/core/i18n'
 import { userService } from '~/modules/user/service'
-import type { User, UserRole, UserStatus } from '~/modules/user/types'
+import type { User } from '~/modules/user/types'
 
 export const meta = () => {
-  return [{ title: '用户详情 - Admin Framework' }]
+  return [{ title: i18n.t('pages.admin.users.detailMetaTitle') }]
 }
 
 export const handle = {
-  breadcrumb: () => ({ label: '用户详情' }),
+  breadcrumb: () => ({ label: i18n.t('pages.admin.users.detailTitle') }),
 }
 
-const roleLabelMap: Record<UserRole, string> = {
-  super_admin: '超级管理员',
-  admin: '管理员',
-  manager: '团队经理',
-  user: '普通用户',
-}
+const roleLabelMap = {
+  super_admin: 'pages.admin.users.roles.superAdmin',
+  admin: 'pages.admin.users.roles.admin',
+  manager: 'pages.admin.users.roles.manager',
+  user: 'pages.admin.users.roles.user',
+} as const
 
-const statusBadgeMap: Record<
-  UserStatus,
-  { label: string; status: 'success' | 'warning' | 'error' }
-> = {
-  active: { label: '正常生效', status: 'success' },
-  inactive: { label: '未激活', status: 'warning' },
-  suspended: { label: '已停用', status: 'error' },
-}
+const statusBadgeMap = {
+  active: { key: 'pages.admin.users.status.active', status: 'success' },
+  inactive: { key: 'pages.admin.users.status.inactive', status: 'warning' },
+  suspended: { key: 'pages.admin.users.status.suspended', status: 'error' },
+} as const
 
 export default function UserViewPage() {
+  const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [user, setUser] = useState<User | null>(null)
@@ -68,7 +68,7 @@ export default function UserViewPage() {
   if (loading) {
     return (
       <AdminPage>
-        <AdminLoading text="加载详情中..." />
+        <AdminLoading text={t('pages.admin.users.loadingDetail')} />
       </AdminPage>
     )
   }
@@ -77,10 +77,10 @@ export default function UserViewPage() {
     return (
       <AdminPage>
         <AdminEmpty
-          title="未找到该用户"
+          title={t('pages.admin.users.notFoundTitle')}
           action={
             <AdminButton onClick={() => navigate('/admin/users')}>
-              返回列表
+              {t('pages.admin.users.backToList')}
             </AdminButton>
           }
         />
@@ -88,16 +88,13 @@ export default function UserViewPage() {
     )
   }
 
-  const statusInfo = statusBadgeMap[user.status] || {
-    label: user.status,
-    status: 'default',
-  }
+  const statusInfo = statusBadgeMap[user.status]
 
   return (
     <AdminPage>
       <AdminPageHeader
-        title={`用户详情：${user.name}`}
-        description={`系统唯一识别标识 (ID): ${user.id}`}
+        title={t('pages.admin.users.detailHeading', { name: user.name })}
+        description={t('pages.admin.users.idDescription', { id: user.id })}
         actions={
           <div className="flex items-center gap-2">
             <AdminButton
@@ -105,14 +102,14 @@ export default function UserViewPage() {
               icon={ArrowLeft}
               onClick={() => navigate('/admin/users')}
             >
-              返回列表
+              {t('pages.admin.users.backToList')}
             </AdminButton>
             <AdminButton
               icon={Edit2}
               onClick={() => navigate(`/admin/users/${user.id}/edit`)}
               permission="users.update"
             >
-              编辑用户
+              {t('pages.admin.users.editAction')}
             </AdminButton>
           </div>
         }
@@ -120,7 +117,10 @@ export default function UserViewPage() {
 
       <AdminPageContent>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          <AdminCard title="身份概览" className="md:col-span-1">
+          <AdminCard
+            title={t('pages.admin.users.identityCard')}
+            className="md:col-span-1"
+          >
             <div className="flex flex-col items-center p-4 text-center">
               {user.avatar ? (
                 <img
@@ -137,18 +137,22 @@ export default function UserViewPage() {
               <p className="text-muted-foreground text-sm">{user.email}</p>
               <div className="mt-4 flex gap-2">
                 <AdminBadge status={statusInfo.status}>
-                  {statusInfo.label}
+                  {t(statusInfo.key)}
                 </AdminBadge>
-                <AdminBadge>{roleLabelMap[user.role] || user.role}</AdminBadge>
+                <AdminBadge>{t(roleLabelMap[user.role])}</AdminBadge>
               </div>
             </div>
           </AdminCard>
 
-          <AdminCard title="详细属性" className="md:col-span-2">
+          <AdminCard
+            title={t('pages.admin.users.attributesCard')}
+            className="md:col-span-2"
+          >
             <dl className="grid grid-cols-1 gap-x-4 gap-y-6 p-2 sm:grid-cols-2">
               <div>
                 <dt className="text-muted-foreground flex items-center text-xs font-medium">
-                  <UserIcon className="mr-1.5 h-3.5 w-3.5" /> 姓名
+                  <UserIcon className="mr-1.5 h-3.5 w-3.5" />{' '}
+                  {t('common.labels.name')}
                 </dt>
                 <dd className="text-foreground mt-1 text-sm font-semibold">
                   {user.name}
@@ -156,7 +160,8 @@ export default function UserViewPage() {
               </div>
               <div>
                 <dt className="text-muted-foreground flex items-center text-xs font-medium">
-                  <Mail className="mr-1.5 h-3.5 w-3.5" /> 登录邮箱
+                  <Mail className="mr-1.5 h-3.5 w-3.5" />{' '}
+                  {t('common.labels.email')}
                 </dt>
                 <dd className="text-foreground mt-1 text-sm font-semibold">
                   {user.email}
@@ -164,15 +169,17 @@ export default function UserViewPage() {
               </div>
               <div>
                 <dt className="text-muted-foreground flex items-center text-xs font-medium">
-                  <Shield className="mr-1.5 h-3.5 w-3.5" /> 角色权限
+                  <Shield className="mr-1.5 h-3.5 w-3.5" />{' '}
+                  {t('pages.admin.users.fields.role')}
                 </dt>
                 <dd className="text-foreground mt-1 text-sm font-semibold">
-                  {roleLabelMap[user.role] || user.role}
+                  {t(roleLabelMap[user.role])}
                 </dd>
               </div>
               <div>
                 <dt className="text-muted-foreground flex items-center text-xs font-medium">
-                  <Calendar className="mr-1.5 h-3.5 w-3.5" /> 创建时间
+                  <Calendar className="mr-1.5 h-3.5 w-3.5" />{' '}
+                  {t('common.labels.createdAt')}
                 </dt>
                 <dd className="text-foreground mt-1 text-sm font-semibold">
                   {user.createdAt}
@@ -180,10 +187,10 @@ export default function UserViewPage() {
               </div>
               <div className="sm:col-span-2">
                 <dt className="text-muted-foreground text-xs font-medium">
-                  个人简介 / 备注
+                  {t('pages.admin.users.fields.bio')}
                 </dt>
                 <dd className="text-foreground bg-muted/30 mt-1 rounded-md border p-3 text-sm">
-                  {user.bio || '无个人简介'}
+                  {user.bio || t('pages.admin.users.noBio')}
                 </dd>
               </div>
             </dl>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
 import {
   AdminCard,
@@ -9,19 +10,21 @@ import {
   AdminPageHeader,
   notify,
 } from '~/admin/ui'
+import { i18n } from '~/core/i18n'
 import { UserForm } from '~/modules/user/components/user-form'
 import { userService } from '~/modules/user/service'
 import type { User, UserFormData } from '~/modules/user/types'
 
 export const meta = () => {
-  return [{ title: '编辑用户 - Admin Framework' }]
+  return [{ title: i18n.t('pages.admin.users.editMetaTitle') }]
 }
 
 export const handle = {
-  breadcrumb: () => ({ label: '编辑用户' }),
+  breadcrumb: () => ({ label: i18n.t('pages.admin.users.editTitle') }),
 }
 
 export default function UserEditPage() {
+  const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [user, setUser] = useState<User | null>(null)
@@ -47,10 +50,12 @@ export default function UserEditPage() {
     setSaving(true)
     try {
       await userService.updateUser(id, data)
-      notify.success('用户信息已成功更新！')
+      notify.success(t('pages.admin.users.updateSuccess'))
       navigate('/admin/users')
     } catch (e) {
-      notify.error(e instanceof Error ? e.message : '更新用户信息失败')
+      notify.error(
+        e instanceof Error ? e.message : t('pages.admin.users.updateFailed'),
+      )
     } finally {
       setSaving(false)
     }
@@ -59,7 +64,7 @@ export default function UserEditPage() {
   if (fetching) {
     return (
       <AdminPage>
-        <AdminLoading text="加载用户资料中..." />
+        <AdminLoading text={t('pages.admin.users.loadingProfile')} />
       </AdminPage>
     )
   }
@@ -68,15 +73,15 @@ export default function UserEditPage() {
     return (
       <AdminPage>
         <AdminEmpty
-          title="未找到该用户"
-          description="该用户可能已被删除或 ID 无效"
+          title={t('pages.admin.users.notFoundTitle')}
+          description={t('pages.admin.users.notFoundDescription')}
           action={
             <button
               type="button"
               onClick={() => navigate('/admin/users')}
               className="text-primary text-sm underline"
             >
-              返回用户列表
+              {t('pages.admin.users.backToList')}
             </button>
           }
         />
@@ -87,17 +92,20 @@ export default function UserEditPage() {
   return (
     <AdminPage>
       <AdminPageHeader
-        title={`编辑用户：${user.name}`}
-        description="修改用户个人信息、重设权限角色或调整账户状态"
+        title={t('pages.admin.users.editHeading', { name: user.name })}
+        description={t('pages.admin.users.editDescription')}
       />
 
       <AdminPageContent>
-        <AdminCard title="用户信息编辑" description={`用户 ID: ${user.id}`}>
+        <AdminCard
+          title={t('pages.admin.users.editCardTitle')}
+          description={t('pages.admin.users.idLabel', { id: user.id })}
+        >
           <UserForm
             initialData={user}
             onSubmit={handleSubmit}
             loading={saving}
-            submitText="保存变更"
+            submitText={t('pages.admin.users.editSubmit')}
           />
         </AdminCard>
       </AdminPageContent>

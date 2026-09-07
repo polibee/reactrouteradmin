@@ -1,4 +1,5 @@
 import { Shield } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { NavGroup } from '~/components/layout/nav-group'
 import { NavUser } from '~/components/layout/nav-user'
@@ -17,12 +18,13 @@ import { usePanel } from '../../core/panel/panel-provider'
 export function AdminSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
+  const { t } = useTranslation()
   const { user } = useAuth()
   const { panel } = usePanel()
   const navGroups = buildNavigation(user)
 
   const navUserData = {
-    name: user?.name || '管理员',
+    name: user?.name || t('common.admin.fallbackUser'),
     email: user?.email || 'admin@domain.com',
     avatar: user?.avatar || '',
   }
@@ -41,7 +43,9 @@ export function AdminSidebar({
             >
               {panel.branding.title}
             </Link>
-            <span className="text-muted-foreground text-xs">管理控制台</span>
+            <span className="text-muted-foreground text-xs">
+              {t('common.admin.console')}
+            </span>
           </div>
         </div>
       </SidebarHeader>

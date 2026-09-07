@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
   AdminButton,
@@ -20,9 +21,11 @@ export function UserForm({
   initialData,
   onSubmit,
   loading = false,
-  submitText = '保存用户',
+  submitText,
 }: UserFormProps) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
+  const resolvedSubmitText = submitText ?? t('resources.users.form.submit')
 
   const defaultValues: Partial<UserFormData> = {
     name: initialData?.name || '',
@@ -33,16 +36,22 @@ export function UserForm({
   }
 
   const roleOptions = [
-    { label: '超级管理员 (super_admin)', value: 'super_admin' },
-    { label: '管理员 (admin)', value: 'admin' },
-    { label: '团队经理 (manager)', value: 'manager' },
-    { label: '普通用户 (user)', value: 'user' },
+    {
+      label: t('resources.users.options.role.superAdmin'),
+      value: 'super_admin',
+    },
+    { label: t('resources.users.options.role.admin'), value: 'admin' },
+    { label: t('resources.users.options.role.manager'), value: 'manager' },
+    { label: t('resources.users.options.role.user'), value: 'user' },
   ]
 
   const statusOptions = [
-    { label: '正常生效 (active)', value: 'active' },
-    { label: '未激活 (inactive)', value: 'inactive' },
-    { label: '已停用 (suspended)', value: 'suspended' },
+    { label: t('resources.users.options.status.active'), value: 'active' },
+    { label: t('resources.users.options.status.inactive'), value: 'inactive' },
+    {
+      label: t('resources.users.options.status.suspended'),
+      value: 'suspended',
+    },
   ]
 
   return (
@@ -51,11 +60,11 @@ export function UserForm({
       defaultValues={defaultValues as UserFormData}
       onSubmit={onSubmit}
       loading={loading}
-      submitText={submitText}
+      submitText={resolvedSubmitText}
       actions={
         <div className="flex items-center gap-3">
           <AdminButton type="submit" loading={loading}>
-            {submitText}
+            {resolvedSubmitText}
           </AdminButton>
           <AdminButton
             type="button"
@@ -63,7 +72,7 @@ export function UserForm({
             onClick={() => navigate('/admin/users')}
             disabled={loading}
           >
-            取消返回
+            {t('resources.users.form.cancelAndReturn')}
           </AdminButton>
         </div>
       }
@@ -71,13 +80,13 @@ export function UserForm({
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <TextField
           name="name"
-          label="用户姓名"
-          placeholder="请输入真实姓名或昵称"
+          label={t('common.labels.name')}
+          placeholder={t('resources.users.form.namePlaceholder')}
           required
         />
         <EmailField
           name="email"
-          label="登录邮箱"
+          label={t('common.labels.email')}
           placeholder="user@example.com"
           required
         />
@@ -86,15 +95,15 @@ export function UserForm({
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <SelectField
           name="role"
-          label="分配角色"
-          placeholder="选择角色"
+          label={t('resources.users.form.assignRole')}
+          placeholder={t('resources.users.form.selectRole')}
           options={roleOptions}
           required
         />
         <SelectField
           name="status"
-          label="账号状态"
-          placeholder="选择状态"
+          label={t('resources.users.form.accountStatus')}
+          placeholder={t('resources.users.form.selectStatus')}
           options={statusOptions}
           required
         />
@@ -102,8 +111,8 @@ export function UserForm({
 
       <TextareaField
         name="bio"
-        label="个人简介 / 备注"
-        placeholder="记录该用户的说明或职责..."
+        label={t('resources.users.form.bioLabel')}
+        placeholder={t('resources.users.form.bioPlaceholder')}
         rows={3}
       />
     </AdminForm>

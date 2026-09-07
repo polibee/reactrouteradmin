@@ -1,4 +1,5 @@
 // biome-ignore-all lint/suspicious/useAwait: async signatures reserved for a future HTTP data source
+import { i18n } from '~/core/i18n'
 import { SYSTEM_PERMISSION_GROUPS } from './permissions'
 import { roleRepository, type IRoleRepository } from './repository'
 import type { PermissionGroup, Role, RoleFormValues } from './types'
@@ -17,7 +18,9 @@ export class RoleService {
   async createRole(values: RoleFormValues): Promise<Role> {
     const existing = await this.repo.findByCode(values.code)
     if (existing) {
-      throw new Error(`角色标识「${values.code}」已被占用，请使用其他标识`)
+      throw new Error(
+        i18n.t('resources.roles.errors.codeTaken', { code: values.code }),
+      )
     }
 
     return this.repo.create({
@@ -31,13 +34,17 @@ export class RoleService {
   async updateRole(id: string, values: RoleFormValues): Promise<Role> {
     const target = await this.repo.findById(id)
     if (!target) {
-      throw new Error('角色不存在或已被删除')
+      throw new Error(i18n.t('resources.roles.errors.notFound'))
     }
 
     if (values.code !== target.code) {
       const codeTaken = await this.repo.findByCode(values.code)
       if (codeTaken && codeTaken.id !== id) {
-        throw new Error(`角色标识「${values.code}」已被其他角色占用`)
+        throw new Error(
+          i18n.t('resources.roles.errors.codeTakenByOther', {
+            code: values.code,
+          }),
+        )
       }
     }
 
@@ -75,7 +82,7 @@ export class RoleService {
     return { successCount, skippedCount }
   }
 
-  getPermissionGroups(): PermissionGroup[] {
+  getPermissionGroups(): readonly PermissionGroup[] {
     return SYSTEM_PERMISSION_GROUPS
   }
 }

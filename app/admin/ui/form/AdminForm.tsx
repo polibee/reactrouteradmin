@@ -9,6 +9,7 @@ import {
   type SubmitHandler,
   type UseFormReturn,
 } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import type { ZodType } from 'zod'
 import { AdminButton } from '../primitives/AdminButton'
 
@@ -32,13 +33,15 @@ export function AdminForm<TFieldValues extends FieldValues = FieldValues>({
   onSubmit,
   form: externalForm,
   loading = false,
-  submitText = '保存',
+  submitText,
   submitIcon = Save,
   actions,
   hideDefaultActions = false,
   children,
   className = 'space-y-4',
 }: AdminFormProps<TFieldValues>) {
+  const { t } = useTranslation()
+  const resolvedSubmitText = submitText ?? t('common.actions.save')
   const internalForm = useForm<TFieldValues>({
     // biome-ignore lint/suspicious/noExplicitAny: zod v4 schema types don't satisfy the resolver's generated generic
     resolver: schema ? zodResolver(schema as any) : undefined,
@@ -60,7 +63,7 @@ export function AdminForm<TFieldValues extends FieldValues = FieldValues>({
           <div className="mt-6 flex items-center gap-3 border-t pt-4">
             {actions || (
               <AdminButton type="submit" loading={loading} icon={submitIcon}>
-                {submitText}
+                {resolvedSubmitText}
               </AdminButton>
             )}
           </div>

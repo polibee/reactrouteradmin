@@ -1,4 +1,5 @@
 // biome-ignore-all lint/suspicious/useAwait: async signatures reserved for a future HTTP data source
+import { i18n } from '~/core/i18n'
 import { siteRepository, type SiteRepository } from './repository'
 import type {
   FriendLink,
@@ -48,7 +49,9 @@ export class SiteService {
   async createPage(values: SitePageFormValues): Promise<SitePage> {
     const existing = await this.repo.getPageBySlug(values.slug)
     if (existing) {
-      throw new Error(`页面别名路径「${values.slug}」已被占用，请使用其他别名`)
+      throw new Error(
+        i18n.t('resources.site.pages.errors.slugTaken', { slug: values.slug }),
+      )
     }
 
     return this.repo.savePage(values)
@@ -56,12 +59,16 @@ export class SiteService {
 
   async updatePage(id: string, values: SitePageFormValues): Promise<SitePage> {
     const target = await this.repo.getPageById(id)
-    if (!target) throw new Error('页面不存在')
+    if (!target) throw new Error(i18n.t('resources.site.pages.errors.notFound'))
 
     if (values.slug !== target.slug) {
       const existing = await this.repo.getPageBySlug(values.slug)
       if (existing && existing.id !== id) {
-        throw new Error(`页面别名路径「${values.slug}」已被占用`)
+        throw new Error(
+          i18n.t('resources.site.pages.errors.slugInUse', {
+            slug: values.slug,
+          }),
+        )
       }
     }
 

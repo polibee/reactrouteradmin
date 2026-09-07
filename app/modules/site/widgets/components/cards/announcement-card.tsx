@@ -1,23 +1,29 @@
 import { ArrowRight, Bell, Sparkles } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { useWidgetContext } from '../widget-context'
 
 export function AnnouncementCard() {
+  const { t } = useTranslation()
   const { density, showCardDividers } = useWidgetContext()
   const isCompact = density === 'compact'
 
   const notices = [
     {
-      title: 'React Router 8.3 引擎就绪',
-      date: '今日',
-      summary: '全量升级至 React 19，全面支持 SSR 与 Vite 7 环境。',
+      title: t('resources.site.widgets.cards.announcements.engineReadyTitle'),
+      date: t('resources.site.widgets.cards.announcements.dateToday'),
+      summary: t(
+        'resources.site.widgets.cards.announcements.engineReadySummary',
+      ),
       link: '/about',
     },
     {
-      title: 'Portal & Site 系统上线',
-      date: '前天',
-      summary: '单页面、页眉页脚导航与卡片小工具全面支持可视化配置。',
+      title: t('resources.site.widgets.cards.announcements.portalLaunchTitle'),
+      date: t('resources.site.widgets.cards.announcements.dateTwoDaysAgo'),
+      summary: t(
+        'resources.site.widgets.cards.announcements.portalLaunchSummary',
+      ),
       link: '/about',
     },
   ]
@@ -30,7 +36,7 @@ export function AnnouncementCard() {
         <CardTitle className="flex items-center justify-between text-xs font-semibold">
           <span className="flex items-center gap-1.5">
             <Bell className="text-primary size-3" />
-            最新动态通告
+            {t('resources.site.widgets.cards.announcements.title')}
           </span>
           <Sparkles className="size-2.5 text-amber-500" />
         </CardTitle>
@@ -59,7 +65,8 @@ export function AnnouncementCard() {
                 to={n.link}
                 className="text-primary inline-flex items-center gap-0.5 text-[9px] font-medium hover:underline sm:text-[10px]"
               >
-                阅读详情 <ArrowRight className="size-2" />
+                {t('resources.site.widgets.cards.announcements.readMore')}{' '}
+                <ArrowRight className="size-2" />
               </Link>
             </div>
           </div>

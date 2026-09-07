@@ -1,4 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
   AdminBadge,
@@ -17,55 +18,81 @@ export interface UserTableProps {
   onDataChange?: () => void
 }
 
-const roleBadgeMap: Record<
-  UserRole,
-  {
-    label: string
-    status: 'default' | 'info' | 'warning' | 'success' | 'error'
-  }
+type RoleBadgeKey =
+  | 'resources.users.roles.superAdmin'
+  | 'resources.users.roles.admin'
+  | 'resources.users.roles.manager'
+  | 'resources.users.roles.user'
+
+type StatusBadgeKey =
+  | 'common.status.active'
+  | 'common.status.inactive'
+  | 'resources.users.status.suspended'
+
+const roleBadgeMap: Partial<
+  Record<
+    UserRole,
+    {
+      label: RoleBadgeKey
+      status: 'default' | 'info' | 'warning' | 'success' | 'error'
+    }
+  >
 > = {
-  super_admin: { label: '超级管理员', status: 'error' },
-  admin: { label: '管理员', status: 'warning' },
-  manager: { label: '团队经理', status: 'info' },
-  user: { label: '普通用户', status: 'default' },
+  super_admin: { label: 'resources.users.roles.superAdmin', status: 'error' },
+  admin: { label: 'resources.users.roles.admin', status: 'warning' },
+  manager: { label: 'resources.users.roles.manager', status: 'info' },
+  user: { label: 'resources.users.roles.user', status: 'default' },
 }
 
-const statusBadgeMap: Record<
-  UserStatus,
-  { label: string; status: 'success' | 'warning' | 'error' }
+const statusBadgeMap: Partial<
+  Record<
+    UserStatus,
+    { label: StatusBadgeKey; status: 'success' | 'warning' | 'error' }
+  >
 > = {
-  active: { label: '正常', status: 'success' },
-  inactive: { label: '未激活', status: 'warning' },
-  suspended: { label: '已停用', status: 'error' },
+  active: { label: 'common.status.active', status: 'success' },
+  inactive: { label: 'common.status.inactive', status: 'warning' },
+  suspended: { label: 'resources.users.status.suspended', status: 'error' },
 }
 
 export function UserTable({ data, loading, onDataChange }: UserTableProps) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const handleDelete = async (user: User) => {
     try {
       await userService.deleteUser(user.id)
-      notify.success(`用户“${user.name}”删除成功`)
+      notify.success(
+        t('resources.users.messages.deleteSuccess', { title: user.name }),
+      )
       if (onDataChange) onDataChange()
     } catch (e) {
-      notify.error(e instanceof Error ? e.message : '删除失败')
+      notify.error(
+        e instanceof Error
+          ? e.message
+          : t('resources.users.messages.deleteFailed'),
+      )
     }
   }
 
   const handleBulkDelete = async (selected: User[]) => {
     try {
       const count = await userService.bulkDeleteUsers(selected.map((u) => u.id))
-      notify.success(`成功批量删除 ${count} 名用户`)
+      notify.success(t('resources.users.messages.bulkDeleteSuccess', { count }))
       if (onDataChange) onDataChange()
     } catch (e) {
-      notify.error(e instanceof Error ? e.message : '批量删除失败')
+      notify.error(
+        e instanceof Error
+          ? e.message
+          : t('resources.users.messages.bulkDeleteFailed'),
+      )
     }
   }
 
   const columns: ColumnDef<User>[] = [
     {
       accessorKey: 'name',
-      header: '用户姓名',
+      header: t('common.labels.name'),
       cell: ({ row }) => (
         <div className="flex items-center gap-3">
           {row.original.avatar ? (
@@ -92,29 +119,31 @@ export function UserTable({ data, loading, onDataChange }: UserTableProps) {
     },
     {
       accessorKey: 'role',
-      header: '系统角色',
+      header: t('resources.users.table.role'),
       cell: ({ row }) => {
-        const item = roleBadgeMap[row.original.role] || {
-          label: row.original.role,
-          status: 'default',
-        }
-        return <AdminBadge status={item.status}>{item.label}</AdminBadge>
+        const item = roleBadgeMap[row.original.role]
+        return (
+          <AdminBadge status={item?.status ?? 'default'}>
+            {item ? t(item.label) : row.original.role}
+          </AdminBadge>
+        )
       },
     },
     {
       accessorKey: 'status',
-      header: '账号状态',
+      header: t('resources.users.table.status'),
       cell: ({ row }) => {
-        const item = statusBadgeMap[row.original.status] || {
-          label: row.original.status,
-          status: 'default',
-        }
-        return <AdminBadge status={item.status}>{item.label}</AdminBadge>
+        const item = statusBadgeMap[row.original.status]
+        return (
+          <AdminBadge status={item?.status ?? 'default'}>
+            {item ? t(item.label) : row.original.status}
+          </AdminBadge>
+        )
       },
     },
     {
       accessorKey: 'createdAt',
-      header: '创建时间',
+      header: t('common.labels.createdAt'),
       cell: ({ row }) => (
         <span className="text-muted-foreground text-xs">
           {row.original.createdAt}
@@ -123,7 +152,7 @@ export function UserTable({ data, loading, onDataChange }: UserTableProps) {
     },
     {
       id: 'actions',
-      header: '操作',
+      header: t('common.labels.actions'),
       cell: ({ row }) => {
         const user = row.original
         return (
@@ -153,7 +182,7 @@ export function UserTable({ data, loading, onDataChange }: UserTableProps) {
       data={data}
       loading={loading}
       searchKey="name"
-      searchPlaceholder="输入姓名搜索用户..."
+      searchPlaceholder={t('resources.users.table.searchPlaceholder')}
       enableRowSelection={true}
       onBulkDelete={handleBulkDelete}
     />

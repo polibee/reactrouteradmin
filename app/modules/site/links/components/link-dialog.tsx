@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import {
   ActionButton,
   NumberField,
@@ -37,6 +38,7 @@ export function LinkDialog({
   onSubmit,
   loading = false,
 }: LinkDialogProps) {
+  const { t } = useTranslation()
   const isEditing = Boolean(link)
 
   const form = useForm<FriendLinkFormValues>({
@@ -82,10 +84,12 @@ export function LinkDialog({
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>
-            {isEditing ? '编辑友情链接' : '新增友情链接'}
+            {isEditing
+              ? t('resources.site.links.dialog.editTitle')
+              : t('resources.site.links.dialog.createTitle')}
           </DialogTitle>
           <DialogDescription>
-            配置站点名称、外部跳转网址、Logo 图标以及审核状态。
+            {t('resources.site.links.dialog.description')}
           </DialogDescription>
         </DialogHeader>
 
@@ -101,10 +105,12 @@ export function LinkDialog({
                 onClick={() => onOpenChange(false)}
                 disabled={loading}
               >
-                取消
+                {t('common.actions.cancel')}
               </ActionButton>
               <ActionButton type="submit" loading={loading}>
-                {isEditing ? '保存修改' : '立即添加'}
+                {isEditing
+                  ? t('resources.site.shared.saveChanges')
+                  : t('resources.site.links.dialog.addNow')}
               </ActionButton>
             </div>
           }
@@ -112,13 +118,13 @@ export function LinkDialog({
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <TextField
               name="name"
-              label="网站名称"
-              placeholder="例如：React 官方网站"
+              label={t('resources.site.links.dialog.nameLabel')}
+              placeholder={t('resources.site.links.dialog.namePlaceholder')}
               required
             />
             <TextField
               name="url"
-              label="网站网址 (URL)"
+              label={t('resources.site.links.dialog.urlLabel')}
               placeholder="https://..."
               required
             />
@@ -127,12 +133,12 @@ export function LinkDialog({
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <TextField
               name="logo"
-              label="Logo 图标网址 (可选)"
+              label={t('resources.site.links.dialog.logoLabel')}
               placeholder="https://.../favicon.ico"
             />
             <TextField
               name="email"
-              label="站长联系邮箱 (可选)"
+              label={t('resources.site.links.dialog.emailLabel')}
               placeholder="admin@example.com"
             />
           </div>
@@ -140,21 +146,36 @@ export function LinkDialog({
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <SelectField
               name="status"
-              label="审核状态"
+              label={t('resources.site.links.dialog.statusLabel')}
               options={[
-                { label: '已审核通过 (公开显示)', value: 'approved' },
-                { label: '待审核申请 (暂不显示)', value: 'pending' },
-                { label: '已驳回拒绝 (不予显示)', value: 'rejected' },
+                {
+                  label: t('resources.site.links.dialog.statusApproved'),
+                  value: 'approved',
+                },
+                {
+                  label: t('resources.site.links.dialog.statusPending'),
+                  value: 'pending',
+                },
+                {
+                  label: t('resources.site.links.dialog.statusRejected'),
+                  value: 'rejected',
+                },
               ]}
               required
             />
-            <NumberField name="sort" label="展示排序 (越小越靠前)" required />
+            <NumberField
+              name="sort"
+              label={t('resources.site.links.dialog.sortLabel')}
+              required
+            />
           </div>
 
           <TextareaField
             name="description"
-            label="站点简述 (可选)"
-            placeholder="简述该站点的核心业务或技术定位..."
+            label={t('resources.site.links.dialog.descriptionLabel')}
+            placeholder={t(
+              'resources.site.links.dialog.descriptionPlaceholder',
+            )}
             rows={2}
           />
         </SmartForm>

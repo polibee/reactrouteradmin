@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
   DashboardCard,
@@ -7,19 +8,24 @@ import {
   DashboardPageHeader,
   notify,
 } from '~/admin/ui'
+import { i18n } from '~/core/i18n'
 import { RoleForm } from '~/modules/role/components/role-form'
 import { roleService } from '~/modules/role/service'
 import type { RoleFormValues } from '~/modules/role/types'
 
 export const meta = () => {
-  return [{ title: '新增角色 - Admin Framework' }]
+  return [{ title: i18n.t('pages.admin.roles.createMetaTitle') }]
 }
 
 export const handle = {
-  breadcrumb: () => ({ label: '新增角色', to: '/admin/roles/create' }),
+  breadcrumb: () => ({
+    label: i18n.t('pages.admin.roles.createAction'),
+    to: '/admin/roles/create',
+  }),
 }
 
 export default function RoleCreatePage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
 
@@ -27,11 +33,13 @@ export default function RoleCreatePage() {
     setLoading(true)
     try {
       const created = await roleService.createRole(data)
-      notify.success(`角色「${created.name}」创建成功！`)
+      notify.success(
+        t('pages.admin.roles.createSuccess', { name: created.name }),
+      )
       navigate('/admin/roles')
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '创建角色失败，请检查输入')
+      notify.error(err?.message || t('pages.admin.roles.createFailed'))
     } finally {
       setLoading(false)
     }
@@ -40,16 +48,19 @@ export default function RoleCreatePage() {
   return (
     <DashboardPage>
       <DashboardPageHeader
-        title="新增角色定义"
-        description="定义新角色名称、唯一英文编码标识并为其分配权限矩阵"
+        title={t('pages.admin.roles.createTitle')}
+        description={t('pages.admin.roles.createDescription')}
       />
 
       <DashboardPageContent>
-        <DashboardCard title="角色属性与权限分配" description="带 * 为必填项">
+        <DashboardCard
+          title={t('pages.admin.roles.createCardTitle')}
+          description={t('pages.admin.requiredHint')}
+        >
           <RoleForm
             onSubmit={handleSubmit}
             loading={loading}
-            submitText="立即创建角色"
+            submitText={t('pages.admin.roles.createSubmit')}
           />
         </DashboardCard>
       </DashboardPageContent>

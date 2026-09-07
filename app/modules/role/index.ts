@@ -1,3 +1,4 @@
+import { i18n } from '~/core/i18n'
 import { defineModule } from '../../admin/core/module/module'
 import { moduleRegistry } from '../../admin/core/module/registry'
 import { RoleResource } from './resource'
@@ -13,8 +14,8 @@ export * from './types'
 
 export const RoleModule = defineModule({
   name: 'role',
-  label: '角色与权限控制模块',
-  description: '提供基于 RBAC 的角色配置、权限字典、矩阵分配与鉴权联动',
+  label: i18n.t('resources.roles.module.label'),
+  description: i18n.t('resources.roles.module.description'),
   version: '1.0.0',
   resources: [RoleResource],
   features: ['table', 'forms'],

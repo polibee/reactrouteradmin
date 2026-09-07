@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { i18n } from '~/core/i18n'
 
 export type UserRole = 'super_admin' | 'admin' | 'manager' | 'user'
 export type UserStatus = 'active' | 'inactive' | 'suspended'
@@ -18,12 +19,15 @@ export interface User {
 export const userFormSchema = z.object({
   name: z
     .string()
-    .min(2, '姓名至少需要 2 个字符')
-    .max(50, '姓名不能超过 50 个字符'),
-  email: z.string().email('请输入有效的邮箱地址'),
+    .min(2, i18n.t('validation.minLength', { count: 2 }))
+    .max(50, i18n.t('validation.maxLength', { count: 50 })),
+  email: z.string().email(i18n.t('validation.invalidEmail')),
   role: z.enum(['super_admin', 'admin', 'manager', 'user']),
   status: z.enum(['active', 'inactive', 'suspended']),
-  bio: z.string().max(200, '个人简介不能超过 200 个字').optional(),
+  bio: z
+    .string()
+    .max(200, i18n.t('validation.maxLength', { count: 200 }))
+    .optional(),
 })
 
 export type UserFormData = z.infer<typeof userFormSchema>

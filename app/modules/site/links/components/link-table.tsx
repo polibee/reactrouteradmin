@@ -15,6 +15,7 @@ import {
   XCircle,
 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ConfirmDialog, notify } from '~/admin/ui'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
@@ -39,6 +40,7 @@ import { LinkDialog } from './link-dialog'
 import { RejectDialog } from './reject-dialog'
 
 export function LinkTable() {
+  const { t } = useTranslation()
   const [links, setLinks] = useState<FriendLink[]>([])
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState<'all' | 'pending' | 'approved' | 'rejected'>(
@@ -97,17 +99,32 @@ export function LinkTable() {
       const res = await siteService.verifyFriendLink(link.id)
       if (res.backlinkStatus === 'verified') {
         notify.success(
-          `「${link.name}」反链检测通过：${res.backlinkDetails || '已检测到本站链接'}`,
+          t('resources.site.links.toasts.verifyPassed', {
+            name: link.name,
+            details:
+              res.backlinkDetails ||
+              t('resources.site.links.toasts.verifyPassedFallback'),
+          }),
         )
       } else if (res.backlinkStatus === 'missing') {
-        notify.warning(`「${link.name}」暂未检测到反链：${res.backlinkDetails}`)
+        notify.warning(
+          t('resources.site.links.toasts.verifyMissing', {
+            name: link.name,
+            details: res.backlinkDetails,
+          }),
+        )
       } else {
-        notify.error(`「${link.name}」反链检测失败：${res.backlinkDetails}`)
+        notify.error(
+          t('resources.site.links.toasts.verifyFailed', {
+            name: link.name,
+            details: res.backlinkDetails,
+          }),
+        )
       }
       await loadData()
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '反向链接检测失败')
+      notify.error(err?.message || t('resources.site.links.toasts.checkFailed'))
     } finally {
       setCheckingMap((prev) => ({ ...prev, [link.id]: false }))
     }
@@ -115,15 +132,20 @@ export function LinkTable() {
 
   const handleBatchVerify = async () => {
     setBatchChecking(true)
-    notify.info('正在对全站友情链接执行反向巡检...')
+    notify.info(t('resources.site.links.toasts.batchCheckStarted'))
     try {
       const stats = await siteService.verifyAllFriendLinks()
       notify.success(
-        `友链反向巡检完成！共核验 ${stats.total} 个站点：正常互换 ${stats.verified} 个，未发现反链 ${stats.missing} 个，检测异常 ${stats.failed} 个`,
+        t('resources.site.links.toasts.batchCheckDone', {
+          total: stats.total,
+          verified: stats.verified,
+          missing: stats.missing,
+          failed: stats.failed,
+        }),
       )
       await loadData()
     } catch {
-      notify.error('批量巡检执行遇到异常')
+      notify.error(t('resources.site.links.toasts.batchCheckFailed'))
     } finally {
       setBatchChecking(false)
     }
@@ -136,10 +158,10 @@ export function LinkTable() {
     try {
       const updated = await siteService.updateFriendLinkGuidelines(values)
       setGuidelines(updated)
-      notify.success('友链互换准则已成功更新')
+      notify.success(t('resources.site.links.toasts.guidelinesUpdated'))
       setGuidelinesOpen(false)
     } catch {
-      notify.error('保存准则失败')
+      notify.error(t('resources.site.links.toasts.guidelinesSaveFailed'))
     } finally {
       setGuidelinesLoading(false)
     }
@@ -171,10 +193,12 @@ export function LinkTable() {
   const handleApprove = async (link: FriendLink) => {
     try {
       await siteService.approveFriendLink(link.id)
-      notify.success(`已审核通过「${link.name}」的友链申请！`)
+      notify.success(
+        t('resources.site.links.toasts.approved', { name: link.name }),
+      )
       await loadData()
     } catch {
-      notify.error('审核操作失败')
+      notify.error(t('resources.site.links.toasts.approveFailed'))
     }
   }
 
@@ -183,11 +207,13 @@ export function LinkTable() {
     setRejectLoading(true)
     try {
       await siteService.rejectFriendLink(rejectTarget.id, reason)
-      notify.success(`已驳回「${rejectTarget.name}」的友链申请`)
+      notify.success(
+        t('resources.site.links.toasts.rejected', { name: rejectTarget.name }),
+      )
       setRejectTarget(null)
       await loadData()
     } catch {
-      notify.error('驳回操作失败')
+      notify.error(t('resources.site.links.toasts.rejectFailed'))
     } finally {
       setRejectLoading(false)
     }
@@ -198,16 +224,20 @@ export function LinkTable() {
     try {
       if (editingLink) {
         await siteService.saveFriendLink({ ...values, id: editingLink.id })
-        notify.success(`友链「${values.name}」已成功更新`)
+        notify.success(
+          t('resources.site.links.toasts.saved', { name: values.name }),
+        )
       } else {
         await siteService.saveFriendLink(values)
-        notify.success(`友链「${values.name}」添加成功`)
+        notify.success(
+          t('resources.site.links.toasts.created', { name: values.name }),
+        )
       }
       setDialogOpen(false)
       await loadData()
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '保存失败')
+      notify.error(err?.message || t('resources.site.shared.saveFailed'))
     } finally {
       setDialogLoading(false)
     }
@@ -218,11 +248,13 @@ export function LinkTable() {
     setDeleteLoading(true)
     try {
       await siteService.deleteFriendLink(deleteTarget.id)
-      notify.success(`友链「${deleteTarget.name}」已删除`)
+      notify.success(
+        t('resources.site.links.toasts.deleted', { name: deleteTarget.name }),
+      )
       setDeleteTarget(null)
       await loadData()
     } catch {
-      notify.error('删除失败')
+      notify.error(t('resources.site.shared.deleteFailed'))
     } finally {
       setDeleteLoading(false)
     }
@@ -237,7 +269,7 @@ export function LinkTable() {
             className="gap-1 border-emerald-500/20 bg-emerald-500/10 text-xs text-emerald-600"
           >
             <CheckCircle2 className="size-3" />
-            已通过
+            {t('common.status.approved')}
           </Badge>
         )
       case 'pending':
@@ -247,7 +279,7 @@ export function LinkTable() {
             className="gap-1 border-amber-500/20 bg-amber-500/10 text-xs text-amber-600"
           >
             <Clock className="size-3" />
-            待审核
+            {t('common.status.pending')}
           </Badge>
         )
       case 'rejected':
@@ -258,7 +290,7 @@ export function LinkTable() {
               className="gap-1 border-rose-500/20 bg-rose-500/10 text-xs text-rose-600"
             >
               <XCircle className="size-3" />
-              已驳回
+              {t('common.status.rejected')}
             </Badge>
             {reason && (
               <span
@@ -281,7 +313,7 @@ export function LinkTable() {
           className="animate-pulse gap-1 border-blue-500/20 bg-blue-500/10 text-xs text-blue-600"
         >
           <RefreshCw className="size-3 animate-spin" />
-          检测中...
+          {t('resources.site.links.backlink.checking')}
         </Badge>
       )
     }
@@ -293,10 +325,13 @@ export function LinkTable() {
             <Badge
               variant="outline"
               className="gap-1 border-emerald-500/20 bg-emerald-500/10 text-xs text-emerald-600"
-              title={item.backlinkDetails || '反链正常'}
+              title={
+                item.backlinkDetails ||
+                t('resources.site.links.backlink.okTitle')
+              }
             >
               <ShieldCheck className="size-3" />
-              已互换
+              {t('resources.site.links.backlink.verified')}
             </Badge>
             {item.lastCheckedAt && (
               <div className="text-muted-foreground font-mono text-[10px]">
@@ -311,10 +346,13 @@ export function LinkTable() {
             <Badge
               variant="outline"
               className="gap-1 border-amber-500/20 bg-amber-500/10 text-xs text-amber-600"
-              title={item.backlinkDetails || '未检测到反链'}
+              title={
+                item.backlinkDetails ||
+                t('resources.site.links.backlink.missingTitle')
+              }
             >
               <AlertCircle className="size-3" />
-              未检测到反链
+              {t('resources.site.links.backlink.missing')}
             </Badge>
             {item.lastCheckedAt && (
               <div className="text-muted-foreground font-mono text-[10px]">
@@ -328,10 +366,13 @@ export function LinkTable() {
           <Badge
             variant="outline"
             className="gap-1 border-rose-500/20 bg-rose-500/10 text-xs text-rose-600"
-            title={item.backlinkDetails || '检测超时或不可达'}
+            title={
+              item.backlinkDetails ||
+              t('resources.site.links.backlink.failedTitle')
+            }
           >
             <XCircle className="size-3" />
-            检测失败
+            {t('resources.site.links.backlink.failed')}
           </Badge>
         )
       default:
@@ -340,7 +381,7 @@ export function LinkTable() {
             variant="outline"
             className="text-muted-foreground gap-1 text-xs"
           >
-            未检测
+            {t('resources.site.links.backlink.unverified')}
           </Badge>
         )
     }
@@ -354,10 +395,10 @@ export function LinkTable() {
             <div>
               <CardTitle className="flex items-center gap-2 text-sm font-semibold">
                 <Link2 className="text-primary size-4" />
-                友情链接与互换管理
+                {t('resources.site.links.title')}
               </CardTitle>
               <CardDescription className="mt-0.5 text-xs">
-                审核前台访客提交的友链互换申请，管理已收录站点，自动定时每周巡检友站反向链接
+                {t('resources.site.links.description')}
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
@@ -369,15 +410,19 @@ export function LinkTable() {
                 className="h-8 gap-1.5 border-blue-200 text-xs text-blue-600 hover:bg-blue-50 dark:border-blue-900/40 dark:hover:bg-blue-950/40"
                 title={
                   weeklyStatus.lastCheckedAt
-                    ? `上次每周巡检时间：${weeklyStatus.lastCheckedAt.slice(0, 10)}`
-                    : '尚未执行全站巡检，点击立即执行'
+                    ? t('resources.site.links.weekly.lastChecked', {
+                        date: weeklyStatus.lastCheckedAt.slice(0, 10),
+                      })
+                    : t('resources.site.links.weekly.neverChecked')
                 }
               >
                 <RefreshCw
                   className={`size-3.5 ${batchChecking ? 'animate-spin' : ''}`}
                 />
                 <span>
-                  {batchChecking ? '全站巡检中...' : '每周巡检 (一键全站检测)'}
+                  {batchChecking
+                    ? t('resources.site.links.weekly.checking')
+                    : t('resources.site.links.weekly.run')}
                 </span>
                 {weeklyStatus.needsCheck && (
                   <span className="size-1.5 animate-ping rounded-full bg-amber-500" />
@@ -390,7 +435,7 @@ export function LinkTable() {
                 className="h-8 gap-1.5 text-xs"
               >
                 <BookOpen className="size-3.5" />
-                编辑互换准则
+                {t('resources.site.links.actions.editGuidelines')}
               </Button>
               <Button
                 size="sm"
@@ -401,7 +446,7 @@ export function LinkTable() {
                 className="h-8 gap-1.5 text-xs"
               >
                 <Plus className="size-3.5" />
-                新增友情链接
+                {t('resources.site.links.actions.add')}
               </Button>
             </div>
           </div>
@@ -413,10 +458,10 @@ export function LinkTable() {
             >
               <TabsList className="h-8">
                 <TabsTrigger value="all" className="px-3 text-xs">
-                  全部 ({links.length})
+                  {t('resources.site.links.tabs.all', { total: links.length })}
                 </TabsTrigger>
                 <TabsTrigger value="pending" className="px-3 text-xs">
-                  待审核
+                  {t('common.status.pending')}
                   {pendingCount > 0 && (
                     <Badge
                       variant="secondary"
@@ -427,10 +472,14 @@ export function LinkTable() {
                   )}
                 </TabsTrigger>
                 <TabsTrigger value="approved" className="px-3 text-xs">
-                  已收录 ({approvedCount})
+                  {t('resources.site.links.tabs.approved', {
+                    total: approvedCount,
+                  })}
                 </TabsTrigger>
                 <TabsTrigger value="rejected" className="px-3 text-xs">
-                  已驳回 ({rejectedCount})
+                  {t('resources.site.links.tabs.rejected', {
+                    total: rejectedCount,
+                  })}
                 </TabsTrigger>
               </TabsList>
             </Tabs>
@@ -440,12 +489,12 @@ export function LinkTable() {
         <CardContent className="p-0">
           {loading ? (
             <div className="text-muted-foreground py-10 text-center text-xs">
-              加载友链数据中...
+              {t('resources.site.links.loading')}
             </div>
           ) : filteredLinks.length === 0 ? (
             <div className="py-12 text-center">
               <p className="text-muted-foreground text-xs">
-                当前分类下暂无友情链接记录
+                {t('resources.site.links.empty')}
               </p>
             </div>
           ) : (
@@ -453,14 +502,30 @@ export function LinkTable() {
               <table className="w-full text-left text-xs">
                 <thead className="bg-muted/40 text-muted-foreground border-b text-[11px] font-medium tracking-wider uppercase">
                   <tr>
-                    <th className="px-4 py-3">站点名称 / Logo</th>
-                    <th className="px-4 py-3">链接网址</th>
-                    <th className="px-4 py-3">简介与站长邮箱</th>
-                    <th className="px-4 py-3 text-center">权重</th>
-                    <th className="px-4 py-3">审核状态</th>
-                    <th className="px-4 py-3">反向友链检测</th>
-                    <th className="px-4 py-3">申请时间</th>
-                    <th className="px-4 py-3 text-right">操作</th>
+                    <th className="px-4 py-3">
+                      {t('resources.site.links.columns.site')}
+                    </th>
+                    <th className="px-4 py-3">
+                      {t('resources.site.links.columns.url')}
+                    </th>
+                    <th className="px-4 py-3">
+                      {t('resources.site.links.columns.intro')}
+                    </th>
+                    <th className="px-4 py-3 text-center">
+                      {t('resources.site.links.columns.weight')}
+                    </th>
+                    <th className="px-4 py-3">
+                      {t('resources.site.links.columns.status')}
+                    </th>
+                    <th className="px-4 py-3">
+                      {t('resources.site.links.columns.backlink')}
+                    </th>
+                    <th className="px-4 py-3">
+                      {t('resources.site.links.columns.appliedAt')}
+                    </th>
+                    <th className="px-4 py-3 text-right">
+                      {t('common.labels.actions')}
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
@@ -545,7 +610,7 @@ export function LinkTable() {
                                 className="h-7 border-emerald-300 px-2 text-xs text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
                                 onClick={() => handleApprove(item)}
                               >
-                                通过
+                                {t('resources.site.links.actions.approve')}
                               </Button>
                               <Button
                                 size="sm"
@@ -553,7 +618,7 @@ export function LinkTable() {
                                 className="h-7 border-rose-300 px-2 text-xs text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40"
                                 onClick={() => setRejectTarget(item)}
                               >
-                                驳回
+                                {t('resources.site.links.actions.reject')}
                               </Button>
                             </>
                           )}
@@ -562,7 +627,9 @@ export function LinkTable() {
                             size="sm"
                             variant="ghost"
                             className="h-7 gap-1 px-1.5 text-xs text-blue-600 hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-950/40"
-                            title="即时检测该站点反链"
+                            title={t(
+                              'resources.site.links.actions.checkTooltip',
+                            )}
                             disabled={checkingMap[item.id]}
                             onClick={() => handleVerifySingle(item)}
                           >
@@ -570,7 +637,7 @@ export function LinkTable() {
                               className={`size-3.5 ${checkingMap[item.id] ? 'animate-spin' : ''}`}
                             />
                             <span className="hidden text-[11px] xl:inline">
-                              检测
+                              {t('resources.site.links.actions.check')}
                             </span>
                           </Button>
 
@@ -578,7 +645,7 @@ export function LinkTable() {
                             size="sm"
                             variant="ghost"
                             className="text-muted-foreground hover:text-foreground h-7 w-7 p-0"
-                            title="编辑"
+                            title={t('common.actions.edit')}
                             onClick={() => {
                               setEditingLink(item)
                               setDialogOpen(true)
@@ -591,7 +658,7 @@ export function LinkTable() {
                             size="sm"
                             variant="ghost"
                             className="text-destructive hover:text-destructive hover:bg-destructive/10 h-7 w-7 p-0"
-                            title="删除"
+                            title={t('common.actions.delete')}
                             onClick={() => setDeleteTarget(item)}
                           >
                             <Trash2 className="size-3.5" />
@@ -629,9 +696,11 @@ export function LinkTable() {
       <ConfirmDialog
         open={Boolean(deleteTarget)}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
-        title="确认删除友情链接"
-        content={`确定要删除友情链接「${deleteTarget?.name}」吗？删除后前台友链页面将不再展示此链接。`}
-        confirmText="确认删除"
+        title={t('resources.site.links.delete.title')}
+        content={t('resources.site.links.delete.description', {
+          name: deleteTarget?.name,
+        })}
+        confirmText={t('common.actions.confirmDelete')}
         variant="destructive"
         loading={deleteLoading}
         onConfirm={handleDeleteConfirm}

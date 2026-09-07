@@ -1,24 +1,27 @@
+import { useTranslation } from 'react-i18next'
 import {
   DashboardPage,
   DashboardPageContent,
   DashboardPageHeader,
 } from '~/admin/ui'
+import { i18n } from '~/core/i18n'
 import { NavigationEditor } from '~/modules/site/navigation/components/navigation-editor'
 
 export const meta = () => {
-  return [{ title: '前台导航菜单配置 - Admin Framework' }]
+  return [{ title: i18n.t('pages.admin.navigation.metaTitle') }]
 }
 
 export const handle = {
-  breadcrumb: () => ({ label: '导航菜单配置' }),
+  breadcrumb: () => ({ label: i18n.t('pages.admin.navigation.title') }),
 }
 
 export default function SiteNavigationPage() {
+  const { t } = useTranslation()
   return (
     <DashboardPage>
       <DashboardPageHeader
-        title="前台导航菜单管理"
-        description="可视化配置前台页眉 Header 主菜单、页脚 Footer 链接组及打开规则"
+        title={t('pages.admin.navigation.heading')}
+        description={t('pages.admin.navigation.description')}
       />
 
       <DashboardPageContent>

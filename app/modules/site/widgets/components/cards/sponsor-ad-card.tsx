@@ -1,5 +1,6 @@
 import { ArrowRight, ExternalLink, Sparkles } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent, CardHeader } from '~/components/ui/card'
@@ -12,6 +13,7 @@ export interface SponsorAdCardProps {
 }
 
 export function SponsorAdCard({ widget }: SponsorAdCardProps) {
+  const { t } = useTranslation()
   const { density, showCardDividers } = useWidgetContext()
   const isCompact = density === 'compact'
   const [ad, setAd] = useState<SiteAdSlot | null>(null)
@@ -24,12 +26,15 @@ export function SponsorAdCard({ widget }: SponsorAdCardProps) {
     load()
   }, [])
 
-  const title = widget?.title || ad?.title || '推荐专栏 · 赞助推广'
+  const title =
+    widget?.title ||
+    ad?.title ||
+    t('resources.site.widgets.cards.sponsor.fallbackTitle')
   const text =
     widget?.description ||
     ad?.text ||
     ad?.title ||
-    '企业级全栈架构脚手架与开源生态套件'
+    t('resources.site.widgets.cards.sponsor.fallbackText')
   const imageUrl = widget?.imageUrl || ad?.imageUrl
   const targetUrl = widget?.targetUrl || ad?.targetUrl || '/about'
   const targetWindow = widget?.targetWindow || '_self'
@@ -45,7 +50,7 @@ export function SponsorAdCard({ widget }: SponsorAdCardProps) {
             {title}
           </span>
           <span className="text-muted-foreground bg-muted/80 rounded px-1 py-0.5 font-mono text-[9px]">
-            推广
+            {t('resources.site.widgets.cards.sponsor.badge')}
           </span>
         </div>
       </CardHeader>
@@ -72,7 +77,8 @@ export function SponsorAdCard({ widget }: SponsorAdCardProps) {
               rel="noreferrer"
               className="text-primary inline-flex items-center gap-1 text-[10px] font-medium hover:underline"
             >
-              立即了解更多 <ExternalLink className="size-2" />
+              {t('resources.site.widgets.cards.sponsor.learnMore')}{' '}
+              <ExternalLink className="size-2" />
             </a>
           ) : (
             <Button
@@ -82,7 +88,8 @@ export function SponsorAdCard({ widget }: SponsorAdCardProps) {
               className="text-primary h-auto p-0 text-[10px] font-medium"
             >
               <Link to={targetUrl} target={targetWindow}>
-                立即了解更多 <ArrowRight className="ml-0.5 size-2" />
+                {t('resources.site.widgets.cards.sponsor.learnMore')}{' '}
+                <ArrowRight className="ml-0.5 size-2" />
               </Link>
             </Button>
           )}

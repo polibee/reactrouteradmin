@@ -11,6 +11,7 @@ import {
   Trash2,
   Upload,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import type { MediaCategory } from '../types'
@@ -44,16 +45,42 @@ export function MediaToolbar({
   onBatchDelete,
   onOpenUpload,
 }: MediaToolbarProps) {
+  const { t } = useTranslation()
   const categoryTabs: {
     key: MediaCategory
-    label: string
+    labelKey:
+      | 'resources.media.toolbar.categories.all'
+      | 'resources.media.toolbar.categories.image'
+      | 'resources.media.toolbar.categories.document'
+      | 'resources.media.toolbar.categories.video'
+      | 'resources.media.toolbar.categories.archive'
     icon: React.ComponentType<{ className?: string }>
   }[] = [
-    { key: 'all', label: '全部', icon: Layers },
-    { key: 'image', label: '图片', icon: ImageIcon },
-    { key: 'document', label: '文档', icon: FileText },
-    { key: 'video', label: '音视频', icon: Film },
-    { key: 'archive', label: '压缩包', icon: Archive },
+    {
+      key: 'all',
+      labelKey: 'resources.media.toolbar.categories.all',
+      icon: Layers,
+    },
+    {
+      key: 'image',
+      labelKey: 'resources.media.toolbar.categories.image',
+      icon: ImageIcon,
+    },
+    {
+      key: 'document',
+      labelKey: 'resources.media.toolbar.categories.document',
+      icon: FileText,
+    },
+    {
+      key: 'video',
+      labelKey: 'resources.media.toolbar.categories.video',
+      icon: Film,
+    },
+    {
+      key: 'archive',
+      labelKey: 'resources.media.toolbar.categories.archive',
+      icon: Archive,
+    },
   ]
 
   return (
@@ -76,7 +103,7 @@ export function MediaToolbar({
                 }`}
               >
                 <Icon className="size-3.5" />
-                <span>{tab.label}</span>
+                <span>{t(tab.labelKey)}</span>
               </button>
             )
           })}
@@ -93,7 +120,11 @@ export function MediaToolbar({
               onClick={onBatchDelete}
             >
               <Trash2 className="size-3.5" />
-              <span>批量删除 ({selectedCount})</span>
+              <span>
+                {t('resources.media.toolbar.batchDelete', {
+                  selected: selectedCount,
+                })}
+              </span>
             </Button>
           )}
 
@@ -104,7 +135,7 @@ export function MediaToolbar({
             onClick={onOpenUpload}
           >
             <Upload className="size-3.5" />
-            <span>上传文件</span>
+            <span>{t('resources.media.toolbar.upload')}</span>
           </Button>
         </div>
       </div>
@@ -117,7 +148,7 @@ export function MediaToolbar({
             <Input
               value={search}
               onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="搜索文件名、标签、格式..."
+              placeholder={t('resources.media.toolbar.searchPlaceholder')}
               className="bg-muted/20 h-8 w-full pl-8 text-xs"
             />
           </div>
@@ -130,7 +161,9 @@ export function MediaToolbar({
                 onChange={(e) => onFolderChange(e.target.value)}
                 className="border-input bg-muted/20 text-foreground focus:ring-ring h-8 rounded-md border px-2 text-xs focus:ring-1 focus:outline-none"
               >
-                <option value="all">所有分组</option>
+                <option value="all">
+                  {t('resources.media.toolbar.allFolders')}
+                </option>
                 {folders.map((f) => (
                   <option key={f} value={f}>
                     {f}
@@ -151,7 +184,7 @@ export function MediaToolbar({
                 ? 'bg-background text-foreground shadow-xs'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
-            title="网格视图"
+            title={t('resources.media.toolbar.gridView')}
           >
             <LayoutGrid className="size-3.5" />
           </button>
@@ -163,7 +196,7 @@ export function MediaToolbar({
                 ? 'bg-background text-foreground shadow-xs'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
-            title="列表详细视图"
+            title={t('resources.media.toolbar.tableView')}
           >
             <List className="size-3.5" />
           </button>

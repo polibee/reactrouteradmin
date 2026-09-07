@@ -1,14 +1,15 @@
 import { Users } from 'lucide-react'
+import { i18n } from '~/core/i18n'
 import { defineResource } from '../../admin/core/resource/resource'
 import type { User } from './types'
 
 export const UserResource = defineResource<User>({
   name: 'users',
-  label: '用户管理',
-  pluralLabel: '用户列表',
+  label: i18n.t('resources.users.label'),
+  pluralLabel: i18n.t('resources.users.pluralLabel'),
   icon: Users,
   navigation: {
-    group: '系统管理',
+    group: i18n.t('resources.users.navGroup'),
     sort: 10,
   },
   permissions: {

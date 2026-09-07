@@ -1,5 +1,6 @@
 import { CornerDownRight, Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
 import {
   Dialog,
@@ -51,6 +52,7 @@ export function NavItemDialog({
   onSave,
   onOpenCreateGroup,
 }: NavItemDialogProps) {
+  const { t } = useTranslation()
   const isEditing = Boolean(initialData)
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
@@ -126,13 +128,31 @@ export function NavItemDialog({
   }
 
   const QUICK_URLS = [
-    { label: '门户首页', url: '/' },
-    { label: '关于我们', url: '/about' },
-    { label: '服务条款', url: '/terms' },
-    { label: '隐私政策', url: '/privacy' },
-    { label: '友情链接', url: '/links' },
-    { label: '用户管理', url: '/admin/users' },
-    { label: '媒体库', url: '/admin/media' },
+    { label: t('resources.site.navigation.itemDialog.quick.home'), url: '/' },
+    {
+      label: t('resources.site.navigation.itemDialog.quick.about'),
+      url: '/about',
+    },
+    {
+      label: t('resources.site.navigation.itemDialog.quick.terms'),
+      url: '/terms',
+    },
+    {
+      label: t('resources.site.navigation.itemDialog.quick.privacy'),
+      url: '/privacy',
+    },
+    {
+      label: t('resources.site.navigation.itemDialog.quick.links'),
+      url: '/links',
+    },
+    {
+      label: t('resources.site.navigation.itemDialog.quick.users'),
+      url: '/admin/users',
+    },
+    {
+      label: t('resources.site.navigation.itemDialog.quick.media'),
+      url: '/admin/media',
+    },
   ]
 
   return (
@@ -145,16 +165,16 @@ export function NavItemDialog({
             )}
             {isEditing
               ? parentId !== 'none'
-                ? '编辑子菜单项'
-                : '编辑主导航菜单项'
+                ? t('resources.site.navigation.itemDialog.editChildTitle')
+                : t('resources.site.navigation.itemDialog.editMainTitle')
               : parentId !== 'none'
-                ? '新增子菜单项'
-                : '新增导航菜单项'}
+                ? t('resources.site.navigation.itemDialog.createChildTitle')
+                : t('resources.site.navigation.itemDialog.createMainTitle')}
           </DialogTitle>
           <DialogDescription className="text-xs">
             {parentId !== 'none'
-              ? '此项作为子菜单，将在前台顶部导航中以下拉菜单 (Dropdown) 或在页脚相应分类下呈现'
-              : '配置前台顶部主菜单或底部关键导航链接'}
+              ? t('resources.site.navigation.itemDialog.childDescription')
+              : t('resources.site.navigation.itemDialog.mainDescription')}
           </DialogDescription>
         </DialogHeader>
 
@@ -162,7 +182,9 @@ export function NavItemDialog({
           {/* 1. 所属位置与父级菜单层级 */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <Label className="text-xs">展示位置</Label>
+              <Label className="text-xs">
+                {t('resources.site.navigation.itemDialog.locationLabel')}
+              </Label>
               <Select
                 value={location}
                 onValueChange={(val) => {
@@ -179,23 +201,33 @@ export function NavItemDialog({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="text-xs">
-                  <SelectItem value="header">页眉顶部 (Header)</SelectItem>
-                  <SelectItem value="footer">页脚底部 (Footer)</SelectItem>
+                  <SelectItem value="header">
+                    {t('resources.site.navigation.locationHeader')}
+                  </SelectItem>
+                  <SelectItem value="footer">
+                    {t('resources.site.navigation.locationFooter')}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs">上级父菜单 (实现子菜单)</Label>
+              <Label className="text-xs">
+                {t('resources.site.navigation.itemDialog.parentLabel')}
+              </Label>
               <Select value={parentId} onValueChange={setParentId}>
                 <SelectTrigger className="h-8 text-xs">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="text-xs">
-                  <SelectItem value="none">无 (作为顶级主菜单)</SelectItem>
+                  <SelectItem value="none">
+                    {t('resources.site.navigation.itemDialog.parentNone')}
+                  </SelectItem>
                   {validParents.map((p) => (
                     <SelectItem key={p.id} value={p.id}>
-                      └ 子项属于: {p.title}
+                      {t('resources.site.navigation.itemDialog.parentChild', {
+                        title: p.title,
+                      })}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -206,7 +238,9 @@ export function NavItemDialog({
           {/* 2. 所属分类分组 */}
           <div className="space-y-1">
             <div className="flex items-center justify-between">
-              <Label className="text-xs">所属导航分类</Label>
+              <Label className="text-xs">
+                {t('resources.site.navigation.itemDialog.groupLabel')}
+              </Label>
               {onOpenCreateGroup && (
                 <button
                   type="button"
@@ -214,23 +248,31 @@ export function NavItemDialog({
                   className="text-primary flex items-center gap-0.5 text-[11px] hover:underline"
                 >
                   <Plus className="size-3" />
-                  新建分类名字
+                  {t('resources.site.navigation.actions.newGroup')}
                 </button>
               )}
             </div>
             <Select value={groupId} onValueChange={setGroupId}>
               <SelectTrigger className="h-8 text-xs">
-                <SelectValue placeholder="选择所属分类名字..." />
+                <SelectValue
+                  placeholder={t(
+                    'resources.site.navigation.itemDialog.groupPlaceholder',
+                  )}
+                />
               </SelectTrigger>
               <SelectContent className="text-xs">
                 {locationGroups.length === 0 ? (
                   <SelectItem value="none" disabled>
-                    暂无分类，请点击右上角新建
+                    {t('resources.site.navigation.itemDialog.noGroups')}
                   </SelectItem>
                 ) : (
                   locationGroups.map((g) => (
                     <SelectItem key={g.id} value={g.id}>
-                      {g.name} ({g.location === 'header' ? '页眉' : '页脚'})
+                      {g.name} (
+                      {g.location === 'header'
+                        ? t('resources.site.navigation.locationHeader')
+                        : t('resources.site.navigation.locationFooter')}
+                      )
                     </SelectItem>
                   ))
                 )}
@@ -242,13 +284,15 @@ export function NavItemDialog({
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-1">
               <Label htmlFor="nav-title" className="text-xs">
-                菜单名称 *
+                {t('resources.site.navigation.itemDialog.titleLabel')}
               </Label>
               <Input
                 id="nav-title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="例如：产品中心、关于我们"
+                placeholder={t(
+                  'resources.site.navigation.itemDialog.titlePlaceholder',
+                )}
                 className="h-8 text-xs"
                 required
               />
@@ -256,13 +300,15 @@ export function NavItemDialog({
 
             <div className="space-y-1">
               <Label htmlFor="nav-desc" className="text-xs">
-                副标题描述 (下拉展现)
+                {t('resources.site.navigation.itemDialog.descriptionLabel')}
               </Label>
               <Input
                 id="nav-desc"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="例如：RBAC 细粒度成员体系"
+                placeholder={t(
+                  'resources.site.navigation.itemDialog.descriptionPlaceholder',
+                )}
                 className="h-8 text-xs"
               />
             </div>
@@ -272,23 +318,25 @@ export function NavItemDialog({
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
               <Label htmlFor="nav-url" className="text-xs">
-                跳转目标链接 (URL) *
+                {t('resources.site.navigation.itemDialog.urlLabel')}
               </Label>
               <span className="text-muted-foreground text-[10px]">
-                若仅作为纯下拉容器可填 #
+                {t('resources.site.navigation.itemDialog.urlHint')}
               </span>
             </div>
             <Input
               id="nav-url"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="例如：/about、https://... 或 #"
+              placeholder={t(
+                'resources.site.navigation.itemDialog.urlPlaceholder',
+              )}
               className="h-8 text-xs"
               required
             />
             <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
               <span className="text-muted-foreground text-[10px]">
-                快捷填入:
+                {t('resources.site.navigation.itemDialog.quickFillLabel')}
               </span>
               {QUICK_URLS.map((q) => (
                 <button
@@ -309,7 +357,9 @@ export function NavItemDialog({
           {/* 5. 打开方式与排序 */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <Label className="text-xs">打开窗口</Label>
+              <Label className="text-xs">
+                {t('resources.site.navigation.itemDialog.targetLabel')}
+              </Label>
               <Select
                 value={target}
                 onValueChange={(val) => setTarget(val as '_self' | '_blank')}
@@ -318,15 +368,19 @@ export function NavItemDialog({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="text-xs">
-                  <SelectItem value="_self">当前页面跳转 (_self)</SelectItem>
-                  <SelectItem value="_blank">新标签页打开 (_blank)</SelectItem>
+                  <SelectItem value="_self">
+                    {t('resources.site.navigation.itemDialog.targetSelf')}
+                  </SelectItem>
+                  <SelectItem value="_blank">
+                    {t('resources.site.navigation.itemDialog.targetBlank')}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-1">
               <Label htmlFor="nav-sort" className="text-xs">
-                排序权重 (越小越靠前)
+                {t('resources.site.navigation.sortLabel')}
               </Label>
               <Input
                 id="nav-sort"
@@ -348,7 +402,7 @@ export function NavItemDialog({
                 onCheckedChange={setEnabled}
               />
               <Label htmlFor="nav-enabled" className="cursor-pointer text-xs">
-                启用该菜单项并在前台展示
+                {t('resources.site.navigation.itemDialog.enabledLabel')}
               </Label>
             </div>
           </div>
@@ -362,7 +416,7 @@ export function NavItemDialog({
               onClick={() => onOpenChange(false)}
               disabled={submitting}
             >
-              取消
+              {t('common.actions.cancel')}
             </Button>
             <Button
               type="submit"
@@ -370,7 +424,9 @@ export function NavItemDialog({
               className="h-8 text-xs"
               disabled={submitting || !title.trim()}
             >
-              {submitting ? '保存中...' : '确定保存'}
+              {submitting
+                ? t('common.actions.saving')
+                : t('common.actions.save')}
             </Button>
           </DialogFooter>
         </form>

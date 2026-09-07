@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
 import {
   DashboardCard,
@@ -9,19 +10,21 @@ import {
   LoadingState,
   notify,
 } from '~/admin/ui'
+import { i18n } from '~/core/i18n'
 import { RoleForm } from '~/modules/role/components/role-form'
 import { roleService } from '~/modules/role/service'
 import type { Role, RoleFormValues } from '~/modules/role/types'
 
 export const meta = () => {
-  return [{ title: '编辑角色 - Admin Framework' }]
+  return [{ title: i18n.t('pages.admin.roles.editMetaTitle') }]
 }
 
 export const handle = {
-  breadcrumb: () => ({ label: '编辑角色' }),
+  breadcrumb: () => ({ label: i18n.t('pages.admin.roles.editTitle') }),
 }
 
 export default function RoleEditPage() {
+  const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [role, setRole] = useState<Role | null>(null)
@@ -47,11 +50,11 @@ export default function RoleEditPage() {
     setSaving(true)
     try {
       await roleService.updateRole(id, data)
-      notify.success('角色信息与权限配置已更新！')
+      notify.success(t('pages.admin.roles.updateSuccess'))
       navigate('/admin/roles')
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '更新角色失败')
+      notify.error(err?.message || t('pages.admin.roles.updateFailed'))
     } finally {
       setSaving(false)
     }
@@ -60,7 +63,7 @@ export default function RoleEditPage() {
   if (fetching) {
     return (
       <DashboardPage>
-        <LoadingState text="加载角色与权限数据中..." />
+        <LoadingState text={t('pages.admin.roles.loading')} />
       </DashboardPage>
     )
   }
@@ -69,15 +72,15 @@ export default function RoleEditPage() {
     return (
       <DashboardPage>
         <EmptyState
-          title="未找到该角色"
-          description="该角色可能已被移除或传入的 ID 无效"
+          title={t('pages.admin.roles.notFoundTitle')}
+          description={t('pages.admin.roles.notFoundDescription')}
           action={
             <button
               type="button"
               onClick={() => navigate('/admin/roles')}
               className="text-primary cursor-pointer text-sm underline"
             >
-              返回角色列表
+              {t('pages.admin.roles.backToList')}
             </button>
           }
         />
@@ -88,24 +91,24 @@ export default function RoleEditPage() {
   return (
     <DashboardPage>
       <DashboardPageHeader
-        title={`编辑角色：${role.name}`}
-        description="调整角色基本定义，为该岗位重新规划系统功能权限范围"
+        title={t('pages.admin.roles.editHeading', { name: role.name })}
+        description={t('pages.admin.roles.editDescription')}
       />
 
       <DashboardPageContent>
         <DashboardCard
-          title="角色信息与权限矩阵"
+          title={t('pages.admin.roles.editCardTitle')}
           description={
             role.isSystem
-              ? '注意：该角色为系统内置保护角色，标识不可更改'
-              : `角色 ID: ${role.id}`
+              ? t('pages.admin.roles.systemRoleNote')
+              : t('pages.admin.roles.idLabel', { id: role.id })
           }
         >
           <RoleForm
             initialData={role}
             onSubmit={handleSubmit}
             loading={saving}
-            submitText="保存角色修改"
+            submitText={t('pages.admin.roles.editSubmit')}
           />
         </DashboardCard>
       </DashboardPageContent>

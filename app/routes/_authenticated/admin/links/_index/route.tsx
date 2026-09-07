@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import {
   DashboardPage,
   DashboardPageContent,
@@ -6,11 +7,12 @@ import {
 import { LinkTable } from '~/modules/site/links'
 
 export default function AdminLinksRoute() {
+  const { t } = useTranslation()
   return (
     <DashboardPage>
       <DashboardPageHeader
-        title="友情链接管理"
-        description="审核前台用户提交的友情链接申请，维护展示在公开页面的伙伴网络"
+        title={t('pages.admin.friendLinks.title')}
+        description={t('pages.admin.friendLinks.description')}
       />
       <DashboardPageContent>
         <LinkTable />

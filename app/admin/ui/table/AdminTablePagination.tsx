@@ -5,6 +5,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
 import {
   Select,
@@ -23,22 +24,31 @@ export function AdminTablePagination<TData>({
   table,
   pageSizeOptions = [10, 20, 30, 50, 100],
 }: AdminTablePaginationProps<TData>) {
+  const { t } = useTranslation()
+  const selectedCount = table.getFilteredSelectedRowModel().rows.length
+  const totalCount = table.getFilteredRowModel().rows.length
   return (
     <div className="flex flex-col items-center justify-between gap-4 px-2 py-4 sm:flex-row">
       <div className="text-muted-foreground flex-1 text-sm">
-        {table.getFilteredSelectedRowModel().rows.length > 0 ? (
+        {selectedCount > 0 ? (
           <span>
-            已选择 {table.getFilteredSelectedRowModel().rows.length} /{' '}
-            {table.getFilteredRowModel().rows.length} 行
+            {t('common.pagination.selectedOf', {
+              selected: selectedCount,
+              total: totalCount,
+            })}
           </span>
         ) : (
-          <span>共 {table.getFilteredRowModel().rows.length} 条数据</span>
+          <span>
+            {t('common.pagination.totalItems', { count: totalCount })}
+          </span>
         )}
       </div>
 
       <div className="flex flex-wrap items-center gap-4 sm:gap-6 lg:gap-8">
         <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">每页行数</p>
+          <p className="text-sm font-medium">
+            {t('common.pagination.rowsPerPage')}
+          </p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
@@ -59,8 +69,10 @@ export function AdminTablePagination<TData>({
         </div>
 
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-          第 {table.getState().pagination.pageIndex + 1} 页，共{' '}
-          {table.getPageCount() || 1} 页
+          {t('common.pagination.pageOf', {
+            page: table.getState().pagination.pageIndex + 1,
+            total: table.getPageCount() || 1,
+          })}
         </div>
 
         <div className="flex items-center space-x-2">
@@ -70,7 +82,7 @@ export function AdminTablePagination<TData>({
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
           >
-            <span className="sr-only">第一页</span>
+            <span className="sr-only">{t('common.pagination.firstPage')}</span>
             <ChevronsLeft className="h-4 w-4" />
           </Button>
           <Button
@@ -79,7 +91,9 @@ export function AdminTablePagination<TData>({
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            <span className="sr-only">上一页</span>
+            <span className="sr-only">
+              {t('common.pagination.previousPage')}
+            </span>
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <Button
@@ -88,7 +102,7 @@ export function AdminTablePagination<TData>({
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            <span className="sr-only">下一页</span>
+            <span className="sr-only">{t('common.pagination.nextPage')}</span>
             <ChevronRight className="h-4 w-4" />
           </Button>
           <Button
@@ -97,7 +111,7 @@ export function AdminTablePagination<TData>({
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >
-            <span className="sr-only">最后一页</span>
+            <span className="sr-only">{t('common.pagination.lastPage')}</span>
             <ChevronsRight className="h-4 w-4" />
           </Button>
         </div>

@@ -36,7 +36,7 @@ export function buildNavigation(user: AuthUser | null): NavGroup[] {
       continue
     }
 
-    const groupTitle = resource.navigation?.group || '资源管理'
+    const groupTitle = resource.navigation?.group || 'Resources'
     const groupSort = resource.navigation?.sort ?? 10
     const group = groupMap.get(groupTitle) || { sort: groupSort, items: [] }
 

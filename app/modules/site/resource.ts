@@ -1,4 +1,5 @@
 import { Compass, FileText, LayoutGrid, Link2, Megaphone } from 'lucide-react'
+import { i18n } from '~/core/i18n'
 import { defineResource } from '../../admin/core/resource/resource'
 import type {
   FriendLink,
@@ -10,11 +11,11 @@ import type {
 
 export const SitePagesResource = defineResource<SitePage>({
   name: 'site-pages',
-  label: '单页面管理',
-  pluralLabel: '单页面列表',
+  label: i18n.t('resources.site.pages.label'),
+  pluralLabel: i18n.t('resources.site.pages.pluralLabel'),
   icon: FileText,
   navigation: {
-    group: '站点与门户',
+    group: i18n.t('resources.site.group'),
     sort: 10,
   },
   permissions: {
@@ -33,11 +34,11 @@ export const SitePagesResource = defineResource<SitePage>({
 
 export const SiteNavResource = defineResource<SiteNavItem>({
   name: 'site-navigation',
-  label: '导航菜单配置',
-  pluralLabel: '导航列表',
+  label: i18n.t('resources.site.navigation.label'),
+  pluralLabel: i18n.t('resources.site.navigation.pluralLabel'),
   icon: Compass,
   navigation: {
-    group: '站点与门户',
+    group: i18n.t('resources.site.group'),
     sort: 20,
   },
   permissions: {
@@ -52,11 +53,11 @@ export const SiteNavResource = defineResource<SiteNavItem>({
 
 export const SiteWidgetsResource = defineResource<SiteWidgetConfig>({
   name: 'site-widgets',
-  label: '卡片小工具',
-  pluralLabel: '小工具列表',
+  label: i18n.t('resources.site.widgets.label'),
+  pluralLabel: i18n.t('resources.site.widgets.pluralLabel'),
   icon: LayoutGrid,
   navigation: {
-    group: '站点与门户',
+    group: i18n.t('resources.site.group'),
     sort: 30,
   },
   permissions: {
@@ -71,11 +72,11 @@ export const SiteWidgetsResource = defineResource<SiteWidgetConfig>({
 
 export const SiteOperationsResource = defineResource<SiteAnnouncement>({
   name: 'site-operations',
-  label: '运营与广告位',
-  pluralLabel: '运营配置',
+  label: i18n.t('resources.site.operations.label'),
+  pluralLabel: i18n.t('resources.site.operations.pluralLabel'),
   icon: Megaphone,
   navigation: {
-    group: '站点与门户',
+    group: i18n.t('resources.site.group'),
     sort: 40,
   },
   permissions: {
@@ -90,11 +91,11 @@ export const SiteOperationsResource = defineResource<SiteAnnouncement>({
 
 export const SiteLinksResource = defineResource<FriendLink>({
   name: 'site-links',
-  label: '友情链接管理',
-  pluralLabel: '友链列表',
+  label: i18n.t('resources.site.links.label'),
+  pluralLabel: i18n.t('resources.site.links.pluralLabel'),
   icon: Link2,
   navigation: {
-    group: '站点与门户',
+    group: i18n.t('resources.site.group'),
     sort: 50,
   },
   permissions: {

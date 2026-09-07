@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, CheckCircle2, Link2, Loader2, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 import { notify } from '~/admin/ui'
 import { Button } from '~/components/ui/button'
@@ -15,18 +16,36 @@ import {
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { Textarea } from '~/components/ui/textarea'
+import { i18n } from '~/core/i18n'
 import { siteService } from '../../service'
 
 const visitorApplySchema = z.object({
-  name: z.string().min(2, '网站名称至少 2 个字符'),
-  url: z.string().url('请输入有效的网址 (需包含 http:// 或 https://)'),
+  name: z.string().min(
+    2,
+    i18n.t('resources.site.links.apply.validation.nameMinLength', {
+      count: 2,
+    }),
+  ),
+  url: z
+    .string()
+    .url(i18n.t('resources.site.links.apply.validation.urlInvalid')),
   logo: z
     .string()
-    .url('请输入有效的 Logo 图标网址')
+    .url(i18n.t('resources.site.links.apply.validation.logoUrlInvalid'))
     .optional()
     .or(z.literal('')),
-  description: z.string().max(200, '网站描述在 200 字以内').optional(),
-  email: z.string().email('请输入有效的站长联系邮箱'),
+  description: z
+    .string()
+    .max(
+      200,
+      i18n.t('resources.site.links.apply.validation.descriptionMaxLength', {
+        count: 200,
+      }),
+    )
+    .optional(),
+  email: z
+    .string()
+    .email(i18n.t('resources.site.links.apply.validation.emailInvalid')),
 })
 
 type VisitorApplyValues = z.infer<typeof visitorApplySchema>
@@ -43,6 +62,7 @@ export function ApplyLinkDialog({
   onOpenChange,
   onSuccess,
 }: ApplyLinkDialogProps) {
+  const { t } = useTranslation()
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [cfVerified, setCfVerified] = useState(true)
@@ -66,7 +86,7 @@ export function ApplyLinkDialog({
 
   const onSubmit = async (values: VisitorApplyValues) => {
     if (!cfVerified) {
-      notify.error('请先通过 Cloudflare 人机安全验证')
+      notify.error(t('resources.site.links.apply.captchaRequired'))
       return
     }
 
@@ -74,11 +94,11 @@ export function ApplyLinkDialog({
     try {
       await siteService.applyFriendLink(values)
       setSubmitted(true)
-      notify.success('友链申请提交成功，请等待管理员审核！')
+      notify.success(t('resources.site.links.apply.submitSuccess'))
       onSuccess?.()
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '提交失败，请稍后重试')
+      notify.error(err?.message || t('resources.site.links.apply.submitFailed'))
     } finally {
       setLoading(false)
     }
@@ -110,15 +130,14 @@ export function ApplyLinkDialog({
               <CheckCircle2 className="size-6" />
             </div>
             <h3 className="text-foreground text-base font-semibold">
-              友链申请已成功提交！
+              {t('resources.site.links.apply.successTitle')}
             </h3>
             <p className="text-muted-foreground mx-auto max-w-sm text-xs leading-relaxed">
-              感谢您的互换申请！我们将在 1~3
-              个工作日内核验贵站并完成审核。请确保已提前在贵站添加我方链接。
+              {t('resources.site.links.apply.successDescription')}
             </p>
             <div className="pt-2">
               <Button size="sm" onClick={handleClose} className="text-xs">
-                完成并返回
+                {t('resources.site.links.apply.done')}
               </Button>
             </div>
           </div>
@@ -127,10 +146,10 @@ export function ApplyLinkDialog({
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Link2 className="text-primary size-4" />
-                申请友情链接互换
+                {t('resources.site.links.apply.title')}
               </DialogTitle>
               <DialogDescription>
-                免登录自助申请。请填写贵站公开信息，审核通过后将自动呈现在友链伙伴列表中。
+                {t('resources.site.links.apply.description')}
               </DialogDescription>
             </DialogHeader>
 
@@ -140,12 +159,13 @@ export function ApplyLinkDialog({
             >
               <div className="space-y-1">
                 <Label htmlFor="visitor-name" className="text-xs font-medium">
-                  网站名称 <span className="text-destructive">*</span>
+                  {t('resources.site.links.apply.name')}{' '}
+                  <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="visitor-name"
                   {...register('name')}
-                  placeholder="例如：极客技术周刊"
+                  placeholder={t('resources.site.links.apply.namePlaceholder')}
                   className="h-8 text-xs"
                 />
                 {errors.name && (
@@ -157,7 +177,8 @@ export function ApplyLinkDialog({
 
               <div className="space-y-1">
                 <Label htmlFor="visitor-url" className="text-xs font-medium">
-                  网站网址 (URL) <span className="text-destructive">*</span>
+                  {t('resources.site.links.apply.url')}{' '}
+                  <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="visitor-url"
@@ -175,7 +196,7 @@ export function ApplyLinkDialog({
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div className="space-y-1">
                   <Label htmlFor="visitor-logo" className="text-xs font-medium">
-                    Logo 图标直链 (可选)
+                    {t('resources.site.links.apply.logo')}
                   </Label>
                   <Input
                     id="visitor-logo"
@@ -195,7 +216,8 @@ export function ApplyLinkDialog({
                     htmlFor="visitor-email"
                     className="text-xs font-medium"
                   >
-                    站长联系邮箱 <span className="text-destructive">*</span>
+                    {t('resources.site.links.apply.email')}{' '}
+                    <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="visitor-email"
@@ -213,12 +235,14 @@ export function ApplyLinkDialog({
 
               <div className="space-y-1">
                 <Label htmlFor="visitor-desc" className="text-xs font-medium">
-                  网站简短介绍 (可选)
+                  {t('resources.site.links.apply.descriptionLabel')}
                 </Label>
                 <Textarea
                   id="visitor-desc"
                   {...register('description')}
-                  placeholder="简述网站的核心内容定位 (200字以内)..."
+                  placeholder={t(
+                    'resources.site.links.apply.descriptionPlaceholder',
+                  )}
                   rows={2}
                   className="resize-none text-xs"
                 />
@@ -252,10 +276,10 @@ export function ApplyLinkDialog({
                   </div>
                   <span className="text-foreground text-xs font-medium">
                     {cfChecking
-                      ? 'Cloudflare 安全验证中...'
+                      ? t('resources.site.links.apply.captchaChecking')
                       : cfVerified
-                        ? '已通过 Cloudflare 智能安全核查'
-                        : '点击完成 Cloudflare 人机安全验证'}
+                        ? t('resources.site.links.apply.captchaVerified')
+                        : t('resources.site.links.apply.captchaClick')}
                   </span>
                 </div>
                 <div className="text-muted-foreground flex items-center gap-1 font-mono text-[10px]">
@@ -273,7 +297,7 @@ export function ApplyLinkDialog({
                   disabled={loading}
                   className="h-8 text-xs"
                 >
-                  取消
+                  {t('common.actions.cancel')}
                 </Button>
                 <Button
                   type="submit"
@@ -281,7 +305,9 @@ export function ApplyLinkDialog({
                   disabled={loading || !cfVerified}
                   className="h-8 text-xs"
                 >
-                  {loading ? '正在提交...' : '立即提交友链申请'}
+                  {loading
+                    ? t('resources.site.links.apply.submitting')
+                    : t('resources.site.links.apply.submit')}
                 </Button>
               </div>
             </form>

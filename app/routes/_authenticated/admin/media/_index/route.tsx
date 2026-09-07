@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   DashboardPage,
   DashboardPageContent,
@@ -6,6 +7,7 @@ import {
   LoadingState,
   notify,
 } from '~/admin/ui'
+import { i18n } from '~/core/i18n'
 import {
   MediaGrid,
   MediaInspector,
@@ -20,14 +22,15 @@ import {
 } from '~/modules/media'
 
 export const meta = () => {
-  return [{ title: '媒体资源库 - Admin Framework' }]
+  return [{ title: i18n.t('pages.admin.media.metaTitle') }]
 }
 
 export const handle = {
-  breadcrumb: () => ({ label: '媒体资源库' }),
+  breadcrumb: () => ({ label: i18n.t('pages.admin.media.title') }),
 }
 
 export default function MediaAdminRoute() {
+  const { t } = useTranslation()
   const [items, setItems] = useState<MediaItem[]>([])
   const [stats, setStats] = useState<MediaStorageStats | null>(null)
   const [folders, setFolders] = useState<string[]>([])
@@ -61,11 +64,11 @@ export default function MediaAdminRoute() {
       setFolders(folderList)
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '读取媒体资产失败')
+      notify.error(err?.message || t('pages.admin.media.loadFailed'))
     } finally {
       setLoading(false)
     }
-  }, [category, folder, search])
+  }, [category, folder, search, t])
 
   useEffect(() => {
     loadData()
@@ -80,7 +83,7 @@ export default function MediaAdminRoute() {
   const handleDelete = async (item: MediaItem) => {
     try {
       await mediaService.deleteMedia(item.id)
-      notify.success(`已删除资产「${item.name}」`)
+      notify.success(t('pages.admin.media.deleteSuccess', { name: item.name }))
       if (inspectItem?.id === item.id) {
         setInspectItem(null)
       }
@@ -88,7 +91,7 @@ export default function MediaAdminRoute() {
       loadData()
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '删除失败')
+      notify.error(err?.message || t('pages.admin.media.deleteFailed'))
     }
   }
 
@@ -96,7 +99,7 @@ export default function MediaAdminRoute() {
     if (selectedIds.length === 0) return
     if (
       !window.confirm(
-        `确定要批量删除已选中的 ${selectedIds.length} 个媒体资产吗？`,
+        t('common.confirm.bulkDeleteTitle', { count: selectedIds.length }),
       )
     ) {
       return
@@ -104,25 +107,25 @@ export default function MediaAdminRoute() {
 
     try {
       const count = await mediaService.deleteBatch(selectedIds)
-      notify.success(`成功批量删除 ${count} 个资产`)
+      notify.success(t('pages.admin.media.batchDeleteSuccess', { count }))
       setSelectedIds([])
       setInspectItem(null)
       loadData()
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '批量删除失败')
+      notify.error(err?.message || t('pages.admin.media.batchDeleteFailed'))
     }
   }
 
   const handleUpdate = async (id: string, patch: Partial<MediaItem>) => {
     try {
       const updated = await mediaService.updateMedia(id, patch)
-      notify.success('资产属性已更新')
+      notify.success(t('pages.admin.media.updateSuccess'))
       setInspectItem(updated)
       loadData()
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '更新失败')
+      notify.error(err?.message || t('pages.admin.media.updateFailed'))
     }
   }
 
@@ -134,17 +137,17 @@ export default function MediaAdminRoute() {
 
     if (navigator.clipboard) {
       navigator.clipboard.writeText(fullUrl)
-      notify.success('外链已复制到剪贴板！')
+      notify.success(t('pages.admin.media.copySuccess'))
     } else {
-      notify.info(`链接：${fullUrl}`)
+      notify.info(t('pages.admin.media.linkInfo', { url: fullUrl }))
     }
   }
 
   return (
     <DashboardPage>
       <DashboardPageHeader
-        title="媒体资源中心"
-        description="集中式管理全站图片素材、技术文档、产品音视频与压缩包附件，支持按分类检索与直链复制"
+        title={t('pages.admin.media.heading')}
+        description={t('pages.admin.media.description')}
       />
 
       <DashboardPageContent className="space-y-4">
@@ -169,7 +172,7 @@ export default function MediaAdminRoute() {
 
         {/* 3. 媒体主体展示：网格模式 vs 表格模式 */}
         {loading && items.length === 0 ? (
-          <LoadingState text="正在读取媒体素材..." />
+          <LoadingState text={t('pages.admin.media.loading')} />
         ) : viewMode === 'grid' ? (
           <MediaGrid
             items={items}

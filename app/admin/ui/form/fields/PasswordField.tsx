@@ -1,6 +1,7 @@
 import { Eye, EyeOff, Lock } from 'lucide-react'
 import { useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
@@ -18,13 +19,17 @@ export interface PasswordFieldProps {
 
 export function PasswordField({
   name,
-  label = '密码',
-  placeholder = '请输入密码',
+  label,
+  placeholder,
   description,
   required,
   disabled,
   className,
 }: PasswordFieldProps) {
+  const { t } = useTranslation()
+  const resolvedLabel = label ?? t('common.admin.passwordLabel')
+  const resolvedPlaceholder =
+    placeholder ?? t('common.admin.passwordPlaceholder')
   const { control } = useFormContext()
   const [showPassword, setShowPassword] = useState(false)
 
@@ -34,9 +39,9 @@ export function PasswordField({
       control={control}
       render={({ field, fieldState }) => (
         <div className={`space-y-1.5 ${className || ''}`}>
-          {label && (
+          {resolvedLabel && (
             <Label htmlFor={name} className="text-sm font-medium">
-              {label}
+              {resolvedLabel}
               {required && <span className="text-destructive ml-1">*</span>}
             </Label>
           )}
@@ -49,7 +54,7 @@ export function PasswordField({
               type={showPassword ? 'text' : 'password'}
               {...field}
               value={field.value ?? ''}
-              placeholder={placeholder}
+              placeholder={resolvedPlaceholder}
               disabled={disabled}
               className={cn(
                 'pr-10 pl-9',

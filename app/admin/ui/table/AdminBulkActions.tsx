@@ -1,5 +1,6 @@
 import { Trash2 } from 'lucide-react'
 import type React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
 import { AdminConfirmDialog } from '../overlay/AdminConfirmDialog'
 
@@ -17,6 +18,7 @@ export function AdminBulkActions({
   onBulkDelete,
   actions,
 }: AdminBulkActionsProps) {
+  const { t } = useTranslation()
   if (selectedCount === 0) return null
 
   return (
@@ -25,14 +27,16 @@ export function AdminBulkActions({
         <span className="bg-primary text-primary-foreground flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold">
           {selectedCount}
         </span>
-        <span className="text-sm font-medium">项已选择</span>
+        <span className="text-sm font-medium">
+          {t('common.pagination.selectedItems')}
+        </span>
         <Button
           variant="ghost"
           size="sm"
           onClick={onClearSelection}
           className="text-muted-foreground hover:text-foreground h-7 text-xs"
         >
-          取消选择
+          {t('common.actions.clearSelection')}
         </Button>
       </div>
 
@@ -41,15 +45,17 @@ export function AdminBulkActions({
 
         {onBulkDelete && (
           <AdminConfirmDialog
-            title={`确认批量删除选中的 ${selectedCount} 项数据？`}
-            description="此操作将永久删除所选数据，请谨慎操作。"
+            title={t('common.confirm.bulkDeleteTitle', {
+              count: selectedCount,
+            })}
+            description={t('common.confirm.bulkDeleteIrreversible')}
             variant="destructive"
-            confirmText="确定删除"
+            confirmText={t('common.actions.confirmDelete')}
             onConfirm={onBulkDelete}
             trigger={
               <Button variant="destructive" size="sm" className="h-8">
                 <Trash2 className="mr-2 h-4 w-4" />
-                批量删除
+                {t('common.actions.bulkDelete')}
               </Button>
             }
           />

@@ -9,6 +9,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ConfirmDialog, notify } from '~/admin/ui'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
@@ -32,6 +33,7 @@ import type {
 import { AnnouncementDialog } from './announcement-dialog'
 
 export function AnnouncementManager() {
+  const { t } = useTranslation()
   const [list, setList] = useState<SiteAnnouncement[]>([])
   const [loading, setLoading] = useState(true)
   const [savingId, setSavingId] = useState<string | null>(null)
@@ -66,9 +68,15 @@ export function AnnouncementManager() {
     try {
       await siteService.toggleAnnouncement(item.id, enabled)
       setList(list.map((a) => (a.id === item.id ? { ...a, enabled } : a)))
-      notify.success(`已${enabled ? '启用' : '停用'}该通告`)
+      notify.success(
+        t(
+          enabled
+            ? 'resources.site.operations.announcements.toasts.enabled'
+            : 'resources.site.operations.announcements.toasts.disabled',
+        ),
+      )
     } catch {
-      notify.error('状态更新失败')
+      notify.error(t('resources.site.shared.statusUpdateFailed'))
     }
   }
 
@@ -76,10 +84,14 @@ export function AnnouncementManager() {
     setSavingId(item.id)
     try {
       await siteService.updateAnnouncement(item.id, item)
-      notify.success(`「${item.title}」配置已保存！`)
+      notify.success(
+        t('resources.site.operations.announcements.toasts.quickSaved', {
+          name: item.title,
+        }),
+      )
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '保存失败')
+      notify.error(err?.message || t('resources.site.shared.saveFailed'))
     } finally {
       setSavingId(null)
     }
@@ -100,16 +112,24 @@ export function AnnouncementManager() {
     try {
       if (editingItem) {
         await siteService.saveAnnouncement({ ...values, id: editingItem.id })
-        notify.success(`通告「${values.title}」已成功更新`)
+        notify.success(
+          t('resources.site.operations.announcements.toasts.updated', {
+            name: values.title,
+          }),
+        )
       } else {
         await siteService.saveAnnouncement(values)
-        notify.success(`通告「${values.title}」创建成功`)
+        notify.success(
+          t('resources.site.operations.announcements.toasts.created', {
+            name: values.title,
+          }),
+        )
       }
       setDialogOpen(false)
       await loadData()
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '保存失败')
+      notify.error(err?.message || t('resources.site.shared.saveFailed'))
     } finally {
       setDialogLoading(false)
     }
@@ -120,11 +140,15 @@ export function AnnouncementManager() {
     setDeleteLoading(true)
     try {
       await siteService.deleteAnnouncement(deleteTarget.id)
-      notify.success(`通告「${deleteTarget.title}」已删除`)
+      notify.success(
+        t('resources.site.operations.announcements.toasts.deleted', {
+          name: deleteTarget.title,
+        }),
+      )
       setDeleteTarget(null)
       await loadData()
     } catch {
-      notify.error('删除失败')
+      notify.error(t('resources.site.shared.deleteFailed'))
     } finally {
       setDeleteLoading(false)
     }
@@ -134,31 +158,43 @@ export function AnnouncementManager() {
     switch (type) {
       case 'banner':
         return {
-          label: '顶部吸顶通告条 (Banner)',
+          label: t(
+            'resources.site.operations.announcements.types.banner.label',
+          ),
           icon: Megaphone,
-          desc: '置于前台页面顶部的横幅，最醒目的强通知',
-          badge: 'Banner',
+          desc: t('resources.site.operations.announcements.types.banner.desc'),
+          badge: t(
+            'resources.site.operations.announcements.types.banner.badge',
+          ),
         }
       case 'modal':
         return {
-          label: '居中弹窗通知 (Modal Dialog)',
+          label: t('resources.site.operations.announcements.types.modal.label'),
           icon: MessageSquare,
-          desc: '页面初次进入时弹出的模态框，用于重大版本公告或重要提示',
-          badge: 'Modal 弹窗',
+          desc: t('resources.site.operations.announcements.types.modal.desc'),
+          badge: t('resources.site.operations.announcements.types.modal.badge'),
         }
       case 'corner':
         return {
-          label: '右下角浮动通知卡片 (Corner Float)',
+          label: t(
+            'resources.site.operations.announcements.types.corner.label',
+          ),
           icon: BellRing,
-          desc: '常驻屏幕右下角轻量浮窗，不干扰主体阅读，适合引导和温馨提示',
-          badge: '右下角浮窗',
+          desc: t('resources.site.operations.announcements.types.corner.desc'),
+          badge: t(
+            'resources.site.operations.announcements.types.corner.badge',
+          ),
         }
       case 'marquee':
         return {
-          label: '页面底部流动跑马灯 (Bottom Marquee)',
+          label: t(
+            'resources.site.operations.announcements.types.marquee.label',
+          ),
           icon: Sparkles,
-          desc: '置于浏览器页面最底部的走马灯字幕条，持续滚动展示多条资讯',
-          badge: '底部跑马灯',
+          desc: t('resources.site.operations.announcements.types.marquee.desc'),
+          badge: t(
+            'resources.site.operations.announcements.types.marquee.badge',
+          ),
         }
     }
   }
@@ -166,7 +202,7 @@ export function AnnouncementManager() {
   if (loading) {
     return (
       <div className="text-muted-foreground py-8 text-center text-xs">
-        加载通知配置中...
+        {t('resources.site.operations.announcements.loading')}
       </div>
     )
   }
@@ -176,10 +212,10 @@ export function AnnouncementManager() {
       <div className="flex items-center justify-between pb-1">
         <div>
           <h3 className="text-foreground text-sm font-semibold">
-            运营通知公告管理
+            {t('resources.site.operations.announcements.title')}
           </h3>
           <p className="text-muted-foreground text-xs">
-            集中调控前台吸顶 Banner、弹窗公告、右下角浮动卡片和走马灯提示
+            {t('resources.site.operations.announcements.description')}
           </p>
         </div>
         <Button
@@ -188,21 +224,23 @@ export function AnnouncementManager() {
           className="h-8 gap-1.5 text-xs"
         >
           <Plus className="size-3.5" />
-          新增运营通知
+          {t('resources.site.operations.announcements.actions.create')}
         </Button>
       </div>
 
       <div className="grid grid-cols-1 gap-4">
         {list.length === 0 ? (
           <div className="rounded-lg border border-dashed py-10 text-center">
-            <p className="text-muted-foreground text-xs">暂无运营通告数据</p>
+            <p className="text-muted-foreground text-xs">
+              {t('resources.site.operations.announcements.empty')}
+            </p>
             <Button
               size="sm"
               variant="outline"
               onClick={handleOpenCreate}
               className="mt-3 text-xs"
             >
-              新增第一条通知
+              {t('resources.site.operations.announcements.actions.addFirst')}
             </Button>
           </div>
         ) : (
@@ -246,7 +284,9 @@ export function AnnouncementManager() {
                         htmlFor={`switch-${item.id}`}
                         className="cursor-pointer text-xs font-medium"
                       >
-                        {item.enabled ? '已开启' : '已关闭'}
+                        {item.enabled
+                          ? t('common.status.enabled')
+                          : t('common.status.disabled')}
                       </Label>
                     </div>
                     <Button
@@ -255,13 +295,19 @@ export function AnnouncementManager() {
                       disabled={savingId === item.id}
                       className="h-8 text-xs"
                     >
-                      {savingId === item.id ? '保存中...' : '快速保存'}
+                      {savingId === item.id
+                        ? t('common.actions.saving')
+                        : t(
+                            'resources.site.operations.announcements.quickSave',
+                          )}
                     </Button>
                     <Button
                       size="sm"
                       variant="ghost"
                       className="text-muted-foreground hover:text-foreground h-8 w-8 p-0"
-                      title="编辑通知"
+                      title={t(
+                        'resources.site.operations.announcements.tooltips.edit',
+                      )}
                       onClick={() => handleOpenEdit(item)}
                     >
                       <Edit2 className="size-3.5" />
@@ -270,7 +316,9 @@ export function AnnouncementManager() {
                       size="sm"
                       variant="ghost"
                       className="text-destructive hover:text-destructive hover:bg-destructive/10 h-8 w-8 p-0"
-                      title="删除通知"
+                      title={t(
+                        'resources.site.operations.announcements.tooltips.delete',
+                      )}
                       onClick={() => setDeleteTarget(item)}
                     >
                       <Trash2 className="size-3.5" />
@@ -281,7 +329,11 @@ export function AnnouncementManager() {
                 <CardContent className="space-y-3 p-4">
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                     <div className="space-y-1">
-                      <Label className="text-xs">通告主标题</Label>
+                      <Label className="text-xs">
+                        {t(
+                          'resources.site.operations.announcements.fields.title',
+                        )}
+                      </Label>
                       <Input
                         value={item.title}
                         onChange={(e) =>
@@ -294,13 +346,19 @@ export function AnnouncementManager() {
                           )
                         }
                         className="h-8 text-xs"
-                        placeholder="通告标题..."
+                        placeholder={t(
+                          'resources.site.operations.announcements.fields.titlePlaceholder',
+                        )}
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
                       <div className="space-y-1">
-                        <Label className="text-xs">按钮文案 (可选)</Label>
+                        <Label className="text-xs">
+                          {t(
+                            'resources.site.operations.announcements.fields.linkText',
+                          )}
+                        </Label>
                         <Input
                           value={item.linkText || ''}
                           onChange={(e) =>
@@ -313,11 +371,17 @@ export function AnnouncementManager() {
                             )
                           }
                           className="h-8 text-xs"
-                          placeholder="例如：查看详情"
+                          placeholder={t(
+                            'resources.site.operations.announcements.fields.linkTextPlaceholder',
+                          )}
                         />
                       </div>
                       <div className="space-y-1">
-                        <Label className="text-xs">跳转链接 (URL)</Label>
+                        <Label className="text-xs">
+                          {t(
+                            'resources.site.operations.announcements.fields.linkUrl',
+                          )}
+                        </Label>
                         <Input
                           value={item.linkUrl || ''}
                           onChange={(e) =>
@@ -337,7 +401,11 @@ export function AnnouncementManager() {
                   </div>
 
                   <div className="space-y-1">
-                    <Label className="text-xs">通告文案正文</Label>
+                    <Label className="text-xs">
+                      {t(
+                        'resources.site.operations.announcements.fields.content',
+                      )}
+                    </Label>
                     <Textarea
                       value={item.content}
                       onChange={(e) =>
@@ -351,7 +419,9 @@ export function AnnouncementManager() {
                       }
                       rows={2}
                       className="resize-none text-xs"
-                      placeholder="在此输入需要向用户公布的详细说明内容..."
+                      placeholder={t(
+                        'resources.site.operations.announcements.fields.contentPlaceholder',
+                      )}
                     />
                   </div>
 
@@ -359,7 +429,7 @@ export function AnnouncementManager() {
                     <div className="text-muted-foreground flex items-center gap-2 pt-1 text-xs">
                       <AlertCircle className="size-3.5 text-amber-600" />
                       <span>
-                        该弹窗默认启用「会话内仅提示一次」机制，关闭后刷新同一会话不再重复弹出干扰用户。
+                        {t('resources.site.operations.announcements.modalNote')}
                       </span>
                     </div>
                   )}
@@ -383,9 +453,14 @@ export function AnnouncementManager() {
       <ConfirmDialog
         open={Boolean(deleteTarget)}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
-        title="确认删除运营通知"
-        content={`确定要删除运营通知「${deleteTarget?.title}」吗？删除后前台将停止渲染此通知。`}
-        confirmText="确认删除"
+        title={t('resources.site.operations.announcements.delete.title')}
+        content={t(
+          'resources.site.operations.announcements.delete.description',
+          {
+            name: deleteTarget?.title,
+          },
+        )}
+        confirmText={t('common.actions.confirmDelete')}
         variant="destructive"
         loading={deleteLoading}
         onConfirm={handleDelete}

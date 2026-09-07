@@ -1,4 +1,5 @@
 import type React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Select,
   SelectContent,
@@ -28,12 +29,14 @@ export function AdminSelect({
   value,
   defaultValue,
   onValueChange,
-  placeholder = '请选择',
+  placeholder,
   options,
   disabled,
   className,
   children,
 }: AdminSelectProps) {
+  const { t } = useTranslation()
+  const resolvedPlaceholder = placeholder ?? t('common.admin.selectPlaceholder')
   return (
     <Select
       value={value}
@@ -42,7 +45,7 @@ export function AdminSelect({
       disabled={disabled}
     >
       <SelectTrigger className={className}>
-        <SelectValue placeholder={placeholder} />
+        <SelectValue placeholder={resolvedPlaceholder} />
       </SelectTrigger>
       <SelectContent>
         {options

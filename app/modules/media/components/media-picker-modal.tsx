@@ -7,6 +7,7 @@ import {
   UploadCloud,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
 import {
   Dialog,
@@ -32,8 +33,10 @@ export function MediaPickerModal({
   onOpenChange,
   onSelect,
   allowedTypes = ['image'],
-  title = '从媒体库选择资产素材',
+  title,
 }: MediaPickerModalProps) {
+  const { t } = useTranslation()
+  const dialogTitle = title ?? t('resources.media.picker.title')
   const [activeTab, setActiveTab] = useState<'library' | 'upload'>('library')
   const [items, setItems] = useState<MediaItem[]>([])
   const [loading, setLoading] = useState(false)
@@ -81,7 +84,8 @@ export function MediaPickerModal({
 
     setUploading(true)
     try {
-      const uploaded = await mediaService.uploadFile(file, '编辑插入')
+      const folderName = t('resources.media.picker.uploadFolder')
+      const uploaded = await mediaService.uploadFile(file, folderName)
       onSelect(uploaded)
       onOpenChange(false)
     } finally {
@@ -95,7 +99,7 @@ export function MediaPickerModal({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-sm font-semibold">
             <ImageIcon className="text-primary size-4" />
-            {title}
+            {dialogTitle}
           </DialogTitle>
         </DialogHeader>
 
@@ -110,7 +114,7 @@ export function MediaPickerModal({
                 : 'bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground'
             }`}
           >
-            素材库选择 ({items.length})
+            {t('resources.media.picker.libraryTab', { total: items.length })}
           </button>
           <button
             type="button"
@@ -121,7 +125,7 @@ export function MediaPickerModal({
                 : 'bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground'
             }`}
           >
-            即时本地上传
+            {t('resources.media.picker.uploadTab')}
           </button>
 
           {activeTab === 'library' && (
@@ -130,7 +134,7 @@ export function MediaPickerModal({
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="搜索名称/标签..."
+                placeholder={t('resources.media.picker.searchPlaceholder')}
                 className="bg-muted/20 h-7 pl-7 text-xs"
               />
             </div>
@@ -143,13 +147,13 @@ export function MediaPickerModal({
             {loading ? (
               <div className="text-muted-foreground flex h-48 items-center justify-center text-xs">
                 <Loader2 className="text-primary mr-2 size-5 animate-spin" />
-                <span>正在读取媒体资源库...</span>
+                <span>{t('resources.media.picker.loading')}</span>
               </div>
             ) : filteredItems.length === 0 ? (
               <div className="text-muted-foreground flex h-48 flex-col items-center justify-center gap-1 text-xs">
-                <span>暂无符合条件的素材</span>
+                <span>{t('resources.media.picker.emptyTitle')}</span>
                 <span className="text-[11px] opacity-75">
-                  您可以切换至“即时本地上传”直接上传新图片
+                  {t('resources.media.picker.emptyHint')}
                 </span>
               </div>
             ) : (
@@ -218,7 +222,7 @@ export function MediaPickerModal({
             {uploading ? (
               <div className="text-muted-foreground flex flex-col items-center gap-2 text-xs">
                 <Loader2 className="text-primary size-8 animate-spin" />
-                <span>正在上传并生成高清素材...</span>
+                <span>{t('resources.media.picker.uploading')}</span>
               </div>
             ) : (
               <label className="flex cursor-pointer flex-col items-center gap-3">
@@ -235,10 +239,10 @@ export function MediaPickerModal({
                 </div>
                 <div className="space-y-1">
                   <div className="text-foreground text-xs font-semibold">
-                    点击选择本地图片直接上传并插入
+                    {t('resources.media.picker.dropzoneTitle')}
                   </div>
                   <div className="text-muted-foreground text-[11px]">
-                    上传后将自动同步至媒体资源库供后续重复引用
+                    {t('resources.media.picker.dropzoneHint')}
                   </div>
                 </div>
                 <Button
@@ -246,7 +250,7 @@ export function MediaPickerModal({
                   size="sm"
                   className="pointer-events-none mt-1 h-8 text-xs"
                 >
-                  选择本地文件
+                  {t('resources.media.picker.chooseFile')}
                 </Button>
               </label>
             )}
@@ -257,10 +261,12 @@ export function MediaPickerModal({
           <div className="text-muted-foreground text-[11px]">
             {selectedItem ? (
               <span className="text-foreground inline-block max-w-[240px] truncate font-medium">
-                已选中：{selectedItem.name}
+                {t('resources.media.picker.selected', {
+                  name: selectedItem.name,
+                })}
               </span>
             ) : (
-              <span>双击素材亦可快速应用</span>
+              <span>{t('resources.media.picker.doubleClickHint')}</span>
             )}
           </div>
           <div className="flex items-center gap-2">
@@ -270,7 +276,7 @@ export function MediaPickerModal({
               size="sm"
               onClick={() => onOpenChange(false)}
             >
-              取消
+              {t('common.actions.cancel')}
             </Button>
             <Button
               type="button"
@@ -278,7 +284,7 @@ export function MediaPickerModal({
               onClick={handleConfirmSelect}
               disabled={!selectedItem || activeTab === 'upload'}
             >
-              确认插入
+              {t('resources.media.picker.insert')}
             </Button>
           </div>
         </DialogFooter>

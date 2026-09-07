@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
   AdminPage,
@@ -6,19 +7,21 @@ import {
   AdminPageHeader,
   CreateAction,
 } from '~/admin/ui'
+import { i18n } from '~/core/i18n'
 import { UserTable } from '~/modules/user/components/user-table'
 import { userService } from '~/modules/user/service'
 import type { User } from '~/modules/user/types'
 
 export const meta = () => {
-  return [{ title: '用户管理 - Admin Framework' }]
+  return [{ title: i18n.t('pages.admin.users.metaTitle') }]
 }
 
 export const handle = {
-  breadcrumb: () => ({ label: '用户管理' }),
+  breadcrumb: () => ({ label: i18n.t('pages.admin.users.title') }),
 }
 
 export default function UsersIndexPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
@@ -41,11 +44,11 @@ export default function UsersIndexPage() {
   return (
     <AdminPage>
       <AdminPageHeader
-        title="用户管理"
-        description="管理系统平台成员、分配权限角色及维护账户运行状态"
+        title={t('pages.admin.users.title')}
+        description={t('pages.admin.users.description')}
         actions={
           <CreateAction
-            label="新增用户"
+            label={t('pages.admin.users.createAction')}
             onClick={() => navigate('/admin/users/create')}
             permission="users.create"
           />

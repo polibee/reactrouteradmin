@@ -1,4 +1,5 @@
 import type React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,30 +31,36 @@ export interface AdminConfirmDialogProps {
 export function AdminConfirmDialog({
   open,
   onOpenChange,
-  title = '确认执行此操作？',
+  title,
   description,
   content,
-  confirmText = '确认',
-  cancelText = '取消',
+  confirmText,
+  cancelText,
   variant = 'default',
   loading = false,
   onConfirm,
   trigger,
   children,
 }: AdminConfirmDialogProps) {
+  const { t } = useTranslation()
+  const resolvedTitle = title ?? t('common.confirm.defaultTitle')
+  const resolvedConfirmText = confirmText ?? t('common.actions.confirm')
+  const resolvedCancelText = cancelText ?? t('common.actions.cancel')
   const displayDescription =
-    description ?? content ?? '此操作可能无法撤销，请确认是否继续。'
+    description ?? content ?? t('common.confirm.defaultDescription')
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       {trigger && <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>}
       {children}
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogTitle>{resolvedTitle}</AlertDialogTitle>
           <AlertDialogDescription>{displayDescription}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={loading}>{cancelText}</AlertDialogCancel>
+          <AlertDialogCancel disabled={loading}>
+            {resolvedCancelText}
+          </AlertDialogCancel>
           <AlertDialogAction
             className={
               variant === 'destructive'
@@ -67,7 +74,7 @@ export function AdminConfirmDialog({
               if (onOpenChange) onOpenChange(false)
             }}
           >
-            {loading ? '处理中...' : confirmText}
+            {loading ? t('common.actions.processing') : resolvedConfirmText}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

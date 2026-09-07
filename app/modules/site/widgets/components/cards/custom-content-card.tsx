@@ -6,6 +6,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Badge } from '~/components/ui/badge'
 import {
   Card,
@@ -22,6 +23,7 @@ export interface CustomContentCardProps {
 }
 
 export function CustomContentCard({ widget }: CustomContentCardProps) {
+  const { t } = useTranslation()
   const { density, showCardDividers } = useWidgetContext()
   const isCompact = density === 'compact'
   const jsContainerRef = useRef<HTMLDivElement>(null)
@@ -34,7 +36,9 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
     .map((line) => {
       const parts = line.split('|').map((p) => p.trim())
       return {
-        title: parts[0] || '链接项',
+        title:
+          parts[0] ||
+          t('resources.site.widgets.cards.custom.fallbackLinkTitle'),
         url: parts[1] || '#',
         badge: parts[2] || '',
       }
@@ -67,7 +71,10 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
       return (
         <Card className="text-muted-foreground border p-3 text-center text-xs shadow-xs">
           <ImageIcon className="mx-auto mb-1 size-5 opacity-50" />
-          <span>{widget.title} (未配置图片地址)</span>
+          <span>
+            {widget.title} (
+            {t('resources.site.widgets.cards.custom.imageNotConfigured')})
+          </span>
         </Card>
       )
     }
@@ -130,7 +137,7 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
         <CardContent className={isCompact ? 'p-2 px-2.5' : 'p-3 pt-2'}>
           {parsedLinks.length === 0 ? (
             <p className="text-muted-foreground py-2 text-center text-[10px]">
-              暂未配置超链接项
+              {t('resources.site.widgets.cards.custom.noLinks')}
             </p>
           ) : (
             <div className="divide-border/50 divide-y">
@@ -250,7 +257,8 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
       </CardHeader>
       <CardContent className={isCompact ? 'p-2 px-2.5 pt-1.5' : 'p-3 pt-2'}>
         <div className="text-muted-foreground text-[11px] leading-relaxed whitespace-pre-wrap">
-          {widget.customContent || '暂无自定义内容'}
+          {widget.customContent ||
+            t('resources.site.widgets.cards.custom.noContent')}
         </div>
       </CardContent>
     </Card>

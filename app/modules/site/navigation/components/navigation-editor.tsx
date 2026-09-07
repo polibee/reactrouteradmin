@@ -10,6 +10,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { notify } from '~/admin/ui'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
@@ -34,6 +35,7 @@ import { NavGroupDialog } from './nav-group-dialog'
 import { NavItemDialog } from './nav-item-dialog'
 
 export function NavigationEditor() {
+  const { t } = useTranslation()
   const [items, setItems] = useState<SiteNavItem[]>([])
   const [groups, setGroups] = useState<SiteNavGroup[]>([])
   const [activeTab, setActiveTab] = useState<NavLocation>('header')
@@ -66,7 +68,9 @@ export function NavigationEditor() {
       setGroups(allGroups)
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '加载导航数据失败')
+      notify.error(
+        err?.message || t('resources.site.navigation.toasts.loadFailed'),
+      )
     }
   }
 
@@ -111,29 +115,43 @@ export function NavigationEditor() {
   ) => {
     try {
       await siteService.saveNavGroup(values)
-      notify.success(values.id ? '分类名字已更新' : '分类已新建成功')
+      notify.success(
+        values.id
+          ? t('resources.site.navigation.toasts.groupUpdated')
+          : t('resources.site.navigation.toasts.groupCreated'),
+      )
       loadData()
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '保存分类失败')
+      notify.error(
+        err?.message || t('resources.site.navigation.toasts.groupSaveFailed'),
+      )
     }
   }
 
   const handleDeleteGroup = async (group: SiteNavGroup) => {
     if (
       !confirm(
-        `确定要删除分类「${group.name}」吗？组内关联的菜单项将变更为未归类状态。`,
+        t('resources.site.navigation.toasts.deleteGroupConfirm', {
+          name: group.name,
+        }),
       )
     ) {
       return
     }
     try {
       await siteService.deleteNavGroup(group.id)
-      notify.success(`分类「${group.name}」已删除`)
+      notify.success(
+        t('resources.site.navigation.toasts.groupDeleted', {
+          name: group.name,
+        }),
+      )
       loadData()
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '删除分类失败')
+      notify.error(
+        err?.message || t('resources.site.navigation.toasts.groupDeleteFailed'),
+      )
     }
   }
 
@@ -162,29 +180,37 @@ export function NavigationEditor() {
   ) => {
     try {
       await siteService.saveNavItem(values)
-      notify.success(values.parentId ? '子菜单项已保存' : '主菜单项已保存')
+      notify.success(
+        values.parentId
+          ? t('resources.site.navigation.toasts.childSaved')
+          : t('resources.site.navigation.toasts.itemSaved'),
+      )
       loadData()
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '保存失败')
+      notify.error(err?.message || t('resources.site.shared.saveFailed'))
     }
   }
 
   const handleDeleteItem = async (item: SiteNavItem) => {
     const hasChildren = items.some((i) => i.parentId === item.id)
     const promptMsg = hasChildren
-      ? `警告：菜单项「${item.title}」包含子菜单，删除它将同时级联删除所有所属子菜单！确定移除吗？`
-      : `确定要移除导航项「${item.title}」吗？`
+      ? t('resources.site.navigation.toasts.deleteItemWithChildren', {
+          name: item.title,
+        })
+      : t('resources.site.navigation.toasts.deleteItemConfirm', {
+          name: item.title,
+        })
 
     if (!confirm(promptMsg)) return
 
     try {
       await siteService.deleteNavItem(item.id)
-      notify.success('导航项已移除')
+      notify.success(t('resources.site.navigation.toasts.itemDeleted'))
       loadData()
     } catch (e: unknown) {
       const err = e as Error
-      notify.error(err?.message || '删除失败')
+      notify.error(err?.message || t('resources.site.shared.deleteFailed'))
     }
   }
 
@@ -192,9 +218,17 @@ export function NavigationEditor() {
     try {
       await siteService.saveNavItem({ ...item, enabled })
       setItems(items.map((i) => (i.id === item.id ? { ...i, enabled } : i)))
-      notify.success(`已${enabled ? '启用' : '禁用'}「${item.title}」`)
+      notify.success(
+        enabled
+          ? t('resources.site.navigation.toasts.itemEnabled', {
+              name: item.title,
+            })
+          : t('resources.site.navigation.toasts.itemDisabled', {
+              name: item.title,
+            }),
+      )
     } catch {
-      notify.error('状态更新失败')
+      notify.error(t('resources.site.shared.statusUpdateFailed'))
     }
   }
 
@@ -202,9 +236,17 @@ export function NavigationEditor() {
     try {
       await siteService.saveNavGroup({ ...group, enabled })
       setGroups(groups.map((g) => (g.id === group.id ? { ...g, enabled } : g)))
-      notify.success(`已${enabled ? '启用' : '禁用'}分类「${group.name}」`)
+      notify.success(
+        enabled
+          ? t('resources.site.navigation.toasts.groupEnabled', {
+              name: group.name,
+            })
+          : t('resources.site.navigation.toasts.groupDisabled', {
+              name: group.name,
+            }),
+      )
     } catch {
-      notify.error('状态更新失败')
+      notify.error(t('resources.site.shared.statusUpdateFailed'))
     }
   }
 
@@ -215,10 +257,10 @@ export function NavigationEditor() {
         <div>
           <h3 className="text-foreground flex items-center gap-2 text-sm font-semibold">
             <Layers className="text-primary size-4" />
-            导航链路与分类子菜单工作台
+            {t('resources.site.navigation.title')}
           </h3>
           <p className="text-muted-foreground mt-0.5 text-xs">
-            可视化管理页眉/页脚分类名字、添加多级子菜单树、定制下拉展示与链接跳转规则
+            {t('resources.site.navigation.description')}
           </p>
         </div>
 
@@ -230,7 +272,7 @@ export function NavigationEditor() {
             className="h-8 gap-1 text-xs"
           >
             <FolderPlus className="size-3.5" />
-            新建分类名字
+            {t('resources.site.navigation.actions.newGroup')}
           </Button>
 
           <Button
@@ -239,7 +281,7 @@ export function NavigationEditor() {
             className="h-8 gap-1 text-xs"
           >
             <Plus className="size-3.5" />
-            新增菜单项
+            {t('resources.site.navigation.actions.newItem')}
           </Button>
         </div>
       </div>
@@ -251,12 +293,16 @@ export function NavigationEditor() {
       >
         <TabsList className="grid w-full max-w-[400px] grid-cols-2">
           <TabsTrigger value="header" className="text-xs">
-            页眉导航 (Header · {headerTopLevel.length} 顶级 /{' '}
-            {headerItems.length} 总项)
+            {t('resources.site.navigation.tabs.header', {
+              topLevel: headerTopLevel.length,
+              total: headerItems.length,
+            })}
           </TabsTrigger>
           <TabsTrigger value="footer" className="text-xs">
-            页脚分组 (Footer · {footerGroups.length} 分类 / {footerItems.length}{' '}
-            链接)
+            {t('resources.site.navigation.tabs.footer', {
+              groups: footerGroups.length,
+              items: footerItems.length,
+            })}
           </TabsTrigger>
         </TabsList>
 
@@ -267,11 +313,11 @@ export function NavigationEditor() {
           <div className="bg-card flex items-center justify-between rounded-lg border p-3 text-xs">
             <div className="space-y-0.5">
               <span className="text-foreground font-medium">
-                页眉分类名字库：
+                {t('resources.site.navigation.headerGroupsLabel')}
               </span>
               <span className="text-muted-foreground ml-1">
                 {headerGroups.length === 0
-                  ? '暂未创建页眉分类'
+                  ? t('resources.site.navigation.noHeaderGroups')
                   : headerGroups.map((g) => g.name).join('、')}
               </span>
             </div>
@@ -282,7 +328,7 @@ export function NavigationEditor() {
               className="text-primary h-7 gap-1 text-xs"
             >
               <FolderPlus className="size-3" />
-              管理页眉分类
+              {t('resources.site.navigation.actions.manageHeaderGroups')}
             </Button>
           </div>
 
@@ -291,11 +337,10 @@ export function NavigationEditor() {
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-sm font-semibold">
-                    前台顶部主导航栏结构树
+                    {t('resources.site.navigation.headerTreeTitle')}
                   </CardTitle>
                   <CardDescription className="text-xs">
-                    包含直接跳转项与带子菜单的下拉项（Dropdown
-                    Menu）。在前台页面顶部按排序权重自左向右排列。
+                    {t('resources.site.navigation.headerTreeDescription')}
                   </CardDescription>
                 </div>
                 <Button
@@ -305,7 +350,7 @@ export function NavigationEditor() {
                   onClick={() => handleOpenCreateItem('header')}
                 >
                   <Plus className="size-3" />
-                  添加顶级菜单
+                  {t('resources.site.navigation.actions.addTopItem')}
                 </Button>
               </div>
             </CardHeader>
@@ -313,13 +358,13 @@ export function NavigationEditor() {
             <CardContent className="space-y-3 p-4">
               {headerTopLevel.length === 0 ? (
                 <div className="text-muted-foreground space-y-2 py-10 text-center text-xs">
-                  <p>暂无页眉菜单项</p>
+                  <p>{t('resources.site.navigation.noHeaderItems')}</p>
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={() => handleOpenCreateItem('header')}
                   >
-                    立即添加第一个主菜单
+                    {t('resources.site.navigation.actions.addFirstItem')}
                   </Button>
                 </div>
               ) : (
@@ -349,19 +394,29 @@ export function NavigationEditor() {
                                     variant="default"
                                     className="h-4 px-1.5 py-0 text-[10px] font-normal"
                                   >
-                                    包含 {childItems.length} 个子菜单 (下拉)
+                                    {t(
+                                      'resources.site.navigation.badges.withChildren',
+                                      { total: childItems.length },
+                                    )}
                                   </Badge>
                                 ) : (
                                   <Badge
                                     variant="outline"
                                     className="text-muted-foreground h-4 px-1 py-0 text-[10px] font-normal"
                                   >
-                                    直链页面
+                                    {t(
+                                      'resources.site.navigation.badges.directLink',
+                                    )}
                                   </Badge>
                                 )}
                                 {parent.group && (
                                   <span className="text-muted-foreground bg-muted rounded px-1.5 py-0.5 text-[10px]">
-                                    分类: {parent.group}
+                                    {t(
+                                      'resources.site.navigation.badges.group',
+                                      {
+                                        name: parent.group,
+                                      },
+                                    )}
                                   </span>
                                 )}
                               </div>
@@ -391,7 +446,7 @@ export function NavigationEditor() {
                               }
                             >
                               <Plus className="size-3" />
-                              添加子菜单
+                              {t('resources.site.navigation.actions.addChild')}
                             </Button>
 
                             <div className="ml-2 flex items-center gap-1.5">
@@ -408,7 +463,9 @@ export function NavigationEditor() {
                               size="icon"
                               onClick={() => handleEditItem(parent)}
                               className="text-muted-foreground hover:text-foreground size-7"
-                              title="编辑此项"
+                              title={t(
+                                'resources.site.navigation.tooltips.editItem',
+                              )}
                             >
                               <Edit2 className="size-3.5" />
                             </Button>
@@ -418,7 +475,9 @@ export function NavigationEditor() {
                               size="icon"
                               onClick={() => handleDeleteItem(parent)}
                               className="text-muted-foreground hover:text-destructive size-7"
-                              title="删除此项"
+                              title={t(
+                                'resources.site.navigation.tooltips.deleteItem',
+                              )}
                             >
                               <Trash2 className="size-3.5" />
                             </Button>
@@ -447,7 +506,9 @@ export function NavigationEditor() {
                                           className="h-3.5 px-1 py-0 text-[9px] font-normal"
                                         >
                                           <ExternalLink className="mr-0.5 size-2.5" />
-                                          新窗口
+                                          {t(
+                                            'resources.site.navigation.badges.newWindow',
+                                          )}
                                         </Badge>
                                       )}
                                     </div>
@@ -507,10 +568,10 @@ export function NavigationEditor() {
           <div className="bg-card flex items-center justify-between rounded-lg border p-3 text-xs">
             <div>
               <span className="text-foreground font-semibold">
-                页脚导航分类与列控制中心
+                {t('resources.site.navigation.footerTitle')}
               </span>
               <p className="text-muted-foreground mt-0.5 text-[11px]">
-                在前台页脚以现代化多列形式呈现。可在此自由【添加新分类】、【重命名/修改分类名】或【删除分类】
+                {t('resources.site.navigation.footerDescription')}
               </p>
             </div>
             <Button
@@ -519,7 +580,7 @@ export function NavigationEditor() {
               className="h-7 gap-1 text-xs"
             >
               <FolderPlus className="size-3" />
-              添加新页脚分类
+              {t('resources.site.navigation.actions.addFooterGroup')}
             </Button>
           </div>
 
@@ -543,7 +604,9 @@ export function NavigationEditor() {
                           {group.name}
                         </CardTitle>
                         <span className="text-muted-foreground bg-background rounded border px-1 font-mono text-[10px]">
-                          排序: {group.sort}
+                          {t('resources.site.navigation.badges.sort', {
+                            sort: group.sort,
+                          })}
                         </span>
                       </div>
 
@@ -553,14 +616,18 @@ export function NavigationEditor() {
                           onCheckedChange={(checked) =>
                             handleToggleGroup(group, checked)
                           }
-                          title="在前台显隐该分类"
+                          title={t(
+                            'resources.site.navigation.tooltips.toggleGroup',
+                          )}
                         />
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => handleEditGroup(group)}
                           className="text-muted-foreground hover:text-foreground size-7"
-                          title="修改分类名字与排序"
+                          title={t(
+                            'resources.site.navigation.tooltips.editGroup',
+                          )}
                         >
                           <Edit2 className="size-3.5" />
                         </Button>
@@ -569,7 +636,9 @@ export function NavigationEditor() {
                           size="icon"
                           onClick={() => handleDeleteGroup(group)}
                           className="text-muted-foreground hover:text-destructive size-7"
-                          title="删除此分类"
+                          title={t(
+                            'resources.site.navigation.tooltips.deleteGroup',
+                          )}
                         >
                           <Trash2 className="size-3.5" />
                         </Button>
@@ -586,7 +655,7 @@ export function NavigationEditor() {
                     <div className="divide-border/60 space-y-1.5 divide-y">
                       {groupItems.length === 0 ? (
                         <div className="text-muted-foreground py-6 text-center text-[11px]">
-                          该分类下暂无链接
+                          {t('resources.site.navigation.noGroupLinks')}
                         </div>
                       ) : (
                         groupItems.map((item) => (
@@ -645,7 +714,9 @@ export function NavigationEditor() {
                       className="text-primary hover:bg-primary/5 mt-2 h-7 w-full gap-1 border-dashed text-xs"
                     >
                       <Plus className="size-3" />
-                      添加「{group.name}」内链接
+                      {t('resources.site.navigation.actions.addLinkToGroup', {
+                        name: group.name,
+                      })}
                     </Button>
                   </CardContent>
                 </Card>
@@ -660,7 +731,7 @@ export function NavigationEditor() {
             <Card className="bg-muted/20 border-dashed">
               <CardHeader className="p-3">
                 <CardTitle className="text-muted-foreground text-xs font-medium">
-                  未归类页脚链接
+                  {t('resources.site.navigation.ungroupedTitle')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-3 pt-0">
@@ -690,7 +761,7 @@ export function NavigationEditor() {
                           className="h-7 text-xs"
                           onClick={() => handleEditItem(item)}
                         >
-                          分配分类
+                          {t('resources.site.navigation.actions.assignGroup')}
                         </Button>
                       </div>
                     ))}

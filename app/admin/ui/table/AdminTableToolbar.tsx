@@ -1,5 +1,6 @@
 import type { Table } from '@tanstack/react-table'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
 import {
   DropdownMenu,
@@ -24,12 +25,15 @@ export interface AdminTableToolbarProps<TData> {
 export function AdminTableToolbar<TData>({
   table,
   searchKey,
-  searchPlaceholder = '搜索...',
+  searchPlaceholder,
   globalFilter,
   onGlobalFilterChange,
   actions,
   filters,
 }: AdminTableToolbarProps<TData>) {
+  const { t } = useTranslation()
+  const resolvedSearchPlaceholder =
+    searchPlaceholder ?? t('common.admin.searchPlaceholder')
   const isFiltered = table.getState().columnFilters.length > 0 || !!globalFilter
 
   return (
@@ -39,7 +43,7 @@ export function AdminTableToolbar<TData>({
           <div className="relative w-full sm:w-64 md:w-80">
             <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
             <Input
-              placeholder={searchPlaceholder}
+              placeholder={resolvedSearchPlaceholder}
               value={
                 (table.getColumn(searchKey)?.getFilterValue() as string) ?? ''
               }
@@ -53,7 +57,7 @@ export function AdminTableToolbar<TData>({
           <div className="relative w-full sm:w-64 md:w-80">
             <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
             <Input
-              placeholder={searchPlaceholder}
+              placeholder={resolvedSearchPlaceholder}
               value={globalFilter ?? ''}
               onChange={(event) => onGlobalFilterChange(event.target.value)}
               className="h-9 pl-8"
@@ -72,7 +76,7 @@ export function AdminTableToolbar<TData>({
             }}
             className="text-muted-foreground h-9 px-2 text-sm lg:px-3"
           >
-            重置
+            {t('common.actions.reset')}
             <X className="ml-2 h-4 w-4" />
           </Button>
         )}
@@ -89,11 +93,13 @@ export function AdminTableToolbar<TData>({
               className="ml-auto hidden h-9 lg:flex"
             >
               <SlidersHorizontal className="mr-2 h-4 w-4" />
-              列设置
+              {t('common.actions.columnSettings')}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[180px]">
-            <DropdownMenuLabel>显示列</DropdownMenuLabel>
+            <DropdownMenuLabel>
+              {t('common.actions.showColumns')}
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
             {table
               .getAllColumns()

@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import {
   ActionButton,
   SelectField,
@@ -37,6 +38,7 @@ export function AdSlotDialog({
   onSubmit,
   loading = false,
 }: AdSlotDialogProps) {
+  const { t } = useTranslation()
   const isEditing = Boolean(slot)
 
   const form = useForm<SiteAdSlotFormValues>({
@@ -86,10 +88,13 @@ export function AdSlotDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{isEditing ? '编辑广告位' : '新增广告位'}</DialogTitle>
+          <DialogTitle>
+            {isEditing
+              ? t('resources.site.operations.adDialog.editTitle')
+              : t('resources.site.operations.adDialog.createTitle')}
+          </DialogTitle>
           <DialogDescription>
-            配置前台预留槽位、推广形式（纯文本链接、海报图片或三方广告 HTML
-            脚本）。
+            {t('resources.site.operations.adDialog.description')}
           </DialogDescription>
         </DialogHeader>
 
@@ -105,10 +110,12 @@ export function AdSlotDialog({
                 onClick={() => onOpenChange(false)}
                 disabled={loading}
               >
-                取消
+                {t('common.actions.cancel')}
               </ActionButton>
               <ActionButton type="submit" loading={loading}>
-                {isEditing ? '保存修改' : '立即创建'}
+                {isEditing
+                  ? t('resources.site.shared.saveChanges')
+                  : t('resources.site.shared.createNow')}
               </ActionButton>
             </div>
           }
@@ -116,15 +123,19 @@ export function AdSlotDialog({
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <TextField
               name="title"
-              label="广告位名称"
-              placeholder="例如：文章列表通栏推广"
+              label={t('resources.site.operations.adDialog.nameLabel')}
+              placeholder={t(
+                'resources.site.operations.adDialog.namePlaceholder',
+              )}
               required
             />
             <TextField
               name="slotKey"
-              label="槽位标识 (SlotKey)"
-              placeholder="例如：post_top, sidebar_footer"
-              description="前端代码通过此标识调用"
+              label={t('resources.site.operations.adDialog.slotKeyLabel')}
+              placeholder={t(
+                'resources.site.operations.adDialog.slotKeyPlaceholder',
+              )}
+              description={t('resources.site.operations.adDialog.slotKeyHint')}
               required
             />
           </div>
@@ -132,16 +143,28 @@ export function AdSlotDialog({
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <SelectField
               name="adType"
-              label="广告呈现形态"
+              label={t('resources.site.operations.adDialog.adTypeLabel')}
               options={[
-                { label: '文字链接推广 (Text)', value: 'text' },
-                { label: '海报图片推广 (Image)', value: 'image' },
-                { label: '自定义 HTML / JS 脚本 (HTML)', value: 'html' },
+                {
+                  label: t('resources.site.operations.adDialog.adTypeText'),
+                  value: 'text',
+                },
+                {
+                  label: t('resources.site.operations.adDialog.adTypeImage'),
+                  value: 'image',
+                },
+                {
+                  label: t('resources.site.operations.adDialog.adTypeHtml'),
+                  value: 'html',
+                },
               ]}
               required
             />
             <div className="pt-6">
-              <SwitchField name="enabled" label="立即启用投放" />
+              <SwitchField
+                name="enabled"
+                label={t('resources.site.operations.adDialog.enabledLabel')}
+              />
             </div>
           </div>
 
@@ -149,13 +172,15 @@ export function AdSlotDialog({
             <div className="space-y-3">
               <TextField
                 name="text"
-                label="推广文案内容"
-                placeholder="例如：⚡ 架构升级全栈指南，即刻查阅..."
+                label={t('resources.site.operations.adDialog.textLabel')}
+                placeholder={t(
+                  'resources.site.operations.adDialog.textPlaceholder',
+                )}
                 required
               />
               <TextField
                 name="targetUrl"
-                label="跳转目标网址 (URL)"
+                label={t('resources.site.operations.adDialog.targetUrlLabel')}
                 placeholder="https://..."
               />
             </div>
@@ -165,13 +190,13 @@ export function AdSlotDialog({
             <div className="space-y-3">
               <TextField
                 name="imageUrl"
-                label="海报图片图片网址 (Image URL)"
+                label={t('resources.site.operations.adDialog.imageUrlLabel')}
                 placeholder="https://example.com/banner.png"
                 required
               />
               <TextField
                 name="targetUrl"
-                label="点击跳转网址 (Target URL)"
+                label={t('resources.site.operations.adDialog.clickUrlLabel')}
                 placeholder="https://..."
               />
             </div>
@@ -180,7 +205,7 @@ export function AdSlotDialog({
           {adType === 'html' && (
             <TextareaField
               name="htmlContent"
-              label="第三方 HTML/联盟广告嵌入代码"
+              label={t('resources.site.operations.adDialog.htmlLabel')}
               placeholder="<div id='ad-partner-widget'>...</div>"
               rows={4}
               required

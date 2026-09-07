@@ -1,4 +1,5 @@
 // biome-ignore-all lint/suspicious/useAwait: async signatures reserved for a future HTTP data source
+import { i18n } from '~/core/i18n'
 import { type IUserRepository, userRepository } from './repository'
 import type { User, UserFormData } from './types'
 
@@ -20,7 +21,9 @@ export class UserService {
       (u) => u.email.toLowerCase() === data.email.toLowerCase(),
     )
     if (exists) {
-      throw new Error(`邮箱 "${data.email}" 已被使用，请更换邮箱`)
+      throw new Error(
+        i18n.t('resources.users.errors.emailInUse', { email: data.email }),
+      )
     }
     return this.repo.create(data)
   }
@@ -33,7 +36,11 @@ export class UserService {
           u.id !== id && u.email.toLowerCase() === data.email?.toLowerCase(),
       )
       if (conflict) {
-        throw new Error(`邮箱 "${data.email}" 已被其他用户占用`)
+        throw new Error(
+          i18n.t('resources.users.errors.emailTakenByOther', {
+            email: data.email,
+          }),
+        )
       }
     }
     return this.repo.update(id, data)

@@ -1,3 +1,4 @@
+import { i18n } from '~/core/i18n'
 import { defineModule } from '../../admin/core/module/module'
 import { moduleRegistry } from '../../admin/core/module/registry'
 import { MediaResource } from './resource'
@@ -16,9 +17,8 @@ export * from './types'
 
 export const MediaModule = defineModule({
   name: 'media',
-  label: '媒体与资产中心',
-  description:
-    '提供图片、文档、视频、压缩包等多媒体文件的集中式存储、分类管理、拖拽上传与属性检视',
+  label: i18n.t('resources.media.resource.moduleLabel'),
+  description: i18n.t('resources.media.resource.moduleDescription'),
   version: '1.0.0',
   resources: [MediaResource],
   features: ['grid', 'table', 'upload', 'picker'],
