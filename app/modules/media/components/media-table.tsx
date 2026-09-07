@@ -1,13 +1,8 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import type { MediaItem } from '../types'
-import {
-  DataTable,
-  AdminBadge,
-  DeleteAction,
-  ViewAction,
-} from '~/admin/ui'
-import { FileText, Film, Archive, File, Copy, Check } from 'lucide-react'
+import { Archive, Check, Copy, File, FileText, Film } from 'lucide-react'
 import { useState } from 'react'
+import { AdminBadge, DataTable, DeleteAction, ViewAction } from '~/admin/ui'
+import type { MediaItem } from '../types'
 
 export interface MediaTableProps {
   data: MediaItem[]
@@ -35,7 +30,7 @@ export function MediaTable({
     const k = 1024
     const sizes = ['B', 'KB', 'MB', 'GB']
     const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return `${(bytes / Math.pow(k, i)).toFixed(1)} ${sizes[i]}`
+    return `${(bytes / k ** i).toFixed(1)} ${sizes[i]}`
   }
 
   const handleCopy = (item: MediaItem) => {
@@ -51,12 +46,14 @@ export function MediaTable({
       cell: ({ row }) => {
         const isSelected = selectedIds.includes(row.original.id)
         return (
+          // biome-ignore lint/a11y/useKeyWithClickEvents: custom checkbox cell, selection is also available via table row interactions
+          // biome-ignore lint/a11y/noStaticElementInteractions: custom checkbox cell, selection is also available via table row interactions
           <div
             onClick={(e) => {
               e.stopPropagation()
               onToggleSelect(row.original.id)
             }}
-            className={`size-4 rounded border flex items-center justify-center cursor-pointer transition-colors ${
+            className={`flex size-4 cursor-pointer items-center justify-center rounded border transition-colors ${
               isSelected
                 ? 'bg-primary border-primary text-primary-foreground'
                 : 'border-border hover:border-primary'
@@ -73,16 +70,18 @@ export function MediaTable({
       cell: ({ row }) => {
         const item = row.original
         return (
+          // biome-ignore lint/a11y/useKeyWithClickEvents: media cell opens the item inspector
+          // biome-ignore lint/a11y/noStaticElementInteractions: media cell opens the item inspector
           <div
-            className="flex items-center gap-3 cursor-pointer group"
+            className="group flex cursor-pointer items-center gap-3"
             onClick={() => onSelectItem(item)}
           >
-            <div className="size-10 rounded-lg overflow-hidden border bg-muted/30 shrink-0 flex items-center justify-center">
+            <div className="bg-muted/30 flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border">
               {item.type === 'image' ? (
                 <img
                   src={item.thumbnailUrl || item.url}
                   alt={item.name}
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover"
                 />
               ) : item.type === 'document' ? (
                 <FileText className="size-5 text-emerald-500" />
@@ -91,14 +90,14 @@ export function MediaTable({
               ) : item.type === 'archive' ? (
                 <Archive className="size-5 text-amber-500" />
               ) : (
-                <File className="size-5 text-muted-foreground" />
+                <File className="text-muted-foreground size-5" />
               )}
             </div>
             <div>
-              <div className="font-medium text-foreground group-hover:text-primary transition-colors truncate max-w-[240px]">
+              <div className="text-foreground group-hover:text-primary max-w-[240px] truncate font-medium transition-colors">
                 {item.name}
               </div>
-              <div className="text-[11px] text-muted-foreground font-mono">
+              <div className="text-muted-foreground font-mono text-[11px]">
                 {item.mimeType}
               </div>
             </div>
@@ -129,7 +128,7 @@ export function MediaTable({
       accessorKey: 'size',
       header: '文件大小',
       cell: ({ row }) => (
-        <span className="text-xs font-mono text-muted-foreground">
+        <span className="text-muted-foreground font-mono text-xs">
           {formatSize(row.original.size)}
         </span>
       ),
@@ -138,7 +137,7 @@ export function MediaTable({
       accessorKey: 'folder',
       header: '存储分组',
       cell: ({ row }) => (
-        <span className="text-xs bg-muted/60 px-2 py-0.5 rounded text-muted-foreground">
+        <span className="bg-muted/60 text-muted-foreground rounded px-2 py-0.5 text-xs">
           {row.original.folder || '未分组'}
         </span>
       ),
@@ -149,7 +148,7 @@ export function MediaTable({
       cell: ({ row }) => {
         const d = row.original.createdAt
         return (
-          <span className="text-xs font-mono text-muted-foreground">
+          <span className="text-muted-foreground font-mono text-xs">
             {d ? d.slice(0, 10) : '-'}
           </span>
         )
@@ -165,7 +164,7 @@ export function MediaTable({
             <button
               type="button"
               onClick={() => handleCopy(item)}
-              className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+              className="hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer rounded p-1.5 transition-colors"
               title="复制外链"
             >
               {copiedId === item.id ? (

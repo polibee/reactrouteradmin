@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router'
 import {
-  DashboardPage,
-  DashboardPageHeader,
-  DashboardPageContent,
   DashboardCard,
-  LoadingState,
+  DashboardPage,
+  DashboardPageContent,
+  DashboardPageHeader,
   EmptyState,
+  LoadingState,
   notify,
 } from '~/admin/ui'
 import { RoleForm } from '~/modules/role/components/role-form'
 import { roleService } from '~/modules/role/service'
 import type { Role, RoleFormValues } from '~/modules/role/types'
-import { useNavigate, useParams } from 'react-router'
 
 export const meta = () => {
   return [{ title: '编辑角色 - Admin Framework' }]
@@ -73,8 +73,9 @@ export default function RoleEditPage() {
           description="该角色可能已被移除或传入的 ID 无效"
           action={
             <button
+              type="button"
               onClick={() => navigate('/admin/roles')}
-              className="text-primary text-sm underline cursor-pointer"
+              className="text-primary cursor-pointer text-sm underline"
             >
               返回角色列表
             </button>

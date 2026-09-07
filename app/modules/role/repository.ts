@@ -1,3 +1,4 @@
+// biome-ignore-all lint/suspicious/useAwait: async signatures reserved for a future HTTP data source
 import type { Role } from './types'
 
 export interface IRoleRepository {
@@ -5,7 +6,10 @@ export interface IRoleRepository {
   findById(id: string): Promise<Role | null>
   findByCode(code: string): Promise<Role | null>
   create(data: Omit<Role, 'id' | 'createdAt' | 'updatedAt'>): Promise<Role>
-  update(id: string, data: Partial<Omit<Role, 'id' | 'createdAt' | 'updatedAt'>>): Promise<Role>
+  update(
+    id: string,
+    data: Partial<Omit<Role, 'id' | 'createdAt' | 'updatedAt'>>,
+  ): Promise<Role>
   delete(id: string): Promise<boolean>
 }
 

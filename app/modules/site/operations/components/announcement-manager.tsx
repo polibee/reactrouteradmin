@@ -1,24 +1,34 @@
-import { useState, useEffect } from 'react'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/components/ui/card'
-import { Switch } from '~/components/ui/switch'
-import { Badge } from '~/components/ui/badge'
-import { Input } from '~/components/ui/input'
-import { Label } from '~/components/ui/label'
-import { Textarea } from '~/components/ui/textarea'
-import { Button } from '~/components/ui/button'
-import { siteService } from '../../service'
-import type { SiteAnnouncement, AnnouncementType, SiteAnnouncementFormValues } from '../../types'
-import { notify, ConfirmDialog } from '~/admin/ui'
 import {
-  BellRing,
-  MessageSquare,
   AlertCircle,
-  Sparkles,
-  Megaphone,
-  Plus,
+  BellRing,
   Edit2,
+  Megaphone,
+  MessageSquare,
+  Plus,
+  Sparkles,
   Trash2,
 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ConfirmDialog, notify } from '~/admin/ui'
+import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '~/components/ui/card'
+import { Input } from '~/components/ui/input'
+import { Label } from '~/components/ui/label'
+import { Switch } from '~/components/ui/switch'
+import { Textarea } from '~/components/ui/textarea'
+import { siteService } from '../../service'
+import type {
+  AnnouncementType,
+  SiteAnnouncement,
+  SiteAnnouncementFormValues,
+} from '../../types'
 import { AnnouncementDialog } from './announcement-dialog'
 
 export function AnnouncementManager() {
@@ -32,7 +42,9 @@ export function AnnouncementManager() {
   const [dialogLoading, setDialogLoading] = useState(false)
 
   // Delete state
-  const [deleteTarget, setDeleteTarget] = useState<SiteAnnouncement | null>(null)
+  const [deleteTarget, setDeleteTarget] = useState<SiteAnnouncement | null>(
+    null,
+  )
   const [deleteLoading, setDeleteLoading] = useState(false)
 
   const loadData = async () => {
@@ -45,6 +57,7 @@ export function AnnouncementManager() {
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only initial load
   useEffect(() => {
     loadData()
   }, [])
@@ -151,19 +164,29 @@ export function AnnouncementManager() {
   }
 
   if (loading) {
-    return <div className="text-center py-8 text-xs text-muted-foreground">加载通知配置中...</div>
+    return (
+      <div className="text-muted-foreground py-8 text-center text-xs">
+        加载通知配置中...
+      </div>
+    )
   }
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between pb-1">
         <div>
-          <h3 className="text-sm font-semibold text-foreground">运营通知公告管理</h3>
-          <p className="text-xs text-muted-foreground">
+          <h3 className="text-foreground text-sm font-semibold">
+            运营通知公告管理
+          </h3>
+          <p className="text-muted-foreground text-xs">
             集中调控前台吸顶 Banner、弹窗公告、右下角浮动卡片和走马灯提示
           </p>
         </div>
-        <Button size="sm" onClick={handleOpenCreate} className="h-8 text-xs gap-1.5">
+        <Button
+          size="sm"
+          onClick={handleOpenCreate}
+          className="h-8 gap-1.5 text-xs"
+        >
           <Plus className="size-3.5" />
           新增运营通知
         </Button>
@@ -171,9 +194,14 @@ export function AnnouncementManager() {
 
       <div className="grid grid-cols-1 gap-4">
         {list.length === 0 ? (
-          <div className="text-center py-10 border rounded-lg border-dashed">
-            <p className="text-xs text-muted-foreground">暂无运营通告数据</p>
-            <Button size="sm" variant="outline" onClick={handleOpenCreate} className="mt-3 text-xs">
+          <div className="rounded-lg border border-dashed py-10 text-center">
+            <p className="text-muted-foreground text-xs">暂无运营通告数据</p>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleOpenCreate}
+              className="mt-3 text-xs"
+            >
               新增第一条通知
             </Button>
           </div>
@@ -183,20 +211,23 @@ export function AnnouncementManager() {
             const Icon = meta.icon
 
             return (
-              <Card key={item.id} className="shadow-xs border">
-                <CardHeader className="p-4 pb-3 border-b flex flex-col sm:flex-row sm:items-center justify-between gap-3 space-y-0">
+              <Card key={item.id} className="border shadow-xs">
+                <CardHeader className="flex flex-col justify-between gap-3 space-y-0 border-b p-4 pb-3 sm:flex-row sm:items-center">
                   <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+                    <div className="bg-primary/10 text-primary shrink-0 rounded-lg p-2">
                       <Icon className="size-4" />
                     </div>
                     <div>
-                      <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                      <CardTitle className="flex items-center gap-2 text-sm font-semibold">
                         {meta.label}
-                        <Badge variant="outline" className="text-[10px] font-normal">
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] font-normal"
+                        >
                           {meta.badge}
                         </Badge>
                       </CardTitle>
-                      <CardDescription className="text-xs mt-0.5">
+                      <CardDescription className="mt-0.5 text-xs">
                         {meta.desc}
                       </CardDescription>
                     </div>
@@ -207,9 +238,14 @@ export function AnnouncementManager() {
                       <Switch
                         id={`switch-${item.id}`}
                         checked={item.enabled}
-                        onCheckedChange={(checked) => handleToggle(item, checked)}
+                        onCheckedChange={(checked) =>
+                          handleToggle(item, checked)
+                        }
                       />
-                      <Label htmlFor={`switch-${item.id}`} className="text-xs font-medium cursor-pointer">
+                      <Label
+                        htmlFor={`switch-${item.id}`}
+                        className="cursor-pointer text-xs font-medium"
+                      >
                         {item.enabled ? '已开启' : '已关闭'}
                       </Label>
                     </div>
@@ -224,7 +260,7 @@ export function AnnouncementManager() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+                      className="text-muted-foreground hover:text-foreground h-8 w-8 p-0"
                       title="编辑通知"
                       onClick={() => handleOpenEdit(item)}
                     >
@@ -233,7 +269,7 @@ export function AnnouncementManager() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="h-8 w-8 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
+                      className="text-destructive hover:text-destructive hover:bg-destructive/10 h-8 w-8 p-0"
                       title="删除通知"
                       onClick={() => setDeleteTarget(item)}
                     >
@@ -242,8 +278,8 @@ export function AnnouncementManager() {
                   </div>
                 </CardHeader>
 
-                <CardContent className="p-4 space-y-3">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <CardContent className="space-y-3 p-4">
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                     <div className="space-y-1">
                       <Label className="text-xs">通告主标题</Label>
                       <Input
@@ -251,7 +287,9 @@ export function AnnouncementManager() {
                         onChange={(e) =>
                           setList(
                             list.map((a) =>
-                              a.id === item.id ? { ...a, title: e.target.value } : a,
+                              a.id === item.id
+                                ? { ...a, title: e.target.value }
+                                : a,
                             ),
                           )
                         }
@@ -268,7 +306,9 @@ export function AnnouncementManager() {
                           onChange={(e) =>
                             setList(
                               list.map((a) =>
-                                a.id === item.id ? { ...a, linkText: e.target.value } : a,
+                                a.id === item.id
+                                  ? { ...a, linkText: e.target.value }
+                                  : a,
                               ),
                             )
                           }
@@ -283,11 +323,13 @@ export function AnnouncementManager() {
                           onChange={(e) =>
                             setList(
                               list.map((a) =>
-                                a.id === item.id ? { ...a, linkUrl: e.target.value } : a,
+                                a.id === item.id
+                                  ? { ...a, linkUrl: e.target.value }
+                                  : a,
                               ),
                             )
                           }
-                          className="h-8 text-xs font-mono"
+                          className="h-8 font-mono text-xs"
                           placeholder="/p/about"
                         />
                       </div>
@@ -301,20 +343,24 @@ export function AnnouncementManager() {
                       onChange={(e) =>
                         setList(
                           list.map((a) =>
-                            a.id === item.id ? { ...a, content: e.target.value } : a,
+                            a.id === item.id
+                              ? { ...a, content: e.target.value }
+                              : a,
                           ),
                         )
                       }
                       rows={2}
-                      className="text-xs resize-none"
+                      className="resize-none text-xs"
                       placeholder="在此输入需要向用户公布的详细说明内容..."
                     />
                   </div>
 
                   {item.type === 'modal' && (
-                    <div className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
+                    <div className="text-muted-foreground flex items-center gap-2 pt-1 text-xs">
                       <AlertCircle className="size-3.5 text-amber-600" />
-                      <span>该弹窗默认启用「会话内仅提示一次」机制，关闭后刷新同一会话不再重复弹出干扰用户。</span>
+                      <span>
+                        该弹窗默认启用「会话内仅提示一次」机制，关闭后刷新同一会话不再重复弹出干扰用户。
+                      </span>
                     </div>
                   )}
                 </CardContent>

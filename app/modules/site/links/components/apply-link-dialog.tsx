@@ -1,26 +1,30 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Check, CheckCircle2, Link2, Loader2, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { notify } from '~/admin/ui'
+import { Button } from '~/components/ui/button'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '~/components/ui/dialog'
 import { Input } from '~/components/ui/input'
-import { Textarea } from '~/components/ui/textarea'
 import { Label } from '~/components/ui/label'
-import { Button } from '~/components/ui/button'
+import { Textarea } from '~/components/ui/textarea'
 import { siteService } from '../../service'
-import { notify } from '~/admin/ui'
-import { CheckCircle2, Link2, ShieldCheck, Check, Loader2 } from 'lucide-react'
 
 const visitorApplySchema = z.object({
   name: z.string().min(2, '网站名称至少 2 个字符'),
   url: z.string().url('请输入有效的网址 (需包含 http:// 或 https://)'),
-  logo: z.string().url('请输入有效的 Logo 图标网址').optional().or(z.literal('')),
+  logo: z
+    .string()
+    .url('请输入有效的 Logo 图标网址')
+    .optional()
+    .or(z.literal('')),
   description: z.string().max(200, '网站描述在 200 字以内').optional(),
   email: z.string().email('请输入有效的站长联系邮箱'),
 })
@@ -101,13 +105,16 @@ export function ApplyLinkDialog({
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
         {submitted ? (
-          <div className="py-6 text-center space-y-3">
-            <div className="size-12 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center justify-center mx-auto">
+          <div className="space-y-3 py-6 text-center">
+            <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
               <CheckCircle2 className="size-6" />
             </div>
-            <h3 className="text-base font-semibold text-foreground">友链申请已成功提交！</h3>
-            <p className="text-xs text-muted-foreground max-w-sm mx-auto leading-relaxed">
-              感谢您的互换申请！我们将在 1~3 个工作日内核验贵站并完成审核。请确保已提前在贵站添加我方链接。
+            <h3 className="text-foreground text-base font-semibold">
+              友链申请已成功提交！
+            </h3>
+            <p className="text-muted-foreground mx-auto max-w-sm text-xs leading-relaxed">
+              感谢您的互换申请！我们将在 1~3
+              个工作日内核验贵站并完成审核。请确保已提前在贵站添加我方链接。
             </p>
             <div className="pt-2">
               <Button size="sm" onClick={handleClose} className="text-xs">
@@ -119,7 +126,7 @@ export function ApplyLinkDialog({
           <>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
-                <Link2 className="size-4 text-primary" />
+                <Link2 className="text-primary size-4" />
                 申请友情链接互换
               </DialogTitle>
               <DialogDescription>
@@ -127,7 +134,10 @@ export function ApplyLinkDialog({
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-3.5 pt-1">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-3.5 pt-1"
+            >
               <div className="space-y-1">
                 <Label htmlFor="visitor-name" className="text-xs font-medium">
                   网站名称 <span className="text-destructive">*</span>
@@ -139,7 +149,9 @@ export function ApplyLinkDialog({
                   className="h-8 text-xs"
                 />
                 {errors.name && (
-                  <p className="text-[11px] text-destructive">{errors.name.message}</p>
+                  <p className="text-destructive text-[11px]">
+                    {errors.name.message}
+                  </p>
                 )}
               </div>
 
@@ -151,14 +163,16 @@ export function ApplyLinkDialog({
                   id="visitor-url"
                   {...register('url')}
                   placeholder="https://example.com"
-                  className="h-8 text-xs font-mono"
+                  className="h-8 font-mono text-xs"
                 />
                 {errors.url && (
-                  <p className="text-[11px] text-destructive">{errors.url.message}</p>
+                  <p className="text-destructive text-[11px]">
+                    {errors.url.message}
+                  </p>
                 )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div className="space-y-1">
                   <Label htmlFor="visitor-logo" className="text-xs font-medium">
                     Logo 图标直链 (可选)
@@ -167,15 +181,20 @@ export function ApplyLinkDialog({
                     id="visitor-logo"
                     {...register('logo')}
                     placeholder="https://.../favicon.ico"
-                    className="h-8 text-xs font-mono"
+                    className="h-8 font-mono text-xs"
                   />
                   {errors.logo && (
-                    <p className="text-[11px] text-destructive">{errors.logo.message}</p>
+                    <p className="text-destructive text-[11px]">
+                      {errors.logo.message}
+                    </p>
                   )}
                 </div>
 
                 <div className="space-y-1">
-                  <Label htmlFor="visitor-email" className="text-xs font-medium">
+                  <Label
+                    htmlFor="visitor-email"
+                    className="text-xs font-medium"
+                  >
                     站长联系邮箱 <span className="text-destructive">*</span>
                   </Label>
                   <Input
@@ -185,7 +204,9 @@ export function ApplyLinkDialog({
                     className="h-8 text-xs"
                   />
                   {errors.email && (
-                    <p className="text-[11px] text-destructive">{errors.email.message}</p>
+                    <p className="text-destructive text-[11px]">
+                      {errors.email.message}
+                    </p>
                   )}
                 </div>
               </div>
@@ -199,33 +220,37 @@ export function ApplyLinkDialog({
                   {...register('description')}
                   placeholder="简述网站的核心内容定位 (200字以内)..."
                   rows={2}
-                  className="text-xs resize-none"
+                  className="resize-none text-xs"
                 />
                 {errors.description && (
-                  <p className="text-[11px] text-destructive">{errors.description.message}</p>
+                  <p className="text-destructive text-[11px]">
+                    {errors.description.message}
+                  </p>
                 )}
               </div>
 
               {/* Cloudflare Turnstile 验证挂件容器 (支持真实 Cloudflare 密钥即插即用) */}
+              {/* biome-ignore lint/a11y/useKeyWithClickEvents: verification widget trigger */}
+              {/* biome-ignore lint/a11y/noStaticElementInteractions: verification widget trigger */}
               <div
                 onClick={handleTriggerCfVerify}
-                className="p-2.5 rounded-lg border bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer flex items-center justify-between select-none"
+                className="bg-muted/30 hover:bg-muted/50 flex cursor-pointer items-center justify-between rounded-lg border p-2.5 transition-colors select-none"
               >
                 <div className="flex items-center gap-2">
                   <div
-                    className={`size-5 rounded border flex items-center justify-center transition-colors ${
+                    className={`flex size-5 items-center justify-center rounded border transition-colors ${
                       cfVerified
-                        ? 'bg-emerald-600 border-emerald-600 text-white'
+                        ? 'border-emerald-600 bg-emerald-600 text-white'
                         : 'bg-background border-muted-foreground/40'
                     }`}
                   >
                     {cfChecking ? (
-                      <Loader2 className="size-3 animate-spin text-primary" />
+                      <Loader2 className="text-primary size-3 animate-spin" />
                     ) : cfVerified ? (
                       <Check className="size-3 stroke-[3]" />
                     ) : null}
                   </div>
-                  <span className="text-xs text-foreground font-medium">
+                  <span className="text-foreground text-xs font-medium">
                     {cfChecking
                       ? 'Cloudflare 安全验证中...'
                       : cfVerified
@@ -233,13 +258,13 @@ export function ApplyLinkDialog({
                         : '点击完成 Cloudflare 人机安全验证'}
                   </span>
                 </div>
-                <div className="flex items-center gap-1 text-[10px] text-muted-foreground font-mono">
+                <div className="text-muted-foreground flex items-center gap-1 font-mono text-[10px]">
                   <ShieldCheck className="size-3 text-orange-500" />
                   <span>Cloudflare Turnstile</span>
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t">
+              <div className="flex items-center justify-end gap-2 border-t pt-2">
                 <Button
                   type="button"
                   variant="outline"

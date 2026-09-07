@@ -20,10 +20,13 @@ export function ProtectedAction({
 
   if (!allowed) {
     if (disableOnly && React.isValidElement(children)) {
-      return React.cloneElement(children as React.ReactElement<any>, {
-        disabled: true,
-        title: '您没有此操作权限',
-      })
+      return React.cloneElement(
+        children as React.ReactElement<{ disabled?: boolean; title?: string }>,
+        {
+          disabled: true,
+          title: '您没有此操作权限',
+        },
+      )
     }
     return <>{fallback}</>
   }

@@ -1,14 +1,9 @@
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  SmartForm,
-  TextField,
-  TextareaField,
-  ActionButton,
-} from '~/admin/ui'
-import { roleFormSchema, type RoleFormValues, type Role } from '../types'
-import { PermissionMatrix } from './permission-matrix'
+import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
+import { ActionButton, SmartForm, TextField, TextareaField } from '~/admin/ui'
+import { roleFormSchema, type Role, type RoleFormValues } from '../types'
+import { PermissionMatrix } from './permission-matrix'
 
 export interface RoleFormProps {
   initialData?: Role | null
@@ -67,7 +62,7 @@ export function RoleForm({
         </div>
       }
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <TextField
           name="name"
           label="角色名称"

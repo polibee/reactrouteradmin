@@ -1,16 +1,16 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Save } from 'lucide-react'
 import type React from 'react'
 import {
-  useForm,
   FormProvider,
-  type UseFormReturn,
-  type FieldValues,
+  useForm,
   type DefaultValues,
+  type FieldValues,
   type SubmitHandler,
+  type UseFormReturn,
 } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import type { ZodType } from 'zod'
 import { AdminButton } from '../primitives/AdminButton'
-import { Save } from 'lucide-react'
 
 export interface AdminFormProps<TFieldValues extends FieldValues> {
   schema?: ZodType<TFieldValues>
@@ -40,6 +40,7 @@ export function AdminForm<TFieldValues extends FieldValues = FieldValues>({
   className = 'space-y-4',
 }: AdminFormProps<TFieldValues>) {
   const internalForm = useForm<TFieldValues>({
+    // biome-ignore lint/suspicious/noExplicitAny: zod v4 schema types don't satisfy the resolver's generated generic
     resolver: schema ? zodResolver(schema as any) : undefined,
     defaultValues,
   })
@@ -56,13 +57,9 @@ export function AdminForm<TFieldValues extends FieldValues = FieldValues>({
         <div className="space-y-4">{children}</div>
 
         {!hideDefaultActions && (
-          <div className="flex items-center gap-3 pt-4 border-t mt-6">
+          <div className="mt-6 flex items-center gap-3 border-t pt-4">
             {actions || (
-              <AdminButton
-                type="submit"
-                loading={loading}
-                icon={submitIcon}
-              >
+              <AdminButton type="submit" loading={loading} icon={submitIcon}>
                 {submitText}
               </AdminButton>
             )}

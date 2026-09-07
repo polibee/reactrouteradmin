@@ -1,4 +1,4 @@
-import { useFormContext, Controller } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import { AdminCheckbox } from '../../primitives/AdminCheckbox'
 
 export interface CheckboxFieldProps {
@@ -33,7 +33,7 @@ export function CheckboxField({
             description={description}
           />
           {fieldState.error && (
-            <p className="text-xs text-destructive font-medium">
+            <p className="text-destructive text-xs font-medium">
               {fieldState.error.message}
             </p>
           )}

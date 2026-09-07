@@ -1,13 +1,13 @@
+import { useNavigate } from 'react-router'
 import {
+  AdminButton,
   AdminForm,
-  TextField,
   EmailField,
   SelectField,
   TextareaField,
-  AdminButton,
+  TextField,
 } from '~/admin/ui'
-import { userFormSchema, type UserFormData, type User } from '../types'
-import { useNavigate } from 'react-router'
+import { userFormSchema, type User, type UserFormData } from '../types'
 
 export interface UserFormProps {
   initialData?: User | null
@@ -68,7 +68,7 @@ export function UserForm({
         </div>
       }
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <TextField
           name="name"
           label="用户姓名"
@@ -83,7 +83,7 @@ export function UserForm({
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <SelectField
           name="role"
           label="分配角色"

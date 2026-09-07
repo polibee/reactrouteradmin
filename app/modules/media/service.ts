@@ -1,10 +1,11 @@
+// biome-ignore-all lint/suspicious/useAwait: async signatures reserved for a future HTTP data source
 import { mediaRepository } from './repository'
 import type {
+  MediaDimensions,
+  MediaFilterParams,
   MediaItem,
   MediaStorageStats,
-  MediaFilterParams,
   MediaType,
-  MediaDimensions,
 } from './types'
 
 export class MediaService {
@@ -16,11 +17,15 @@ export class MediaService {
     return mediaRepository.getItemById(id)
   }
 
-  async uploadFile(file: File, folder?: string, tags?: string[]): Promise<MediaItem> {
+  async uploadFile(
+    file: File,
+    folder?: string,
+    tags?: string[],
+  ): Promise<MediaItem> {
     const type = this.detectMediaType(file.name, file.type)
 
     let url = ''
-    let dimensions: MediaDimensions | undefined = undefined
+    let dimensions: MediaDimensions | undefined
 
     // Handle preview and URL generation
     if (typeof window !== 'undefined') {
@@ -116,7 +121,8 @@ export class MediaService {
   private getImageDimensions(src: string): Promise<MediaDimensions> {
     return new Promise((resolve) => {
       const img = new Image()
-      img.onload = () => resolve({ width: img.naturalWidth, height: img.naturalHeight })
+      img.onload = () =>
+        resolve({ width: img.naturalWidth, height: img.naturalHeight })
       img.onerror = () => resolve({ width: 0, height: 0 })
       img.src = src
     })

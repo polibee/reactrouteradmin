@@ -1,21 +1,21 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   DashboardPage,
-  DashboardPageHeader,
   DashboardPageContent,
+  DashboardPageHeader,
   LoadingState,
   notify,
 } from '~/admin/ui'
 import {
+  MediaGrid,
+  MediaInspector,
   mediaService,
   MediaStorageStatsCard,
-  MediaToolbar,
-  MediaGrid,
   MediaTable,
-  MediaInspector,
+  MediaToolbar,
   MediaUploadDialog,
-  type MediaItem,
   type MediaCategory,
+  type MediaItem,
   type MediaStorageStats,
 } from '~/modules/media'
 
@@ -73,7 +73,7 @@ export default function MediaAdminRoute() {
 
   const handleToggleSelect = (id: string) => {
     setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
     )
   }
 
@@ -94,7 +94,11 @@ export default function MediaAdminRoute() {
 
   const handleBatchDelete = async () => {
     if (selectedIds.length === 0) return
-    if (!window.confirm(`确定要批量删除已选中的 ${selectedIds.length} 个媒体资产吗？`)) {
+    if (
+      !window.confirm(
+        `确定要批量删除已选中的 ${selectedIds.length} 个媒体资产吗？`,
+      )
+    ) {
       return
     }
 
@@ -123,9 +127,10 @@ export default function MediaAdminRoute() {
   }
 
   const handleCopyUrl = (url: string) => {
-    const fullUrl = url.startsWith('http') || url.startsWith('data:')
-      ? url
-      : `${window.location.origin}${url}`
+    const fullUrl =
+      url.startsWith('http') || url.startsWith('data:')
+        ? url
+        : `${window.location.origin}${url}`
 
     if (navigator.clipboard) {
       navigator.clipboard.writeText(fullUrl)

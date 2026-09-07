@@ -1,4 +1,4 @@
-import { useFormContext, Controller } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import { Label } from '~/components/ui/label'
 import { AdminSelect, type SelectOption } from '../../primitives/AdminSelect'
 
@@ -46,10 +46,10 @@ export function SelectField({
             className={fieldState.error ? 'border-destructive' : ''}
           />
           {description && !fieldState.error && (
-            <p className="text-xs text-muted-foreground">{description}</p>
+            <p className="text-muted-foreground text-xs">{description}</p>
           )}
           {fieldState.error && (
-            <p className="text-xs text-destructive font-medium">
+            <p className="text-destructive text-xs font-medium">
               {fieldState.error.message}
             </p>
           )}

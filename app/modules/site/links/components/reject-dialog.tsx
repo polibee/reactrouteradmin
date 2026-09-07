@@ -1,15 +1,15 @@
 import { useState } from 'react'
+import { Button } from '~/components/ui/button'
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from '~/components/ui/dialog'
-import { Button } from '~/components/ui/button'
-import { Textarea } from '~/components/ui/textarea'
 import { Label } from '~/components/ui/label'
+import { Textarea } from '~/components/ui/textarea'
 import type { FriendLink } from '../../types'
 
 export interface RejectDialogProps {

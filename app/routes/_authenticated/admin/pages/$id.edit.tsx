@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router'
 import {
-  DashboardPage,
-  DashboardPageHeader,
-  DashboardPageContent,
   DashboardCard,
-  LoadingState,
+  DashboardPage,
+  DashboardPageContent,
+  DashboardPageHeader,
   EmptyState,
+  LoadingState,
   notify,
 } from '~/admin/ui'
 import { PageForm } from '~/modules/site/pages/components/page-form'
 import { siteService } from '~/modules/site/service'
 import type { SitePage, SitePageFormValues } from '~/modules/site/types'
-import { useNavigate, useParams } from 'react-router'
 
 export const meta = () => {
   return [{ title: '编辑单页面 - Admin Framework' }]
@@ -73,8 +73,9 @@ export default function SitePageEdit() {
           description="该页面可能已被删除或 ID 错误"
           action={
             <button
+              type="button"
               onClick={() => navigate('/admin/pages')}
-              className="text-primary text-sm underline cursor-pointer"
+              className="text-primary cursor-pointer text-sm underline"
             >
               返回单页面列表
             </button>
@@ -92,7 +93,10 @@ export default function SitePageEdit() {
       />
 
       <DashboardPageContent>
-        <DashboardCard title="单页面属性与正文修改" description={`页面标识: ${page.slug || page.id.replace(/^page-/, '')}`}>
+        <DashboardCard
+          title="单页面属性与正文修改"
+          description={`页面标识: ${page.slug || page.id.replace(/^page-/, '')}`}
+        >
           <PageForm
             initialData={page}
             onSubmit={handleSubmit}

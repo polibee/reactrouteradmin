@@ -1,15 +1,19 @@
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router'
 import {
+  ActionButton,
+  RichTextField,
+  SelectField,
   SmartForm,
   TextField,
   TextareaField,
-  SelectField,
-  RichTextField,
-  ActionButton,
 } from '~/admin/ui'
-import { sitePageFormSchema, type SitePageFormValues, type SitePage } from '../../types'
-import { useNavigate } from 'react-router'
+import {
+  sitePageFormSchema,
+  type SitePage,
+  type SitePageFormValues,
+} from '../../types'
 
 export interface PageFormProps {
   initialData?: SitePage | null
@@ -61,7 +65,7 @@ export function PageForm({
         </div>
       }
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <TextField
           name="title"
           label="页面主标题"
@@ -94,9 +98,11 @@ export function PageForm({
         required
       />
 
-      <div className="p-4 rounded-lg bg-muted/30 border space-y-4">
-        <h4 className="text-sm font-semibold text-foreground">SEO 搜索引擎优化 (TDK 设置)</h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="bg-muted/30 space-y-4 rounded-lg border p-4">
+        <h4 className="text-foreground text-sm font-semibold">
+          SEO 搜索引擎优化 (TDK 设置)
+        </h4>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <TextField
             name="seoTitle"
             label="SEO 网页标题 (Meta Title)"

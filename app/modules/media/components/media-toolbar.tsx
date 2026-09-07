@@ -1,19 +1,19 @@
-import type { MediaCategory } from '../types'
-import { Button } from '~/components/ui/button'
-import { Input } from '~/components/ui/input'
 import {
-  Upload,
+  Archive,
+  FileText,
+  Film,
+  Filter,
+  Image as ImageIcon,
+  Layers,
   LayoutGrid,
   List,
   Search,
   Trash2,
-  Filter,
-  Image as ImageIcon,
-  FileText,
-  Film,
-  Archive,
-  Layers,
+  Upload,
 } from 'lucide-react'
+import { Button } from '~/components/ui/button'
+import { Input } from '~/components/ui/input'
+import type { MediaCategory } from '../types'
 
 export interface MediaToolbarProps {
   category: MediaCategory
@@ -44,7 +44,11 @@ export function MediaToolbar({
   onBatchDelete,
   onOpenUpload,
 }: MediaToolbarProps) {
-  const categoryTabs: { key: MediaCategory; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
+  const categoryTabs: {
+    key: MediaCategory
+    label: string
+    icon: React.ComponentType<{ className?: string }>
+  }[] = [
     { key: 'all', label: '全部', icon: Layers },
     { key: 'image', label: '图片', icon: ImageIcon },
     { key: 'document', label: '文档', icon: FileText },
@@ -54,9 +58,9 @@ export function MediaToolbar({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+      <div className="flex flex-col justify-between gap-3 lg:flex-row lg:items-center">
         {/* 分类快捷标签 */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
+        <div className="scrollbar-none flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0">
           {categoryTabs.map((tab) => {
             const Icon = tab.icon
             const isActive = category === tab.key
@@ -65,9 +69,9 @@ export function MediaToolbar({
                 key={tab.key}
                 type="button"
                 onClick={() => onCategoryChange(tab.key)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-all shrink-0 ${
+                className={`inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                   isActive
-                    ? 'bg-primary text-primary-foreground shadow-xs font-semibold'
+                    ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
                     : 'bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground'
                 }`}
               >
@@ -79,13 +83,13 @@ export function MediaToolbar({
         </div>
 
         {/* 右侧动作区：上传按钮与批量操作 */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex shrink-0 items-center gap-2">
           {selectedCount > 0 && (
             <Button
               type="button"
               variant="destructive"
               size="sm"
-              className="h-8 text-xs gap-1.5"
+              className="h-8 gap-1.5 text-xs"
               onClick={onBatchDelete}
             >
               <Trash2 className="size-3.5" />
@@ -96,7 +100,7 @@ export function MediaToolbar({
           <Button
             type="button"
             size="sm"
-            className="h-8 text-xs gap-1.5 cursor-pointer shadow-xs"
+            className="h-8 cursor-pointer gap-1.5 text-xs shadow-xs"
             onClick={onOpenUpload}
           >
             <Upload className="size-3.5" />
@@ -106,25 +110,25 @@ export function MediaToolbar({
       </div>
 
       {/* 第二栏：搜索、文件夹筛选与视图模式切换 */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-1 border-t border-border/40">
-        <div className="flex items-center gap-2 flex-1 max-w-md">
+      <div className="border-border/40 flex flex-col justify-between gap-2.5 border-t pt-1 sm:flex-row sm:items-center">
+        <div className="flex max-w-md flex-1 items-center gap-2">
           <div className="relative w-full">
-            <Search className="size-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Search className="text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
             <Input
               value={search}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="搜索文件名、标签、格式..."
-              className="h-8 pl-8 text-xs bg-muted/20 w-full"
+              className="bg-muted/20 h-8 w-full pl-8 text-xs"
             />
           </div>
 
           {folders.length > 0 && (
-            <div className="flex items-center gap-1 shrink-0">
-              <Filter className="size-3.5 text-muted-foreground ml-1" />
+            <div className="flex shrink-0 items-center gap-1">
+              <Filter className="text-muted-foreground ml-1 size-3.5" />
               <select
                 value={selectedFolder}
                 onChange={(e) => onFolderChange(e.target.value)}
-                className="h-8 rounded-md border border-input bg-muted/20 px-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+                className="border-input bg-muted/20 text-foreground focus:ring-ring h-8 rounded-md border px-2 text-xs focus:ring-1 focus:outline-none"
               >
                 <option value="all">所有分组</option>
                 {folders.map((f) => (
@@ -138,11 +142,11 @@ export function MediaToolbar({
         </div>
 
         {/* 视图切换 (Grid vs Table) */}
-        <div className="flex items-center gap-1 border rounded-lg p-0.5 bg-muted/30 self-end sm:self-auto">
+        <div className="bg-muted/30 flex items-center gap-1 self-end rounded-lg border p-0.5 sm:self-auto">
           <button
             type="button"
             onClick={() => onViewModeChange('grid')}
-            className={`p-1.5 rounded-md cursor-pointer transition-colors ${
+            className={`cursor-pointer rounded-md p-1.5 transition-colors ${
               viewMode === 'grid'
                 ? 'bg-background text-foreground shadow-xs'
                 : 'text-muted-foreground hover:text-foreground'
@@ -154,7 +158,7 @@ export function MediaToolbar({
           <button
             type="button"
             onClick={() => onViewModeChange('table')}
-            className={`p-1.5 rounded-md cursor-pointer transition-colors ${
+            className={`cursor-pointer rounded-md p-1.5 transition-colors ${
               viewMode === 'table'
                 ? 'bg-background text-foreground shadow-xs'
                 : 'text-muted-foreground hover:text-foreground'

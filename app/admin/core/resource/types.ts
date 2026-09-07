@@ -1,4 +1,4 @@
-import React from 'react'
+import type React from 'react'
 
 export interface ResourceNavigation {
   group?: string
@@ -24,7 +24,7 @@ export interface ResourceRouteConfig {
   viewPath?: string
 }
 
-export interface AdminResource<T = any> {
+export interface AdminResource<T = unknown> {
   name: string
   label: string
   pluralLabel: string
@@ -36,4 +36,4 @@ export interface AdminResource<T = any> {
   _model?: T
 }
 
-export type ResourceConfig<T = any> = AdminResource<T>
+export type ResourceConfig<T = unknown> = AdminResource<T>

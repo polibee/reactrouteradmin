@@ -1,3 +1,4 @@
+// biome-ignore-all lint/suspicious/useAwait: async signatures reserved for a future HTTP data source
 import { type IUserRepository, userRepository } from './repository'
 import type { User, UserFormData } from './types'
 
@@ -15,7 +16,9 @@ export class UserService {
   async createUser(data: UserFormData): Promise<User> {
     // Validate uniqueness of email
     const all = await this.repo.findAll()
-    const exists = all.some((u) => u.email.toLowerCase() === data.email.toLowerCase())
+    const exists = all.some(
+      (u) => u.email.toLowerCase() === data.email.toLowerCase(),
+    )
     if (exists) {
       throw new Error(`邮箱 "${data.email}" 已被使用，请更换邮箱`)
     }
@@ -26,7 +29,8 @@ export class UserService {
     if (data.email) {
       const all = await this.repo.findAll()
       const conflict = all.some(
-        (u) => u.id !== id && u.email.toLowerCase() === data.email?.toLowerCase(),
+        (u) =>
+          u.id !== id && u.email.toLowerCase() === data.email?.toLowerCase(),
       )
       if (conflict) {
         throw new Error(`邮箱 "${data.email}" 已被其他用户占用`)

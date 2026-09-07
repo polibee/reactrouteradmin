@@ -1,6 +1,9 @@
 import type { AuthUser } from '../auth/types'
 
-export function hasPermission(user: AuthUser | null, permission?: string): boolean {
+export function hasPermission(
+  user: AuthUser | null,
+  permission?: string,
+): boolean {
   if (!permission) return true
   if (!user) return false
   if (user.permissions.includes('*')) return true
@@ -15,6 +18,10 @@ export function hasPermission(user: AuthUser | null, permission?: string): boole
   return false
 }
 
-export function can(user: AuthUser | null, action: string, resource: string): boolean {
+export function can(
+  user: AuthUser | null,
+  action: string,
+  resource: string,
+): boolean {
   return hasPermission(user, `${resource}.${action}`)
 }

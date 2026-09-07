@@ -1,6 +1,7 @@
-import { roleRepository, type IRoleRepository } from './repository'
+// biome-ignore-all lint/suspicious/useAwait: async signatures reserved for a future HTTP data source
 import { SYSTEM_PERMISSION_GROUPS } from './permissions'
-import type { Role, RoleFormValues, PermissionGroup } from './types'
+import { roleRepository, type IRoleRepository } from './repository'
+import type { PermissionGroup, Role, RoleFormValues } from './types'
 
 export class RoleService {
   constructor(private repo: IRoleRepository = roleRepository) {}
@@ -52,7 +53,9 @@ export class RoleService {
     return this.repo.delete(id)
   }
 
-  async deleteRoles(ids: string[]): Promise<{ successCount: number; skippedCount: number }> {
+  async deleteRoles(
+    ids: string[],
+  ): Promise<{ successCount: number; skippedCount: number }> {
     let successCount = 0
     let skippedCount = 0
 

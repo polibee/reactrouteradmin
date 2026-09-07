@@ -1,11 +1,11 @@
-import { FileText, Compass, LayoutGrid, Megaphone, Link2 } from 'lucide-react'
+import { Compass, FileText, LayoutGrid, Link2, Megaphone } from 'lucide-react'
 import { defineResource } from '../../admin/core/resource/resource'
 import type {
-  SitePage,
-  SiteNavItem,
-  SiteWidgetConfig,
-  SiteAnnouncement,
   FriendLink,
+  SiteAnnouncement,
+  SiteNavItem,
+  SitePage,
+  SiteWidgetConfig,
 } from './types'
 
 export const SitePagesResource = defineResource<SitePage>({

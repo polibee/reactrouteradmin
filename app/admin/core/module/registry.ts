@@ -1,13 +1,15 @@
-import type { AdminModule } from './types'
-import { resourceRegistry } from '../resource/registry'
 import { navigationRegistry } from '../navigation/registry'
+import { resourceRegistry } from '../resource/registry'
+import type { AdminModule } from './types'
 
 export class ModuleRegistry {
   private modules: Map<string, AdminModule> = new Map()
 
   register(mod: AdminModule): void {
     if (this.modules.has(mod.name)) {
-      console.warn(`[ModuleRegistry] Module "${mod.name}" already registered. Overwriting.`)
+      console.warn(
+        `[ModuleRegistry] Module "${mod.name}" already registered. Overwriting.`,
+      )
     }
     this.modules.set(mod.name, mod)
 

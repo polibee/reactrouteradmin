@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 import {
-  DashboardPage,
-  DashboardPageHeader,
-  DashboardPageContent,
   CreateAction,
+  DashboardPage,
+  DashboardPageContent,
+  DashboardPageHeader,
 } from '~/admin/ui'
 import { RoleTable } from '~/modules/role/components/role-table'
 import { roleService } from '~/modules/role/service'
 import type { Role } from '~/modules/role/types'
-import { useNavigate } from 'react-router'
 
 export const meta = () => {
   return [{ title: '角色与权限 - Admin Framework' }]
@@ -33,6 +33,7 @@ export default function RolesIndexPage() {
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only initial load
   useEffect(() => {
     loadData()
   }, [])
@@ -52,11 +53,7 @@ export default function RolesIndexPage() {
       />
 
       <DashboardPageContent>
-        <RoleTable
-          data={roles}
-          loading={loading}
-          onDataChange={loadData}
-        />
+        <RoleTable data={roles} loading={loading} onDataChange={loadData} />
       </DashboardPageContent>
     </DashboardPage>
   )

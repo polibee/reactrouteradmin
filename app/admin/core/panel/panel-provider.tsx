@@ -19,7 +19,9 @@ export function PanelProvider({
 }) {
   const [panel, setPanel] = useState<PanelConfig>(initialPanel)
 
-  const isFeatureEnabled = (feature: keyof PanelConfig['features']): boolean => {
+  const isFeatureEnabled = (
+    feature: keyof PanelConfig['features'],
+  ): boolean => {
     return !!panel.features[feature]
   }
 

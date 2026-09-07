@@ -1,8 +1,8 @@
-import React from 'react'
+import type React from 'react'
 import { Header } from '~/components/layout/header'
+import { ProfileDropdown } from '~/components/layout/profile-dropdown'
 import { Search } from '~/components/layout/search'
 import { ThemeSwitch } from '~/components/layout/theme-switch'
-import { ProfileDropdown } from '~/components/layout/profile-dropdown'
 import { PresetSelector } from '../themes/preset-selector'
 
 export interface AdminHeaderProps {

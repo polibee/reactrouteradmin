@@ -1,4 +1,10 @@
-import type { MediaItem, MediaStorageStats, MediaFilterParams, MediaType } from './types'
+// biome-ignore-all lint/suspicious/useAwait: async signatures reserved for a future HTTP data source
+import type {
+  MediaFilterParams,
+  MediaItem,
+  MediaStorageStats,
+  MediaType,
+} from './types'
 
 const STORAGE_KEY_MEDIA = 'site_media_items_v1'
 
@@ -11,7 +17,8 @@ export const SEED_MEDIA: MediaItem[] = [
     mimeType: 'image/png',
     size: 1428500, // ~1.4 MB
     url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&q=80',
+    thumbnailUrl:
+      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&q=80',
     dimensions: { width: 1920, height: 1080 },
     folder: '系统架构',
     tags: ['架构图', '拓扑', '后台'],
@@ -26,7 +33,8 @@ export const SEED_MEDIA: MediaItem[] = [
     mimeType: 'image/jpeg',
     size: 892400, // ~890 KB
     url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80',
+    thumbnailUrl:
+      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80',
     dimensions: { width: 2400, height: 1200 },
     folder: '站点配图',
     tags: ['Banner', '首页', '现代化'],
@@ -41,7 +49,8 @@ export const SEED_MEDIA: MediaItem[] = [
     mimeType: 'image/jpeg',
     size: 2150000, // ~2.1 MB
     url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=400&q=80',
+    thumbnailUrl:
+      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=400&q=80',
     dimensions: { width: 2048, height: 1365 },
     folder: '团队动态',
     tags: ['团队', '研发', '办公'],
@@ -56,7 +65,8 @@ export const SEED_MEDIA: MediaItem[] = [
     mimeType: 'image/png',
     size: 1680000, // ~1.6 MB
     url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80',
+    thumbnailUrl:
+      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80',
     dimensions: { width: 1920, height: 1200 },
     folder: '站点配图',
     tags: ['控制台', '看板', 'UI'],
@@ -81,7 +91,8 @@ export const SEED_MEDIA: MediaItem[] = [
     name: 'data-analysis-report-q1.xlsx',
     originalName: 'data-analysis-report-q1.xlsx',
     type: 'document',
-    mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    mimeType:
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     size: 780000, // ~780 KB
     url: '/docs/q1-report.xlsx',
     folder: '业务报表',
@@ -94,7 +105,8 @@ export const SEED_MEDIA: MediaItem[] = [
     name: 'privacy-policy-whitepaper.docx',
     originalName: 'privacy-policy-whitepaper.docx',
     type: 'document',
-    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    mimeType:
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     size: 320000, // ~320 KB
     url: '/docs/privacy-whitepaper.docx',
     folder: '合规文件',
@@ -164,13 +176,13 @@ export class MediaRepository {
       if (params.folder && params.folder !== 'all') {
         items = items.filter((item) => item.folder === params.folder)
       }
-      if (params.search && params.search.trim()) {
+      if (params.search?.trim()) {
         const q = params.search.toLowerCase().trim()
         items = items.filter(
           (item) =>
             item.name.toLowerCase().includes(q) ||
             item.originalName.toLowerCase().includes(q) ||
-            item.tags?.some((t) => t.toLowerCase().includes(q))
+            item.tags?.some((t) => t.toLowerCase().includes(q)),
         )
       }
 
@@ -178,9 +190,15 @@ export class MediaRepository {
         items = [...items].sort((a, b) => {
           switch (params.sortBy) {
             case 'date_desc':
-              return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+              return (
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+              )
             case 'date_asc':
-              return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+              return (
+                new Date(a.createdAt).getTime() -
+                new Date(b.createdAt).getTime()
+              )
             case 'size_desc':
               return b.size - a.size
             case 'size_asc':
@@ -194,7 +212,8 @@ export class MediaRepository {
       } else {
         // default: newest first
         items = [...items].sort(
-          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         )
       }
     }
@@ -207,7 +226,9 @@ export class MediaRepository {
     return items.find((i) => i.id === id) || null
   }
 
-  async saveItem(item: Omit<MediaItem, 'id' | 'createdAt' | 'updatedAt'>): Promise<MediaItem> {
+  async saveItem(
+    item: Omit<MediaItem, 'id' | 'createdAt' | 'updatedAt'>,
+  ): Promise<MediaItem> {
     const items = this.getStorage()
     const now = new Date().toISOString()
     const newItem: MediaItem = {

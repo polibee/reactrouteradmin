@@ -1,71 +1,72 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useEditor, EditorContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import Underline from '@tiptap/extension-underline'
-import Link from '@tiptap/extension-link'
-import Image from '@tiptap/extension-image'
-import TextAlign from '@tiptap/extension-text-align'
-import Placeholder from '@tiptap/extension-placeholder'
-import { TextStyle } from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
+import Image from '@tiptap/extension-image'
+import Link from '@tiptap/extension-link'
+import Placeholder from '@tiptap/extension-placeholder'
 import { Table } from '@tiptap/extension-table'
-import TableRow from '@tiptap/extension-table-row'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
+import TextAlign from '@tiptap/extension-text-align'
+import { TextStyle } from '@tiptap/extension-text-style'
+import Underline from '@tiptap/extension-underline'
+import { EditorContent, useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import type React from 'react'
+import { useEffect, useRef, useState } from 'react'
 
+import {
+  AlignCenter,
+  AlignJustify,
+  AlignLeft,
+  AlignRight,
+  Bold,
+  Check,
+  Code,
+  FileText,
+  FolderOpen,
+  Heading1,
+  Heading2,
+  Heading3,
+  Highlighter,
+  Image as ImageIcon,
+  Italic,
+  Link as LinkIcon,
+  List,
+  ListOrdered,
+  Minus,
+  Palette,
+  Plus,
+  Quote,
+  Redo,
+  RemoveFormatting,
+  Strikethrough,
+  Table as TableIcon,
+  Trash2,
+  Type,
+  Underline as UnderlineIcon,
+  Undo,
+  Unlink,
+} from 'lucide-react'
 import { htmlToMarkdown, markdownToHtml } from '~/lib/markdown'
 import { MediaPickerModal } from '~/modules/media/components/media-picker-modal'
 import { Button } from './button'
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from './dialog'
-import { Input } from './input'
-import { Label } from './label'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from './dropdown-menu'
-import {
-  Bold,
-  Italic,
-  Underline as UnderlineIcon,
-  Strikethrough,
-  Heading1,
-  Heading2,
-  Heading3,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  AlignJustify,
-  List,
-  ListOrdered,
-  Quote,
-  Code,
-  Link as LinkIcon,
-  Image as ImageIcon,
-  Minus,
-  RemoveFormatting,
-  Undo,
-  Redo,
-  FileText,
-  Type,
-  Palette,
-  Highlighter,
-  Table as TableIcon,
-  Plus,
-  Trash2,
-  Unlink,
-  Check,
-  FolderOpen,
-} from 'lucide-react'
+import { Input } from './input'
+import { Label } from './label'
 
 export interface RichTextEditorProps {
   value: string
@@ -119,7 +120,8 @@ export function RichTextEditor({
         autolink: true,
         defaultProtocol: 'https',
         HTMLAttributes: {
-          class: 'text-primary underline font-medium hover:opacity-80 transition-opacity',
+          class:
+            'text-primary underline font-medium hover:opacity-80 transition-opacity',
         },
       }),
       Image.configure({
@@ -274,7 +276,9 @@ export function RichTextEditor({
     }
   }
 
-  const handleMarkdownTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleMarkdownTextareaChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
     const val = e.target.value
     setMarkdownContent(val)
     onChange(markdownToHtml(val))
@@ -293,7 +297,7 @@ export function RichTextEditor({
     return (
       <div
         style={{ minHeight }}
-        className="flex items-center justify-center border rounded-lg bg-muted/20 text-xs text-muted-foreground"
+        className="bg-muted/20 text-muted-foreground flex items-center justify-center rounded-lg border text-xs"
       >
         <span>正在载入 TipTap 官方编辑器...</span>
       </div>
@@ -301,16 +305,20 @@ export function RichTextEditor({
   }
 
   // Character and word metrics
-  const textContent = isMarkdownMode ? markdownContent : editor.state.doc.textContent
+  const textContent = isMarkdownMode
+    ? markdownContent
+    : editor.state.doc.textContent
   const charCount = textContent.length
-  const wordCount = textContent.trim() ? textContent.trim().split(/\s+/).filter(Boolean).length : 0
+  const wordCount = textContent.trim()
+    ? textContent.trim().split(/\s+/).filter(Boolean).length
+    : 0
 
   return (
     <div
-      className={`border rounded-lg bg-card text-card-foreground shadow-xs overflow-hidden flex flex-col focus-within:ring-1 focus-within:ring-ring transition-all ${className}`}
+      className={`bg-card text-card-foreground focus-within:ring-ring flex flex-col overflow-hidden rounded-lg border shadow-xs transition-all focus-within:ring-1 ${className}`}
     >
       {/* 官方规范工具栏 (TipTap Official Standard Toolbar) */}
-      <div className="flex flex-wrap items-center gap-1 p-1.5 border-b bg-muted/20 text-muted-foreground select-none">
+      <div className="bg-muted/20 text-muted-foreground flex flex-wrap items-center gap-1 border-b p-1.5 select-none">
         {/* 段落与标题选择 */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild disabled={disabled || isMarkdownMode}>
@@ -318,9 +326,9 @@ export function RichTextEditor({
               type="button"
               variant="ghost"
               size="sm"
-              className="h-8 px-2 text-xs font-normal gap-1.5 hover:text-foreground hover:bg-muted/80"
+              className="hover:text-foreground hover:bg-muted/80 h-8 gap-1.5 px-2 text-xs font-normal"
             >
-              <Type className="size-3.5 text-primary" />
+              <Type className="text-primary size-3.5" />
               <span className="font-medium">
                 {editor.isActive('heading', { level: 1 })
                   ? '一级标题 (H1)'
@@ -336,53 +344,77 @@ export function RichTextEditor({
               </span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="text-xs w-44">
+          <DropdownMenuContent align="start" className="w-44 text-xs">
             <DropdownMenuItem
               onClick={() => editor.chain().focus().setParagraph().run()}
-              className={editor.isActive('paragraph') ? 'bg-muted font-semibold' : ''}
+              className={
+                editor.isActive('paragraph') ? 'bg-muted font-semibold' : ''
+              }
             >
               <span>常规正文 (Paragraph)</span>
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-              className={editor.isActive('heading', { level: 1 }) ? 'bg-muted font-semibold' : ''}
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 1 }).run()
+              }
+              className={
+                editor.isActive('heading', { level: 1 })
+                  ? 'bg-muted font-semibold'
+                  : ''
+              }
             >
-              <Heading1 className="size-4 mr-2 text-primary" />
+              <Heading1 className="text-primary mr-2 size-4" />
               <span className="text-sm font-bold">一级大标题 (H1)</span>
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-              className={editor.isActive('heading', { level: 2 }) ? 'bg-muted font-semibold' : ''}
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 2 }).run()
+              }
+              className={
+                editor.isActive('heading', { level: 2 })
+                  ? 'bg-muted font-semibold'
+                  : ''
+              }
             >
-              <Heading2 className="size-4 mr-2 text-primary" />
+              <Heading2 className="text-primary mr-2 size-4" />
               <span className="text-xs font-semibold">二级副标题 (H2)</span>
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-              className={editor.isActive('heading', { level: 3 }) ? 'bg-muted font-semibold' : ''}
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 3 }).run()
+              }
+              className={
+                editor.isActive('heading', { level: 3 })
+                  ? 'bg-muted font-semibold'
+                  : ''
+              }
             >
-              <Heading3 className="size-4 mr-2 text-primary" />
+              <Heading3 className="text-primary mr-2 size-4" />
               <span className="text-xs font-medium">三级小标题 (H3)</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => editor.chain().focus().toggleBlockquote().run()}
-              className={editor.isActive('blockquote') ? 'bg-muted font-semibold' : ''}
+              className={
+                editor.isActive('blockquote') ? 'bg-muted font-semibold' : ''
+              }
             >
-              <Quote className="size-3.5 mr-2 text-muted-foreground" />
+              <Quote className="text-muted-foreground mr-2 size-3.5" />
               <span>引用块 (Blockquote)</span>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-              className={editor.isActive('codeBlock') ? 'bg-muted font-semibold' : ''}
+              className={
+                editor.isActive('codeBlock') ? 'bg-muted font-semibold' : ''
+              }
             >
-              <Code className="size-3.5 mr-2 text-muted-foreground" />
+              <Code className="text-muted-foreground mr-2 size-3.5" />
               <span className="font-mono text-xs">代码块 (Code Block)</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <div className="w-px h-4 bg-border/60 mx-1" />
+        <div className="bg-border/60 mx-1 h-4 w-px" />
 
         {/* 基础行内排版 */}
         <Button
@@ -458,7 +490,10 @@ export function RichTextEditor({
               <Palette className="size-3.5" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="grid grid-cols-4 gap-1 p-2 w-36">
+          <DropdownMenuContent
+            align="start"
+            className="grid w-36 grid-cols-4 gap-1 p-2"
+          >
             {[
               { color: '#09090b', title: '默认黑' },
               { color: '#2563eb', title: '科技蓝' },
@@ -472,7 +507,7 @@ export function RichTextEditor({
               <button
                 key={c.color}
                 type="button"
-                className="size-6 rounded-full border border-border/60 hover:scale-110 transition-transform cursor-pointer"
+                className="border-border/60 size-6 cursor-pointer rounded-full border transition-transform hover:scale-110"
                 style={{ backgroundColor: c.color }}
                 title={c.title}
                 onClick={() => editor.chain().focus().setColor(c.color).run()}
@@ -494,7 +529,10 @@ export function RichTextEditor({
               <Highlighter className="size-3.5" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="grid grid-cols-4 gap-1 p-2 w-36">
+          <DropdownMenuContent
+            align="start"
+            className="grid w-36 grid-cols-4 gap-1 p-2"
+          >
             {[
               { color: '#fef08a', title: '柠檬黄' },
               { color: '#bbf7d0', title: '薄荷绿' },
@@ -508,25 +546,31 @@ export function RichTextEditor({
               <button
                 key={c.color}
                 type="button"
-                className="size-6 rounded-full border border-border/60 hover:scale-110 transition-transform cursor-pointer"
+                className="border-border/60 size-6 cursor-pointer rounded-full border transition-transform hover:scale-110"
                 style={{ backgroundColor: c.color }}
                 title={c.title}
                 onClick={() =>
                   c.color === 'transparent'
                     ? editor.chain().focus().unsetHighlight().run()
-                    : editor.chain().focus().setHighlight({ color: c.color }).run()
+                    : editor
+                        .chain()
+                        .focus()
+                        .setHighlight({ color: c.color })
+                        .run()
                 }
               />
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <div className="w-px h-4 bg-border/60 mx-1" />
+        <div className="bg-border/60 mx-1 h-4 w-px" />
 
         {/* 对齐排版 */}
         <Button
           type="button"
-          variant={editor.isActive({ textAlign: 'left' }) ? 'secondary' : 'ghost'}
+          variant={
+            editor.isActive({ textAlign: 'left' }) ? 'secondary' : 'ghost'
+          }
           size="sm"
           className="h-8 w-8 p-0"
           title="居左对齐"
@@ -538,7 +582,9 @@ export function RichTextEditor({
 
         <Button
           type="button"
-          variant={editor.isActive({ textAlign: 'center' }) ? 'secondary' : 'ghost'}
+          variant={
+            editor.isActive({ textAlign: 'center' }) ? 'secondary' : 'ghost'
+          }
           size="sm"
           className="h-8 w-8 p-0"
           title="居中对齐"
@@ -550,7 +596,9 @@ export function RichTextEditor({
 
         <Button
           type="button"
-          variant={editor.isActive({ textAlign: 'right' }) ? 'secondary' : 'ghost'}
+          variant={
+            editor.isActive({ textAlign: 'right' }) ? 'secondary' : 'ghost'
+          }
           size="sm"
           className="h-8 w-8 p-0"
           title="居右对齐"
@@ -562,7 +610,9 @@ export function RichTextEditor({
 
         <Button
           type="button"
-          variant={editor.isActive({ textAlign: 'justify' }) ? 'secondary' : 'ghost'}
+          variant={
+            editor.isActive({ textAlign: 'justify' }) ? 'secondary' : 'ghost'
+          }
           size="sm"
           className="h-8 w-8 p-0"
           title="两端对齐"
@@ -572,7 +622,7 @@ export function RichTextEditor({
           <AlignJustify className="size-3.5" />
         </Button>
 
-        <div className="w-px h-4 bg-border/60 mx-1" />
+        <div className="bg-border/60 mx-1 h-4 w-px" />
 
         {/* 列表 */}
         <Button
@@ -599,7 +649,7 @@ export function RichTextEditor({
           <ListOrdered className="size-3.5" />
         </Button>
 
-        <div className="w-px h-4 bg-border/60 mx-1" />
+        <div className="bg-border/60 mx-1 h-4 w-px" />
 
         {/* 插入超链接 */}
         <Button
@@ -650,7 +700,7 @@ export function RichTextEditor({
                   .run()
               }
             >
-              <Plus className="size-3.5 mr-2 text-primary" />
+              <Plus className="text-primary mr-2 size-3.5" />
               <span>插入 3x3 表格</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -684,7 +734,7 @@ export function RichTextEditor({
               className="text-destructive"
               onClick={() => editor.chain().focus().deleteTable().run()}
             >
-              <Trash2 className="size-3.5 mr-2" />
+              <Trash2 className="mr-2 size-3.5" />
               删除整个表格
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -711,12 +761,14 @@ export function RichTextEditor({
           className="h-8 w-8 p-0"
           title="清除所选格式"
           disabled={disabled || isMarkdownMode}
-          onClick={() => editor.chain().focus().unsetAllMarks().clearNodes().run()}
+          onClick={() =>
+            editor.chain().focus().unsetAllMarks().clearNodes().run()
+          }
         >
           <RemoveFormatting className="size-3.5" />
         </Button>
 
-        <div className="w-px h-4 bg-border/60 mx-1" />
+        <div className="bg-border/60 mx-1 h-4 w-px" />
 
         {/* 撤销 / 重做 */}
         <Button
@@ -749,9 +801,13 @@ export function RichTextEditor({
             type="button"
             variant={isMarkdownMode ? 'default' : 'outline'}
             size="sm"
-            className="h-7 px-2.5 text-xs gap-1.5 font-mono cursor-pointer transition-colors"
+            className="h-7 cursor-pointer gap-1.5 px-2.5 font-mono text-xs transition-colors"
             onClick={handleToggleMarkdownMode}
-            title={isMarkdownMode ? '返回所见即所得可视化模式' : '切换到 Markdown 代码模式'}
+            title={
+              isMarkdownMode
+                ? '返回所见即所得可视化模式'
+                : '切换到 Markdown 代码模式'
+            }
           >
             <FileText className="size-3.5" />
             <span>{isMarkdownMode ? '所见即所得模式' : 'Markdown 模式'}</span>
@@ -764,7 +820,7 @@ export function RichTextEditor({
         ref={canvasRef}
         onClick={handleCanvasClick}
         style={{ minHeight }}
-        className="relative flex-1 bg-background cursor-text flex flex-col"
+        className="bg-background relative flex flex-1 cursor-text flex-col"
       >
         {isMarkdownMode ? (
           <textarea
@@ -773,11 +829,11 @@ export function RichTextEditor({
             disabled={disabled}
             placeholder="使用标准 Markdown 语法撰写正文（如 # 大标题，**粗体**，- 列表，| 表格 | 等）..."
             style={{ minHeight }}
-            className="w-full flex-1 font-mono text-xs p-4 bg-transparent border-0 text-foreground focus:outline-none resize-y leading-relaxed"
+            className="text-foreground w-full flex-1 resize-y border-0 bg-transparent p-4 font-mono text-xs leading-relaxed focus:outline-none"
           />
         ) : (
           <div
-            className="flex-1 w-full flex flex-col"
+            className="flex w-full flex-1 flex-col"
             onClick={() => {
               if (editor && !editor.isFocused) {
                 editor.commands.focus('end')
@@ -786,23 +842,27 @@ export function RichTextEditor({
           >
             <EditorContent
               editor={editor}
-              className="flex-1 w-full h-full flex flex-col [&_.ProseMirror]:flex-1 [&_.ProseMirror]:min-h-[320px] [&_.ProseMirror]:outline-none"
+              className="flex h-full w-full flex-1 flex-col [&_.ProseMirror]:min-h-[320px] [&_.ProseMirror]:flex-1 [&_.ProseMirror]:outline-none"
             />
           </div>
         )}
       </div>
 
       {/* 底部状态栏 */}
-      <div className="flex items-center justify-between px-3 py-1.5 border-t bg-muted/20 text-[11px] text-muted-foreground">
+      <div className="bg-muted/20 text-muted-foreground flex items-center justify-between border-t px-3 py-1.5 text-[11px]">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-foreground">TipTap</span>
+          <span className="text-foreground font-semibold">TipTap</span>
           <span>·</span>
           <span>{isMarkdownMode ? 'Markdown 模式' : '所见即所得排版'}</span>
           <span>·</span>
-          <span>统计：{charCount} 字符 ({wordCount} 词)</span>
+          <span>
+            统计：{charCount} 字符 ({wordCount} 词)
+          </span>
         </div>
         <div className="text-[10px] opacity-75">
-          {isMarkdownMode ? '支持标准 Markdown 语法，保存时自动解析为富文本' : '点击任意区域即可编辑，支持键盘快捷键'}
+          {isMarkdownMode
+            ? '支持标准 Markdown 语法，保存时自动解析为富文本'
+            : '点击任意区域即可编辑，支持键盘快捷键'}
         </div>
       </div>
 
@@ -810,8 +870,8 @@ export function RichTextEditor({
       <Dialog open={linkDialogOpen} onOpenChange={setLinkDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-sm font-semibold flex items-center gap-2">
-              <LinkIcon className="size-4 text-primary" />
+            <DialogTitle className="flex items-center gap-2 text-sm font-semibold">
+              <LinkIcon className="text-primary size-4" />
               插入/编辑超链接
             </DialogTitle>
           </DialogHeader>
@@ -842,20 +902,23 @@ export function RichTextEditor({
                 id="link-newtab"
                 checked={linkNewTab}
                 onChange={(e) => setLinkNewTab(e.target.checked)}
-                className="rounded border-border text-primary focus:ring-primary"
+                className="border-border text-primary focus:ring-primary rounded"
               />
-              <Label htmlFor="link-newtab" className="cursor-pointer text-xs font-normal">
+              <Label
+                htmlFor="link-newtab"
+                className="cursor-pointer text-xs font-normal"
+              >
                 在新标签页中打开 (_blank)
               </Label>
             </div>
           </div>
-          <DialogFooter className="pt-2 flex justify-between sm:justify-between items-center">
+          <DialogFooter className="flex items-center justify-between pt-2 sm:justify-between">
             {editor.isActive('link') ? (
               <Button
                 type="button"
                 variant="destructive"
                 size="sm"
-                className="h-8 text-xs gap-1"
+                className="h-8 gap-1 text-xs"
                 onClick={handleRemoveLink}
               >
                 <Unlink className="size-3.5" />
@@ -879,7 +942,7 @@ export function RichTextEditor({
                 onClick={handleApplyLink}
                 disabled={!linkUrl.trim()}
               >
-                <Check className="size-3.5 mr-1" />
+                <Check className="mr-1 size-3.5" />
                 应用链接
               </Button>
             </div>
@@ -891,23 +954,27 @@ export function RichTextEditor({
       <Dialog open={imageDialogOpen} onOpenChange={setImageDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-sm font-semibold flex items-center gap-2">
-              <ImageIcon className="size-4 text-primary" />
+            <DialogTitle className="flex items-center gap-2 text-sm font-semibold">
+              <ImageIcon className="text-primary size-4" />
               插入网络图片
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-3 py-2 text-xs">
             {/* 从媒体库快速选用 */}
-            <div className="p-2.5 bg-muted/40 rounded-lg border border-dashed flex items-center justify-between gap-2">
+            <div className="bg-muted/40 flex items-center justify-between gap-2 rounded-lg border border-dashed p-2.5">
               <div>
-                <div className="font-medium text-foreground text-xs">从系统媒体库选取</div>
-                <div className="text-[11px] text-muted-foreground">一键选用已上传的高清插图或海报</div>
+                <div className="text-foreground text-xs font-medium">
+                  从系统媒体库选取
+                </div>
+                <div className="text-muted-foreground text-[11px]">
+                  一键选用已上传的高清插图或海报
+                </div>
               </div>
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
-                className="h-7 text-xs gap-1 text-primary border-primary/30 hover:bg-primary/5 shrink-0"
+                className="text-primary border-primary/30 hover:bg-primary/5 h-7 shrink-0 gap-1 text-xs"
                 onClick={() => setMediaPickerOpen(true)}
               >
                 <FolderOpen className="size-3.5" />
@@ -915,10 +982,12 @@ export function RichTextEditor({
               </Button>
             </div>
 
-            <div className="relative flex py-0.5 items-center">
-              <div className="flex-grow border-t border-border/60"></div>
-              <span className="flex-shrink mx-2 text-[10px] text-muted-foreground">或输入外链地址</span>
-              <div className="flex-grow border-t border-border/60"></div>
+            <div className="relative flex items-center py-0.5">
+              <div className="border-border/60 flex-grow border-t"></div>
+              <span className="text-muted-foreground mx-2 flex-shrink text-[10px]">
+                或输入外链地址
+              </span>
+              <div className="border-border/60 flex-grow border-t"></div>
             </div>
 
             <div className="space-y-1">
@@ -957,7 +1026,7 @@ export function RichTextEditor({
               onClick={handleApplyImage}
               disabled={!imageUrl.trim()}
             >
-              <Check className="size-3.5 mr-1" />
+              <Check className="mr-1 size-3.5" />
               插入图片
             </Button>
           </DialogFooter>

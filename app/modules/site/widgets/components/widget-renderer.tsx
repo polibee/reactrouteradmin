@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
-import type { SiteWidgetConfig, SiteWidgetGlobalSettings } from '../../types'
 import { siteService } from '../../service'
-import { WidgetContext } from './widget-context'
-import { QuickLinksCard } from './cards/quick-links-card'
-import { StatsMetricCard } from './cards/stats-metric-card'
+import type { SiteWidgetConfig, SiteWidgetGlobalSettings } from '../../types'
 import { AnnouncementCard } from './cards/announcement-card'
 import { ContactInfoCard } from './cards/contact-info-card'
-import { SponsorAdCard } from './cards/sponsor-ad-card'
 import { CustomContentCard } from './cards/custom-content-card'
+import { QuickLinksCard } from './cards/quick-links-card'
+import { SponsorAdCard } from './cards/sponsor-ad-card'
+import { StatsMetricCard } from './cards/stats-metric-card'
+import { WidgetContext } from './widget-context'
 
 export interface WidgetRendererProps {
   placement: 'dashboard' | 'home_sidebar' | 'page_sidebar' | 'site_sidebar'
@@ -17,7 +17,7 @@ export interface WidgetRendererProps {
 export function WidgetRenderer({ placement, className }: WidgetRendererProps) {
   const [widgets, setWidgets] = useState<SiteWidgetConfig[]>([])
   const [settings, setSettings] = useState<SiteWidgetGlobalSettings>(() =>
-    siteService.getWidgetGlobalSettings()
+    siteService.getWidgetGlobalSettings(),
   )
 
   useEffect(() => {
@@ -34,9 +34,15 @@ export function WidgetRenderer({ placement, className }: WidgetRendererProps) {
       }
     }
 
-    window.addEventListener('site_widget_settings_changed', handleSettingsChange)
+    window.addEventListener(
+      'site_widget_settings_changed',
+      handleSettingsChange,
+    )
     return () => {
-      window.removeEventListener('site_widget_settings_changed', handleSettingsChange)
+      window.removeEventListener(
+        'site_widget_settings_changed',
+        handleSettingsChange,
+      )
     }
   }, [placement])
 
@@ -44,7 +50,8 @@ export function WidgetRenderer({ placement, className }: WidgetRendererProps) {
     return null
   }
 
-  const defaultGapClass = settings.density === 'compact' ? 'space-y-2.5' : 'space-y-3.5'
+  const defaultGapClass =
+    settings.density === 'compact' ? 'space-y-2.5' : 'space-y-3.5'
   const containerClass = className || defaultGapClass
 
   const renderCard = (w: SiteWidgetConfig) => {

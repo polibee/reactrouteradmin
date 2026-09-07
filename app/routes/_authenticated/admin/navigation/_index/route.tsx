@@ -1,7 +1,7 @@
 import {
   DashboardPage,
-  DashboardPageHeader,
   DashboardPageContent,
+  DashboardPageHeader,
 } from '~/admin/ui'
 import { NavigationEditor } from '~/modules/site/navigation/components/navigation-editor'
 

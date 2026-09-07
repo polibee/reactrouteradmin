@@ -5,7 +5,9 @@ export class ResourceRegistry {
 
   register(resource: AdminResource): void {
     if (this.resources.has(resource.name)) {
-      console.warn(`[ResourceRegistry] Resource with name "${resource.name}" is already registered. Overwriting.`)
+      console.warn(
+        `[ResourceRegistry] Resource with name "${resource.name}" is already registered. Overwriting.`,
+      )
     }
     this.resources.set(resource.name, resource)
   }

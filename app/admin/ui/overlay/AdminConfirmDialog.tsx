@@ -1,4 +1,4 @@
-import React from 'react'
+import type React from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,7 +41,8 @@ export function AdminConfirmDialog({
   trigger,
   children,
 }: AdminConfirmDialogProps) {
-  const displayDescription = description ?? content ?? '此操作可能无法撤销，请确认是否继续。'
+  const displayDescription =
+    description ?? content ?? '此操作可能无法撤销，请确认是否继续。'
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       {trigger && <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>}
@@ -54,7 +55,11 @@ export function AdminConfirmDialog({
         <AlertDialogFooter>
           <AlertDialogCancel disabled={loading}>{cancelText}</AlertDialogCancel>
           <AlertDialogAction
-            className={variant === 'destructive' ? buttonVariants({ variant: 'destructive' }) : ''}
+            className={
+              variant === 'destructive'
+                ? buttonVariants({ variant: 'destructive' })
+                : ''
+            }
             disabled={loading}
             onClick={(e) => {
               e.preventDefault()

@@ -14,14 +14,17 @@ export function htmlToMarkdown(html: string): string {
   md = md.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
 
   // Pre / Code blocks
-  md = md.replace(/<pre><code(?:\s+class="language-(\w+)")?>([\s\S]*?)<\/code><\/pre>/gi, (_, lang, code) => {
-    const unescaped = code
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&amp;/g, '&')
-      .replace(/&quot;/g, '"')
-    return `\n\n\`\`\`${lang || ''}\n${unescaped.trim()}\n\`\`\`\n\n`
-  })
+  md = md.replace(
+    /<pre><code(?:\s+class="language-(\w+)")?>([\s\S]*?)<\/code><\/pre>/gi,
+    (_, lang, code) => {
+      const unescaped = code
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+      return `\n\n\`\`\`${lang || ''}\n${unescaped.trim()}\n\`\`\`\n\n`
+    },
+  )
 
   // Tables
   md = md.replace(/<table[^>]*>([\s\S]*?)<\/table>/gi, (_, tableContent) => {
@@ -30,9 +33,11 @@ export function htmlToMarkdown(html: string): string {
 
     for (const r of rowMatches) {
       const cells: string[] = []
-      const cellMatches = r.match(/<(?:th|td)[^>]*>([\s\S]*?)<\/(?:th|td)>/gi) || []
+      const cellMatches =
+        r.match(/<(?:th|td)[^>]*>([\s\S]*?)<\/(?:th|td)>/gi) || []
       for (const c of cellMatches) {
-        const text = c.replace(/<(?:th|td)[^>]*>([\s\S]*?)<\/(?:th|td)>/gi, '$1')
+        const text = c
+          .replace(/<(?:th|td)[^>]*>([\s\S]*?)<\/(?:th|td)>/gi, '$1')
           .replace(/<[^>]+>/g, '')
           .trim()
         cells.push(text)
@@ -61,14 +66,27 @@ export function htmlToMarkdown(html: string): string {
   md = md.replace(/<h6[^>]*>([\s\S]*?)<\/h6>/gi, '\n\n###### $1\n\n')
 
   // Blockquotes
-  md = md.replace(/<blockquote[^>]*>([\s\S]*?)<\/blockquote>/gi, (_, content) => {
-    const lines = content.replace(/<p[^>]*>/gi, '').replace(/<\/p>/gi, '\n').trim().split('\n')
-    return '\n\n' + lines.map((l: string) => `> ${l.trim()}`).join('\n') + '\n\n'
-  })
+  md = md.replace(
+    /<blockquote[^>]*>([\s\S]*?)<\/blockquote>/gi,
+    (_, content) => {
+      const lines = content
+        .replace(/<p[^>]*>/gi, '')
+        .replace(/<\/p>/gi, '\n')
+        .trim()
+        .split('\n')
+      return `\n\n${lines.map((l: string) => `> ${l.trim()}`).join('\n')}\n\n`
+    },
+  )
 
   // Images
-  md = md.replace(/<img[^>]*src="([^"]+)"[^>]*alt="([^"]*)"[^>]*\/?>/gi, '![$2]($1)')
-  md = md.replace(/<img[^>]*alt="([^"]*)"[^>]*src="([^"]+)"[^>]*\/?>/gi, '![$1]($2)')
+  md = md.replace(
+    /<img[^>]*src="([^"]+)"[^>]*alt="([^"]*)"[^>]*\/?>/gi,
+    '![$2]($1)',
+  )
+  md = md.replace(
+    /<img[^>]*alt="([^"]*)"[^>]*src="([^"]+)"[^>]*\/?>/gi,
+    '![$1]($2)',
+  )
   md = md.replace(/<img[^>]*src="([^"]+)"[^>]*\/?>/gi, '![]($1)')
 
   // Links
@@ -77,19 +95,37 @@ export function htmlToMarkdown(html: string): string {
   // Unordered list
   md = md.replace(/<ul[^>]*>([\s\S]*?)<\/ul>/gi, (_, content) => {
     const items = content.match(/<li[^>]*>([\s\S]*?)<\/li>/gi) || []
-    return '\n\n' + items.map((item: string) => {
-      const clean = item.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, '$1').replace(/<[^>]+>/g, '').trim()
-      return `- ${clean}`
-    }).join('\n') + '\n\n'
+    return (
+      '\n\n' +
+      items
+        .map((item: string) => {
+          const clean = item
+            .replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, '$1')
+            .replace(/<[^>]+>/g, '')
+            .trim()
+          return `- ${clean}`
+        })
+        .join('\n') +
+      '\n\n'
+    )
   })
 
   // Ordered list
   md = md.replace(/<ol[^>]*>([\s\S]*?)<\/ol>/gi, (_, content) => {
     const items = content.match(/<li[^>]*>([\s\S]*?)<\/li>/gi) || []
-    return '\n\n' + items.map((item: string, idx: number) => {
-      const clean = item.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, '$1').replace(/<[^>]+>/g, '').trim()
-      return `${idx + 1}. ${clean}`
-    }).join('\n') + '\n\n'
+    return (
+      '\n\n' +
+      items
+        .map((item: string, idx: number) => {
+          const clean = item
+            .replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, '$1')
+            .replace(/<[^>]+>/g, '')
+            .trim()
+          return `${idx + 1}. ${clean}`
+        })
+        .join('\n') +
+      '\n\n'
+    )
   })
 
   // Inline formatting
@@ -130,7 +166,8 @@ export function markdownToHtml(md: string): string {
 
   const flushTable = () => {
     if (!inTable || tableRows.length === 0) return
-    let tableHtml = '<table class="border-collapse table-auto w-full my-4 border text-xs">'
+    let tableHtml =
+      '<table class="border-collapse table-auto w-full my-4 border text-xs">'
     if (tableRows.length > 0) {
       tableHtml += '<thead><tr>'
       for (const th of tableRows[0]) {
@@ -157,11 +194,14 @@ export function markdownToHtml(md: string): string {
 
   const flushCodeBlock = () => {
     if (!inCodeBlock) return
-    const codeContent = codeBlockLines.join('\n')
+    const codeContent = codeBlockLines
+      .join('\n')
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
-    htmlChunks.push(`<pre><code${codeBlockLang ? ` class="language-${codeBlockLang}"` : ''}>${codeContent}</code></pre>`)
+    htmlChunks.push(
+      `<pre><code${codeBlockLang ? ` class="language-${codeBlockLang}"` : ''}>${codeContent}</code></pre>`,
+    )
     inCodeBlock = false
     codeBlockLang = ''
     codeBlockLines = []
@@ -242,7 +282,9 @@ export function markdownToHtml(md: string): string {
 
     // Blockquote
     if (trimmed.startsWith('> ')) {
-      htmlChunks.push(`<blockquote><p>${formatInline(trimmed.slice(2))}</p></blockquote>`)
+      htmlChunks.push(
+        `<blockquote><p>${formatInline(trimmed.slice(2))}</p></blockquote>`,
+      )
       continue
     }
 
@@ -276,7 +318,10 @@ export function markdownToHtml(md: string): string {
 function formatInline(str: string): string {
   let s = str
   s = s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" />')
-  s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>')
+  s = s.replace(
+    /\[([^\]]+)\]\(([^)]+)\)/g,
+    '<a href="$2" target="_blank" rel="noreferrer">$1</a>',
+  )
   s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
   s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>')
   s = s.replace(/~~([^~]+)~~/g, '<s>$1</s>')

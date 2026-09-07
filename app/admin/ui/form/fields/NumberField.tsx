@@ -1,4 +1,4 @@
-import { useFormContext, Controller } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import { Label } from '~/components/ui/label'
 import { AdminInput } from '../../primitives/AdminInput'
 
@@ -52,15 +52,16 @@ export function NumberField({
             error={fieldState.error?.message}
             value={field.value ?? ''}
             onChange={(e) => {
-              const val = e.target.value === '' ? undefined : Number(e.target.value)
+              const val =
+                e.target.value === '' ? undefined : Number(e.target.value)
               field.onChange(val)
             }}
           />
           {description && !fieldState.error && (
-            <p className="text-xs text-muted-foreground">{description}</p>
+            <p className="text-muted-foreground text-xs">{description}</p>
           )}
           {fieldState.error && (
-            <p className="text-xs text-destructive font-medium">
+            <p className="text-destructive text-xs font-medium">
               {fieldState.error.message}
             </p>
           )}

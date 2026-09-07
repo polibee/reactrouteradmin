@@ -39,9 +39,12 @@ function PaginationItem({ ...props }: React.ComponentProps<'li'>) {
 
 type PaginationLinkProps = {
   isActive?: boolean
-} & Pick<React.ComponentProps<'button'>, 'className' | 'children' | 'onClick'> & {
-  size?: 'default' | 'sm' | 'lg' | 'icon'
-}
+} & Pick<
+  React.ComponentProps<'button'>,
+  'className' | 'children' | 'onClick'
+> & {
+    size?: 'default' | 'sm' | 'lg' | 'icon'
+  }
 
 function PaginationLink({
   className,
@@ -120,9 +123,9 @@ function PaginationEllipsis({
 export {
   Pagination,
   PaginationContent,
-  PaginationLink,
-  PaginationItem,
-  PaginationPrevious,
-  PaginationNext,
   PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
 }

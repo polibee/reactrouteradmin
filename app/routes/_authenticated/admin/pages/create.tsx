@@ -1,15 +1,15 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 import {
-  DashboardPage,
-  DashboardPageHeader,
-  DashboardPageContent,
   DashboardCard,
+  DashboardPage,
+  DashboardPageContent,
+  DashboardPageHeader,
   notify,
 } from '~/admin/ui'
 import { PageForm } from '~/modules/site/pages/components/page-form'
 import { siteService } from '~/modules/site/service'
 import type { SitePageFormValues } from '~/modules/site/types'
-import { useNavigate } from 'react-router'
 
 export const meta = () => {
   return [{ title: '新建单页面 - Admin Framework' }]
@@ -45,7 +45,10 @@ export default function SitePageCreate() {
       />
 
       <DashboardPageContent>
-        <DashboardCard title="单页面基本信息与 SEO 配置" description="带 * 为必填项">
+        <DashboardCard
+          title="单页面基本信息与 SEO 配置"
+          description="带 * 为必填项"
+        >
           <PageForm
             onSubmit={handleSubmit}
             loading={loading}

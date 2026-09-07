@@ -1,5 +1,5 @@
-import type React from 'react'
 import { Eye } from 'lucide-react'
+import type React from 'react'
 import { AdminAction, type AdminActionProps } from './AdminAction'
 
 export interface ViewActionProps extends Omit<AdminActionProps, 'icon'> {

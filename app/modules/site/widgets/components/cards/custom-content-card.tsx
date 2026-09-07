@@ -1,8 +1,20 @@
+import {
+  Code2,
+  ExternalLink,
+  Image as ImageIcon,
+  Link2,
+  Sparkles,
+} from 'lucide-react'
 import { useEffect, useRef } from 'react'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/components/ui/card'
 import { Badge } from '~/components/ui/badge'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '~/components/ui/card'
 import type { SiteWidgetConfig } from '../../../types'
-import { Sparkles, ExternalLink, Image as ImageIcon, Link2, Code2 } from 'lucide-react'
 import { useWidgetContext } from '../widget-context'
 
 export interface CustomContentCardProps {
@@ -30,7 +42,11 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
 
   // Execute custom JS if specified
   useEffect(() => {
-    if (widget.cardType === 'custom_js' && widget.jsCode && jsContainerRef.current) {
+    if (
+      widget.cardType === 'custom_js' &&
+      widget.jsCode &&
+      jsContainerRef.current
+    ) {
       try {
         const script = document.createElement('script')
         script.type = 'text/javascript'
@@ -49,20 +65,20 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
   if (widget.cardType === 'image_banner') {
     if (!widget.imageUrl) {
       return (
-        <Card className="shadow-xs border p-3 text-center text-xs text-muted-foreground">
-          <ImageIcon className="size-5 mx-auto mb-1 opacity-50" />
+        <Card className="text-muted-foreground border p-3 text-center text-xs shadow-xs">
+          <ImageIcon className="mx-auto mb-1 size-5 opacity-50" />
           <span>{widget.title} (未配置图片地址)</span>
         </Card>
       )
     }
 
     return (
-      <Card className="shadow-xs border overflow-hidden group">
+      <Card className="group overflow-hidden border shadow-xs">
         <a
           href={widget.targetUrl || '#'}
           target={widget.targetWindow || '_blank'}
           rel={widget.targetWindow === '_blank' ? 'noreferrer' : undefined}
-          className="block relative overflow-hidden"
+          className="relative block overflow-hidden"
         >
           <img
             src={widget.imageUrl}
@@ -71,16 +87,18 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
               isCompact ? 'h-20 sm:h-22' : 'h-28 sm:h-32'
             }`}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-2.5 text-white">
+          <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/30 to-transparent p-2.5 text-white">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold drop-shadow-xs flex items-center gap-1">
+              <span className="flex items-center gap-1 text-xs font-semibold drop-shadow-xs">
                 <ImageIcon className="size-3" />
                 {widget.title}
               </span>
-              {widget.targetUrl && <ExternalLink className="size-2.5 opacity-80" />}
+              {widget.targetUrl && (
+                <ExternalLink className="size-2.5 opacity-80" />
+              )}
             </div>
             {widget.description && (
-              <p className="text-[10px] text-white/80 line-clamp-1 mt-0.5">
+              <p className="mt-0.5 line-clamp-1 text-[10px] text-white/80">
                 {widget.description}
               </p>
             )}
@@ -93,15 +111,17 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
   // 2. 文本超链接集合卡片 (Link List)
   if (widget.cardType === 'link_list') {
     return (
-      <Card className="shadow-xs border">
-        <CardHeader className={`${isCompact ? 'p-2 px-2.5 pb-1' : 'p-3 pb-2'} ${showCardDividers ? 'border-b' : ''}`}>
-          <CardTitle className="text-xs font-semibold flex items-center justify-between text-foreground">
+      <Card className="border shadow-xs">
+        <CardHeader
+          className={`${isCompact ? 'p-2 px-2.5 pb-1' : 'p-3 pb-2'} ${showCardDividers ? 'border-b' : ''}`}
+        >
+          <CardTitle className="text-foreground flex items-center justify-between text-xs font-semibold">
             <span className="flex items-center gap-1.5">
-              <Link2 className="size-3 text-primary" />
+              <Link2 className="text-primary size-3" />
               {widget.title}
             </span>
             {widget.description && (
-              <span className="text-[9px] text-muted-foreground font-normal truncate max-w-[120px]">
+              <span className="text-muted-foreground max-w-[120px] truncate text-[9px] font-normal">
                 {widget.description}
               </span>
             )}
@@ -109,25 +129,32 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
         </CardHeader>
         <CardContent className={isCompact ? 'p-2 px-2.5' : 'p-3 pt-2'}>
           {parsedLinks.length === 0 ? (
-            <p className="text-[10px] text-muted-foreground py-2 text-center">暂未配置超链接项</p>
+            <p className="text-muted-foreground py-2 text-center text-[10px]">
+              暂未配置超链接项
+            </p>
           ) : (
-            <div className="divide-y divide-border/50">
+            <div className="divide-border/50 divide-y">
               {parsedLinks.map((item, idx) => (
                 <a
                   key={idx}
                   href={item.url}
                   target={widget.targetWindow || '_blank'}
-                  rel={widget.targetWindow === '_blank' ? 'noreferrer' : undefined}
-                  className={`flex items-center justify-between first:pt-0 last:pb-0 hover:text-primary transition-colors text-muted-foreground group ${
+                  rel={
+                    widget.targetWindow === '_blank' ? 'noreferrer' : undefined
+                  }
+                  className={`hover:text-primary text-muted-foreground group flex items-center justify-between transition-colors first:pt-0 last:pb-0 ${
                     isCompact ? 'py-1' : 'py-1.5'
                   }`}
                 >
-                  <span className="truncate pr-2 group-hover:text-foreground font-medium text-[11px]">
+                  <span className="group-hover:text-foreground truncate pr-2 text-[11px] font-medium">
                     {item.title}
                   </span>
-                  <div className="flex items-center gap-1.5 shrink-0">
+                  <div className="flex shrink-0 items-center gap-1.5">
                     {item.badge && (
-                      <Badge variant="secondary" className="text-[8px] sm:text-[9px] px-1 py-0 h-3.5">
+                      <Badge
+                        variant="secondary"
+                        className="h-3.5 px-1 py-0 text-[8px] sm:text-[9px]"
+                      >
                         {item.badge}
                       </Badge>
                     )}
@@ -145,19 +172,24 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
   // 3. 自定义 HTML / CSS 卡片 (Custom HTML)
   if (widget.cardType === 'custom_html') {
     return (
-      <Card className="shadow-xs border">
-        <CardHeader className={`${isCompact ? 'p-2 px-2.5 pb-1' : 'p-3 pb-2'} ${showCardDividers ? 'border-b' : ''}`}>
-          <CardTitle className="text-xs font-semibold flex items-center gap-1.5">
-            <Code2 className="size-3 text-primary" />
+      <Card className="border shadow-xs">
+        <CardHeader
+          className={`${isCompact ? 'p-2 px-2.5 pb-1' : 'p-3 pb-2'} ${showCardDividers ? 'border-b' : ''}`}
+        >
+          <CardTitle className="flex items-center gap-1.5 text-xs font-semibold">
+            <Code2 className="text-primary size-3" />
             {widget.title}
           </CardTitle>
           {widget.description && (
-            <CardDescription className="text-[9px]">{widget.description}</CardDescription>
+            <CardDescription className="text-[9px]">
+              {widget.description}
+            </CardDescription>
           )}
         </CardHeader>
         <CardContent className={isCompact ? 'p-2 px-2.5 pt-1.5' : 'p-3 pt-2'}>
           <div
-            className="text-[11px] leading-relaxed overflow-hidden"
+            className="overflow-hidden text-[11px] leading-relaxed"
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: renders admin-authored custom widget HTML
             dangerouslySetInnerHTML={{ __html: widget.customContent || '' }}
           />
         </CardContent>
@@ -168,21 +200,30 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
   // 4. 自定义 JS 外部脚本挂件卡片 (Custom JS)
   if (widget.cardType === 'custom_js') {
     return (
-      <Card className="shadow-xs border">
-        <CardHeader className={`${isCompact ? 'p-2 px-2.5 pb-1' : 'p-3 pb-2'} ${showCardDividers ? 'border-b' : ''}`}>
-          <CardTitle className="text-xs font-semibold flex items-center gap-1.5">
+      <Card className="border shadow-xs">
+        <CardHeader
+          className={`${isCompact ? 'p-2 px-2.5 pb-1' : 'p-3 pb-2'} ${showCardDividers ? 'border-b' : ''}`}
+        >
+          <CardTitle className="flex items-center gap-1.5 text-xs font-semibold">
             <Code2 className="size-3 text-amber-500" />
             {widget.title}
           </CardTitle>
           {widget.description && (
-            <CardDescription className="text-[9px]">{widget.description}</CardDescription>
+            <CardDescription className="text-[9px]">
+              {widget.description}
+            </CardDescription>
           )}
         </CardHeader>
         <CardContent className={isCompact ? 'p-2 px-2.5 pt-1.5' : 'p-3 pt-2'}>
-          <div id={`widget-js-${widget.id}`} ref={jsContainerRef} className="text-xs min-h-6" />
+          <div
+            id={`widget-js-${widget.id}`}
+            ref={jsContainerRef}
+            className="min-h-6 text-xs"
+          />
           {widget.customContent && (
             <div
-              className="text-[11px] leading-relaxed mt-1.5"
+              className="mt-1.5 text-[11px] leading-relaxed"
+              // biome-ignore lint/security/noDangerouslySetInnerHtml: renders admin-authored custom widget HTML
               dangerouslySetInnerHTML={{ __html: widget.customContent }}
             />
           )}
@@ -193,18 +234,22 @@ export function CustomContentCard({ widget }: CustomContentCardProps) {
 
   // 5. 自定义 Markdown / 纯文本卡片 (Custom Text)
   return (
-    <Card className="shadow-xs border">
-      <CardHeader className={`${isCompact ? 'p-2 px-2.5 pb-1' : 'p-3 pb-2'} ${showCardDividers ? 'border-b' : ''}`}>
-        <CardTitle className="text-xs font-semibold flex items-center gap-1.5">
-          <Sparkles className="size-3 text-primary" />
+    <Card className="border shadow-xs">
+      <CardHeader
+        className={`${isCompact ? 'p-2 px-2.5 pb-1' : 'p-3 pb-2'} ${showCardDividers ? 'border-b' : ''}`}
+      >
+        <CardTitle className="flex items-center gap-1.5 text-xs font-semibold">
+          <Sparkles className="text-primary size-3" />
           {widget.title}
         </CardTitle>
         {widget.description && (
-          <CardDescription className="text-[9px]">{widget.description}</CardDescription>
+          <CardDescription className="text-[9px]">
+            {widget.description}
+          </CardDescription>
         )}
       </CardHeader>
       <CardContent className={isCompact ? 'p-2 px-2.5 pt-1.5' : 'p-3 pt-2'}>
-        <div className="text-[11px] text-muted-foreground whitespace-pre-wrap leading-relaxed">
+        <div className="text-muted-foreground text-[11px] leading-relaxed whitespace-pre-wrap">
           {widget.customContent || '暂无自定义内容'}
         </div>
       </CardContent>

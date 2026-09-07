@@ -2,12 +2,12 @@ import { defineModule } from '../../admin/core/module/module'
 import { moduleRegistry } from '../../admin/core/module/registry'
 import { UserResource } from './resource'
 
-export * from './types'
+export * from './components/user-form'
+export * from './components/user-table'
+export * from './repository'
 export * from './resource'
 export * from './service'
-export * from './repository'
-export * from './components/user-table'
-export * from './components/user-form'
+export * from './types'
 
 export const UserModule = defineModule({
   name: 'user',

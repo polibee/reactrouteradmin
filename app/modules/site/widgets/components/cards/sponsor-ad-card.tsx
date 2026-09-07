@@ -1,10 +1,10 @@
+import { ArrowRight, ExternalLink, Sparkles } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Card, CardHeader, CardContent } from '~/components/ui/card'
-import { Button } from '~/components/ui/button'
 import { Link } from 'react-router'
+import { Button } from '~/components/ui/button'
+import { Card, CardContent, CardHeader } from '~/components/ui/card'
 import { siteService } from '../../../service'
 import type { SiteAdSlot, SiteWidgetConfig } from '../../../types'
-import { ArrowRight, Sparkles, ExternalLink } from 'lucide-react'
 import { useWidgetContext } from '../widget-context'
 
 export interface SponsorAdCardProps {
@@ -25,33 +25,43 @@ export function SponsorAdCard({ widget }: SponsorAdCardProps) {
   }, [])
 
   const title = widget?.title || ad?.title || '推荐专栏 · 赞助推广'
-  const text = widget?.description || ad?.text || ad?.title || '企业级全栈架构脚手架与开源生态套件'
+  const text =
+    widget?.description ||
+    ad?.text ||
+    ad?.title ||
+    '企业级全栈架构脚手架与开源生态套件'
   const imageUrl = widget?.imageUrl || ad?.imageUrl
   const targetUrl = widget?.targetUrl || ad?.targetUrl || '/about'
   const targetWindow = widget?.targetWindow || '_self'
 
   return (
-    <Card className="border-primary/20 bg-linear-to-b from-primary/5 via-background to-background shadow-xs overflow-hidden">
-      <CardHeader className={`${isCompact ? 'p-2 px-2.5 pb-1' : 'p-3 pb-2'} ${showCardDividers ? 'border-b' : ''}`}>
+    <Card className="border-primary/20 from-primary/5 via-background to-background overflow-hidden bg-linear-to-b shadow-xs">
+      <CardHeader
+        className={`${isCompact ? 'p-2 px-2.5 pb-1' : 'p-3 pb-2'} ${showCardDividers ? 'border-b' : ''}`}
+      >
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-primary flex items-center gap-1.5">
+          <span className="text-primary flex items-center gap-1.5 text-xs font-semibold">
             <Sparkles className="size-3 text-amber-500" />
             {title}
           </span>
-          <span className="text-[9px] text-muted-foreground bg-muted/80 px-1 py-0.5 rounded font-mono">
+          <span className="text-muted-foreground bg-muted/80 rounded px-1 py-0.5 font-mono text-[9px]">
             推广
           </span>
         </div>
       </CardHeader>
-      <CardContent className={isCompact ? 'p-2 px-2.5 pt-1.5 space-y-1.5' : 'p-3 pt-2 space-y-2'}>
+      <CardContent
+        className={
+          isCompact ? 'space-y-1.5 p-2 px-2.5 pt-1.5' : 'space-y-2 p-3 pt-2'
+        }
+      >
         {imageUrl && (
           <img
             src={imageUrl}
             alt={title}
-            className={`w-full object-cover rounded-md border ${isCompact ? 'h-16' : 'h-20'}`}
+            className={`w-full rounded-md border object-cover ${isCompact ? 'h-16' : 'h-20'}`}
           />
         )}
-        <p className="text-[11px] text-foreground/90 font-medium leading-snug line-clamp-2">
+        <p className="text-foreground/90 line-clamp-2 text-[11px] leading-snug font-medium">
           {text}
         </p>
         <div className="pt-0.2">
@@ -60,7 +70,7 @@ export function SponsorAdCard({ widget }: SponsorAdCardProps) {
               href={targetUrl}
               target="_blank"
               rel="noreferrer"
-              className="text-primary hover:underline text-[10px] inline-flex items-center gap-1 font-medium"
+              className="text-primary inline-flex items-center gap-1 text-[10px] font-medium hover:underline"
             >
               立即了解更多 <ExternalLink className="size-2" />
             </a>
@@ -69,10 +79,10 @@ export function SponsorAdCard({ widget }: SponsorAdCardProps) {
               size="sm"
               variant="link"
               asChild
-              className="p-0 h-auto text-[10px] text-primary font-medium"
+              className="text-primary h-auto p-0 text-[10px] font-medium"
             >
               <Link to={targetUrl} target={targetWindow}>
-                立即了解更多 <ArrowRight className="size-2 ml-0.5" />
+                立即了解更多 <ArrowRight className="ml-0.5 size-2" />
               </Link>
             </Button>
           )}

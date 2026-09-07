@@ -37,7 +37,10 @@ export const useBreadcrumbs = () => {
       return null
     }
     return {
-      ...match.handle.breadcrumb((match as { loaderData?: unknown; data?: unknown }).loaderData ?? (match as { data?: unknown }).data),
+      ...match.handle.breadcrumb(
+        (match as { loaderData?: unknown; data?: unknown }).loaderData ??
+          (match as { data?: unknown }).data,
+      ),
       isCurrentPage: idx === breadcrumbMatches.length - 1,
     }
   }) as MatchedBreadcrumbItem[]

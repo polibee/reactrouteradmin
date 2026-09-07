@@ -1,4 +1,4 @@
-import { useFormContext, Controller } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import { Label } from '~/components/ui/label'
 import { AdminTextarea } from '../../primitives/AdminTextarea'
 
@@ -47,10 +47,10 @@ export function TextareaField({
             error={fieldState.error?.message}
           />
           {description && !fieldState.error && (
-            <p className="text-xs text-muted-foreground">{description}</p>
+            <p className="text-muted-foreground text-xs">{description}</p>
           )}
           {fieldState.error && (
-            <p className="text-xs text-destructive font-medium">
+            <p className="text-destructive text-xs font-medium">
               {fieldState.error.message}
             </p>
           )}

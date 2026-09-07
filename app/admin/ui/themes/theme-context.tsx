@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import type React from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { type ThemePreset, themePresets } from './presets'
 
 interface ThemePresetContextValue {

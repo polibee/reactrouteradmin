@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import { useFormContext, Controller } from 'react-hook-form'
-import { Label } from '~/components/ui/label'
-import { Input } from '~/components/ui/input'
 import { Eye, EyeOff, Lock } from 'lucide-react'
+import { useState } from 'react'
+import { Controller, useFormContext } from 'react-hook-form'
 import { Button } from '~/components/ui/button'
+import { Input } from '~/components/ui/input'
+import { Label } from '~/components/ui/label'
 import { cn } from '~/lib/utils'
 
 export interface PasswordFieldProps {
@@ -40,8 +40,8 @@ export function PasswordField({
               {required && <span className="text-destructive ml-1">*</span>}
             </Label>
           )}
-          <div className="relative flex items-center w-full">
-            <div className="absolute left-3 text-muted-foreground pointer-events-none">
+          <div className="relative flex w-full items-center">
+            <div className="text-muted-foreground pointer-events-none absolute left-3">
               <Lock className="h-4 w-4" />
             </div>
             <Input
@@ -52,15 +52,16 @@ export function PasswordField({
               placeholder={placeholder}
               disabled={disabled}
               className={cn(
-                'pl-9 pr-10',
-                fieldState.error && 'border-destructive focus-visible:ring-destructive',
+                'pr-10 pl-9',
+                fieldState.error &&
+                  'border-destructive focus-visible:ring-destructive',
               )}
             />
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              className="absolute right-0 h-full px-3 py-2 hover:bg-transparent text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground absolute right-0 h-full px-3 py-2 hover:bg-transparent"
               onClick={() => setShowPassword(!showPassword)}
               tabIndex={-1}
             >
@@ -72,10 +73,10 @@ export function PasswordField({
             </Button>
           </div>
           {description && !fieldState.error && (
-            <p className="text-xs text-muted-foreground">{description}</p>
+            <p className="text-muted-foreground text-xs">{description}</p>
           )}
           {fieldState.error && (
-            <p className="text-xs text-destructive font-medium">
+            <p className="text-destructive text-xs font-medium">
               {fieldState.error.message}
             </p>
           )}

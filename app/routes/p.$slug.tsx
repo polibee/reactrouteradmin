@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { SinglePageView } from '~/components/site/single-page-content'
 
 export default function PSlugRoute() {

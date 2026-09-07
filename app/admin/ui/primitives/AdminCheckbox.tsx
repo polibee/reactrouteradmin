@@ -1,8 +1,10 @@
-import React from 'react'
+import type React from 'react'
 import { Checkbox } from '~/components/ui/checkbox'
 import { Label } from '~/components/ui/label'
 
-export interface AdminCheckboxProps extends React.ComponentProps<typeof Checkbox> {
+export interface AdminCheckboxProps extends React.ComponentProps<
+  typeof Checkbox
+> {
   label?: string
   description?: string
 }
@@ -14,7 +16,9 @@ export function AdminCheckbox({
   className,
   ...props
 }: AdminCheckboxProps) {
-  const checkboxId = id || (label ? `check-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined)
+  const checkboxId =
+    id ||
+    (label ? `check-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined)
 
   if (!label) {
     return <Checkbox id={checkboxId} className={className} {...props} />
@@ -24,11 +28,14 @@ export function AdminCheckbox({
     <div className="flex items-start space-x-3">
       <Checkbox id={checkboxId} className={className} {...props} />
       <div className="space-y-0.5 leading-none">
-        <Label htmlFor={checkboxId} className="text-sm font-medium cursor-pointer">
+        <Label
+          htmlFor={checkboxId}
+          className="cursor-pointer text-sm font-medium"
+        >
           {label}
         </Label>
         {description && (
-          <p className="text-xs text-muted-foreground">{description}</p>
+          <p className="text-muted-foreground text-xs">{description}</p>
         )}
       </div>
     </div>

@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 import {
   AdminPage,
-  AdminPageHeader,
   AdminPageContent,
+  AdminPageHeader,
   CreateAction,
 } from '~/admin/ui'
 import { UserTable } from '~/modules/user/components/user-table'
 import { userService } from '~/modules/user/service'
 import type { User } from '~/modules/user/types'
-import { useNavigate } from 'react-router'
 
 export const meta = () => {
   return [{ title: '用户管理 - Admin Framework' }]
@@ -33,6 +33,7 @@ export default function UsersIndexPage() {
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only initial load
   useEffect(() => {
     loadData()
   }, [])
@@ -52,11 +53,7 @@ export default function UsersIndexPage() {
       />
 
       <AdminPageContent>
-        <UserTable
-          data={users}
-          loading={loading}
-          onDataChange={loadData}
-        />
+        <UserTable data={users} loading={loading} onDataChange={loadData} />
       </AdminPageContent>
     </AdminPage>
   )

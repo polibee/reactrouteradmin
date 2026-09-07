@@ -1,6 +1,8 @@
 import type { AdminResource, ResourceConfig } from './types'
 
-export function defineResource<T = any>(config: ResourceConfig<T>): AdminResource<T> {
+export function defineResource<T = unknown>(
+  config: ResourceConfig<T>,
+): AdminResource<T> {
   const defaultPath = `/admin/${config.name}`
   return {
     ...config,

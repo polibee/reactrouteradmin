@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import type {
   ColumnDef,
   ColumnFiltersState,
@@ -13,6 +12,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import React, { useState } from 'react'
+import { Checkbox } from '~/components/ui/checkbox'
 import {
   Table,
   TableBody,
@@ -21,12 +22,11 @@ import {
   TableHeader,
   TableRow,
 } from '~/components/ui/table'
-import { Checkbox } from '~/components/ui/checkbox'
-import { AdminTableToolbar } from './AdminTableToolbar'
-import { AdminTablePagination } from './AdminTablePagination'
-import { AdminBulkActions } from './AdminBulkActions'
 import { AdminEmpty } from '../feedback/AdminEmpty'
 import { AdminLoading } from '../feedback/AdminLoading'
+import { AdminBulkActions } from './AdminBulkActions'
+import { AdminTablePagination } from './AdminTablePagination'
+import { AdminTableToolbar } from './AdminTableToolbar'
 
 export interface AdminTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -44,7 +44,7 @@ export interface AdminTableProps<TData, TValue> {
   emptyDescription?: string
 }
 
-export function createSelectColumn<TData>(): ColumnDef<TData, any> {
+export function createSelectColumn<TData>(): ColumnDef<TData, unknown> {
   return {
     id: 'select',
     header: ({ table }) => (
@@ -124,10 +124,12 @@ export function AdminTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
   })
 
-  const selectedRows = table.getFilteredSelectedRowModel().rows.map((r) => r.original)
+  const selectedRows = table
+    .getFilteredSelectedRowModel()
+    .rows.map((r) => r.original)
 
   return (
-    <div className="space-y-3 w-full">
+    <div className="w-full space-y-3">
       <AdminTableToolbar
         table={table}
         searchKey={searchKey}
@@ -149,7 +151,7 @@ export function AdminTable<TData, TValue>({
         />
       )}
 
-      <div className="rounded-md border bg-card overflow-hidden">
+      <div className="bg-card overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -184,7 +186,7 @@ export function AdminTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
-                  onClick={() => onRowClick && onRowClick(row.original)}
+                  onClick={() => onRowClick?.(row.original)}
                   className={onRowClick ? 'cursor-pointer' : undefined}
                 >
                   {row.getVisibleCells().map((cell) => (

@@ -1,22 +1,23 @@
-import { siteRepository, SiteRepository } from './repository'
+// biome-ignore-all lint/suspicious/useAwait: async signatures reserved for a future HTTP data source
+import { siteRepository, type SiteRepository } from './repository'
 import type {
-  SitePage,
-  SiteNavItem,
+  FriendLink,
+  FriendLinkFormValues,
+  FriendLinkGuidelines,
+  FriendLinkStatus,
+  SiteAdSlot,
+  SiteAdSlotFormValues,
+  SiteAnnouncement,
+  SiteAnnouncementFormValues,
   SiteNavGroup,
   SiteNavGroupFormValues,
-  SiteWidgetConfig,
-  SiteWidgetGlobalSettings,
-  SiteAnnouncement,
-  SiteAdSlot,
-  FriendLink,
-  FriendLinkStatus,
-  FriendLinkGuidelines,
-  SitePageFormValues,
+  SiteNavItem,
   SiteNavItemFormValues,
+  SitePage,
+  SitePageFormValues,
+  SiteWidgetConfig,
   SiteWidgetFormValues,
-  SiteAnnouncementFormValues,
-  SiteAdSlotFormValues,
-  FriendLinkFormValues,
+  SiteWidgetGlobalSettings,
 } from './types'
 
 export class SiteService {
@@ -33,7 +34,10 @@ export class SiteService {
     return this.repo.getPageById(id)
   }
 
-  async getPageBySlug(slug: string, recordView = false): Promise<SitePage | null> {
+  async getPageBySlug(
+    slug: string,
+    recordView = false,
+  ): Promise<SitePage | null> {
     const page = await this.repo.getPageBySlug(slug)
     if (page && recordView && page.status === 'published') {
       await this.repo.incrementPageViews(slug)
@@ -75,7 +79,9 @@ export class SiteService {
     return this.repo.getNavGroups(location)
   }
 
-  async saveNavGroup(group: SiteNavGroupFormValues & { id?: string }): Promise<SiteNavGroup> {
+  async saveNavGroup(
+    group: SiteNavGroupFormValues & { id?: string },
+  ): Promise<SiteNavGroup> {
     return this.repo.saveNavGroup(group)
   }
 
@@ -110,7 +116,9 @@ export class SiteService {
     return this.repo.getNavItems(location)
   }
 
-  async saveNavItem(item: SiteNavItemFormValues & { id?: string }): Promise<SiteNavItem> {
+  async saveNavItem(
+    item: SiteNavItemFormValues & { id?: string },
+  ): Promise<SiteNavItem> {
     return this.repo.saveNavItem(item)
   }
 
@@ -126,7 +134,7 @@ export class SiteService {
   }
 
   async getWidgetsForPlacement(
-    placement: 'dashboard' | 'home_sidebar' | 'page_sidebar' | 'site_sidebar'
+    placement: 'dashboard' | 'home_sidebar' | 'page_sidebar' | 'site_sidebar',
   ): Promise<SiteWidgetConfig[]> {
     const all = await this.repo.getWidgets()
     return all
@@ -134,10 +142,14 @@ export class SiteService {
         if (!w.enabled) return false
         if (w.placement === 'both') return true
         if (placement === 'home_sidebar') {
-          return w.placement === 'home_sidebar' || w.placement === 'site_sidebar'
+          return (
+            w.placement === 'home_sidebar' || w.placement === 'site_sidebar'
+          )
         }
         if (placement === 'page_sidebar') {
-          return w.placement === 'page_sidebar' || w.placement === 'site_sidebar'
+          return (
+            w.placement === 'page_sidebar' || w.placement === 'site_sidebar'
+          )
         }
         if (placement === 'site_sidebar') {
           return (
@@ -154,7 +166,9 @@ export class SiteService {
       .sort((a, b) => a.sort - b.sort)
   }
 
-  async saveWidget(data: SiteWidgetFormValues & { id?: string }): Promise<SiteWidgetConfig> {
+  async saveWidget(
+    data: SiteWidgetFormValues & { id?: string },
+  ): Promise<SiteWidgetConfig> {
     return this.repo.saveWidget(data)
   }
 
@@ -174,7 +188,9 @@ export class SiteService {
     return this.repo.getWidgetGlobalSettings()
   }
 
-  saveWidgetGlobalSettings(settings: Partial<SiteWidgetGlobalSettings>): SiteWidgetGlobalSettings {
+  saveWidgetGlobalSettings(
+    settings: Partial<SiteWidgetGlobalSettings>,
+  ): SiteWidgetGlobalSettings {
     return this.repo.saveWidgetGlobalSettings(settings)
   }
 
@@ -190,15 +206,23 @@ export class SiteService {
     return list.filter((a) => a.enabled)
   }
 
-  async saveAnnouncement(data: SiteAnnouncementFormValues & { id?: string }): Promise<SiteAnnouncement> {
+  async saveAnnouncement(
+    data: SiteAnnouncementFormValues & { id?: string },
+  ): Promise<SiteAnnouncement> {
     return this.repo.saveAnnouncement(data)
   }
 
-  async updateAnnouncement(id: string, data: Partial<SiteAnnouncement>): Promise<SiteAnnouncement> {
+  async updateAnnouncement(
+    id: string,
+    data: Partial<SiteAnnouncement>,
+  ): Promise<SiteAnnouncement> {
     return this.repo.updateAnnouncement(id, data)
   }
 
-  async toggleAnnouncement(id: string, enabled: boolean): Promise<SiteAnnouncement> {
+  async toggleAnnouncement(
+    id: string,
+    enabled: boolean,
+  ): Promise<SiteAnnouncement> {
     return this.repo.updateAnnouncement(id, { enabled })
   }
 
@@ -219,11 +243,16 @@ export class SiteService {
     return target || null
   }
 
-  async saveAdSlot(data: SiteAdSlotFormValues & { id?: string }): Promise<SiteAdSlot> {
+  async saveAdSlot(
+    data: SiteAdSlotFormValues & { id?: string },
+  ): Promise<SiteAdSlot> {
     return this.repo.saveAdSlot(data)
   }
 
-  async updateAdSlot(id: string, data: Partial<SiteAdSlot>): Promise<SiteAdSlot> {
+  async updateAdSlot(
+    id: string,
+    data: Partial<SiteAdSlot>,
+  ): Promise<SiteAdSlot> {
     return this.repo.updateAdSlot(id, data)
   }
 
@@ -242,7 +271,9 @@ export class SiteService {
     return this.repo.getApprovedFriendLinks()
   }
 
-  async saveFriendLink(data: FriendLinkFormValues & { id?: string }): Promise<FriendLink> {
+  async saveFriendLink(
+    data: FriendLinkFormValues & { id?: string },
+  ): Promise<FriendLink> {
     return this.repo.saveFriendLink(data)
   }
 
@@ -276,12 +307,21 @@ export class SiteService {
     return this.repo.verifyFriendLink(id)
   }
 
-  async verifyAllFriendLinks(): Promise<{ total: number; verified: number; missing: number; failed: number }> {
+  async verifyAllFriendLinks(): Promise<{
+    total: number
+    verified: number
+    missing: number
+    failed: number
+  }> {
     return this.repo.verifyAllFriendLinks()
   }
 
-  getWeeklyLinkCheckStatus(): { needsCheck: boolean; lastCheckedAt: string | null } {
-    if (typeof window === 'undefined') return { needsCheck: false, lastCheckedAt: null }
+  getWeeklyLinkCheckStatus(): {
+    needsCheck: boolean
+    lastCheckedAt: string | null
+  } {
+    if (typeof window === 'undefined')
+      return { needsCheck: false, lastCheckedAt: null }
     const lastChecked = localStorage.getItem('site_last_weekly_link_check')
     if (!lastChecked) {
       return { needsCheck: true, lastCheckedAt: null }
@@ -301,7 +341,9 @@ export class SiteService {
     return this.repo.getFriendLinkGuidelines()
   }
 
-  async updateFriendLinkGuidelines(data: Partial<FriendLinkGuidelines>): Promise<FriendLinkGuidelines> {
+  async updateFriendLinkGuidelines(
+    data: Partial<FriendLinkGuidelines>,
+  ): Promise<FriendLinkGuidelines> {
     return this.repo.updateFriendLinkGuidelines(data)
   }
 }

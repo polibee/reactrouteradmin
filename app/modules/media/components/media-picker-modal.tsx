@@ -1,23 +1,23 @@
-import { useState, useEffect } from 'react'
-import type { MediaItem, MediaType } from '../types'
-import { mediaService } from '../service'
+import {
+  Check,
+  FileText,
+  Image as ImageIcon,
+  Loader2,
+  Search,
+  UploadCloud,
+} from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Button } from '~/components/ui/button'
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from '~/components/ui/dialog'
-import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
-import {
-  Image as ImageIcon,
-  FileText,
-  Search,
-  Check,
-  UploadCloud,
-  Loader2,
-} from 'lucide-react'
+import { mediaService } from '../service'
+import type { MediaItem, MediaType } from '../types'
 
 export interface MediaPickerModalProps {
   open: boolean
@@ -52,6 +52,7 @@ export function MediaPickerModal({
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reload on open toggle only
   useEffect(() => {
     if (open) {
       loadMedia()
@@ -62,7 +63,10 @@ export function MediaPickerModal({
   const filteredItems = items.filter((i) => {
     if (!search.trim()) return true
     const q = search.toLowerCase()
-    return i.name.toLowerCase().includes(q) || i.tags?.some((t) => t.toLowerCase().includes(q))
+    return (
+      i.name.toLowerCase().includes(q) ||
+      i.tags?.some((t) => t.toLowerCase().includes(q))
+    )
   })
 
   const handleConfirmSelect = () => {
@@ -87,10 +91,10 @@ export function MediaPickerModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl max-h-[85vh] flex flex-col">
+      <DialogContent className="flex max-h-[85vh] flex-col sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle className="text-sm font-semibold flex items-center gap-2">
-            <ImageIcon className="size-4 text-primary" />
+          <DialogTitle className="flex items-center gap-2 text-sm font-semibold">
+            <ImageIcon className="text-primary size-4" />
             {title}
           </DialogTitle>
         </DialogHeader>
@@ -100,7 +104,7 @@ export function MediaPickerModal({
           <button
             type="button"
             onClick={() => setActiveTab('library')}
-            className={`px-3 py-1.5 rounded-md font-medium cursor-pointer transition-colors ${
+            className={`cursor-pointer rounded-md px-3 py-1.5 font-medium transition-colors ${
               activeTab === 'library'
                 ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
                 : 'bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground'
@@ -111,7 +115,7 @@ export function MediaPickerModal({
           <button
             type="button"
             onClick={() => setActiveTab('upload')}
-            className={`px-3 py-1.5 rounded-md font-medium cursor-pointer transition-colors ${
+            className={`cursor-pointer rounded-md px-3 py-1.5 font-medium transition-colors ${
               activeTab === 'upload'
                 ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
                 : 'bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground'
@@ -122,12 +126,12 @@ export function MediaPickerModal({
 
           {activeTab === 'library' && (
             <div className="relative ml-auto w-48">
-              <Search className="size-3 absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Search className="text-muted-foreground absolute top-1/2 left-2 size-3 -translate-y-1/2" />
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="搜索名称/标签..."
-                className="h-7 pl-7 text-xs bg-muted/20"
+                className="bg-muted/20 h-7 pl-7 text-xs"
               />
             </div>
           )}
@@ -135,22 +139,26 @@ export function MediaPickerModal({
 
         {/* Tab 1: 素材库网格选择 */}
         {activeTab === 'library' && (
-          <div className="flex-1 overflow-y-auto min-h-[300px] max-h-[420px] p-1">
+          <div className="max-h-[420px] min-h-[300px] flex-1 overflow-y-auto p-1">
             {loading ? (
-              <div className="flex items-center justify-center h-48 text-xs text-muted-foreground">
-                <Loader2 className="size-5 animate-spin mr-2 text-primary" />
+              <div className="text-muted-foreground flex h-48 items-center justify-center text-xs">
+                <Loader2 className="text-primary mr-2 size-5 animate-spin" />
                 <span>正在读取媒体资源库...</span>
               </div>
             ) : filteredItems.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-48 text-xs text-muted-foreground gap-1">
+              <div className="text-muted-foreground flex h-48 flex-col items-center justify-center gap-1 text-xs">
                 <span>暂无符合条件的素材</span>
-                <span className="text-[11px] opacity-75">您可以切换至“即时本地上传”直接上传新图片</span>
+                <span className="text-[11px] opacity-75">
+                  您可以切换至“即时本地上传”直接上传新图片
+                </span>
               </div>
             ) : (
-              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
+              <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4">
                 {filteredItems.map((item) => {
                   const isSelected = selectedItem?.id === item.id
                   return (
+                    // biome-ignore lint/a11y/useKeyWithClickEvents: media picker card, double-click to confirm selection
+                    // biome-ignore lint/a11y/noStaticElementInteractions: media picker card, double-click to confirm selection
                     <div
                       key={item.id}
                       onClick={() => setSelectedItem(item)}
@@ -158,37 +166,42 @@ export function MediaPickerModal({
                         onSelect(item)
                         onOpenChange(false)
                       }}
-                      className={`group relative rounded-lg border overflow-hidden cursor-pointer transition-all bg-card ${
+                      className={`group bg-card relative cursor-pointer overflow-hidden rounded-lg border transition-all ${
                         isSelected
-                          ? 'ring-2 ring-primary border-primary shadow-sm'
+                          ? 'ring-primary border-primary shadow-sm ring-2'
                           : 'hover:border-primary/60'
                       }`}
                     >
-                      <div className="aspect-4/3 w-full overflow-hidden bg-muted/30 relative">
+                      <div className="bg-muted/30 relative aspect-4/3 w-full overflow-hidden">
                         {item.type === 'image' ? (
                           <img
                             src={item.thumbnailUrl || item.url}
                             alt={item.name}
-                            className="w-full h-full object-cover"
+                            className="h-full w-full object-cover"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-primary">
+                          <div className="text-primary flex h-full w-full items-center justify-center">
                             <FileText className="size-8" />
                           </div>
                         )}
 
                         {isSelected && (
-                          <div className="absolute top-1.5 right-1.5 size-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-xs">
+                          <div className="bg-primary text-primary-foreground absolute top-1.5 right-1.5 flex size-5 items-center justify-center rounded-full shadow-xs">
                             <Check className="size-3 stroke-3" />
                           </div>
                         )}
                       </div>
                       <div className="p-1.5">
-                        <div className="text-[11px] font-medium text-foreground truncate" title={item.name}>
+                        <div
+                          className="text-foreground truncate text-[11px] font-medium"
+                          title={item.name}
+                        >
                           {item.name}
                         </div>
-                        <div className="text-[10px] text-muted-foreground font-mono">
-                          {item.dimensions ? `${item.dimensions.width}×${item.dimensions.height}` : `${Math.round(item.size / 1024)} KB`}
+                        <div className="text-muted-foreground font-mono text-[10px]">
+                          {item.dimensions
+                            ? `${item.dimensions.width}×${item.dimensions.height}`
+                            : `${Math.round(item.size / 1024)} KB`}
                         </div>
                       </div>
                     </div>
@@ -201,32 +214,38 @@ export function MediaPickerModal({
 
         {/* Tab 2: 即时本地上传 */}
         {activeTab === 'upload' && (
-          <div className="flex-1 flex flex-col items-center justify-center min-h-[300px] border-2 border-dashed rounded-xl m-2 bg-muted/10 p-6 text-center">
+          <div className="bg-muted/10 m-2 flex min-h-[300px] flex-1 flex-col items-center justify-center rounded-xl border-2 border-dashed p-6 text-center">
             {uploading ? (
-              <div className="flex flex-col items-center gap-2 text-xs text-muted-foreground">
-                <Loader2 className="size-8 animate-spin text-primary" />
+              <div className="text-muted-foreground flex flex-col items-center gap-2 text-xs">
+                <Loader2 className="text-primary size-8 animate-spin" />
                 <span>正在上传并生成高清素材...</span>
               </div>
             ) : (
-              <label className="cursor-pointer flex flex-col items-center gap-3">
+              <label className="flex cursor-pointer flex-col items-center gap-3">
                 <input
                   type="file"
-                  accept={allowedTypes.includes('image') ? 'image/*' : undefined}
+                  accept={
+                    allowedTypes.includes('image') ? 'image/*' : undefined
+                  }
                   onChange={handleDirectUpload}
                   className="hidden"
                 />
-                <div className="size-12 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                <div className="bg-primary/10 text-primary flex size-12 items-center justify-center rounded-full">
                   <UploadCloud className="size-6" />
                 </div>
                 <div className="space-y-1">
-                  <div className="text-xs font-semibold text-foreground">
+                  <div className="text-foreground text-xs font-semibold">
                     点击选择本地图片直接上传并插入
                   </div>
-                  <div className="text-[11px] text-muted-foreground">
+                  <div className="text-muted-foreground text-[11px]">
                     上传后将自动同步至媒体资源库供后续重复引用
                   </div>
                 </div>
-                <Button type="button" size="sm" className="h-8 text-xs pointer-events-none mt-1">
+                <Button
+                  type="button"
+                  size="sm"
+                  className="pointer-events-none mt-1 h-8 text-xs"
+                >
                   选择本地文件
                 </Button>
               </label>
@@ -234,10 +253,10 @@ export function MediaPickerModal({
           </div>
         )}
 
-        <DialogFooter className="pt-2 flex items-center justify-between sm:justify-between border-t">
-          <div className="text-[11px] text-muted-foreground">
+        <DialogFooter className="flex items-center justify-between border-t pt-2 sm:justify-between">
+          <div className="text-muted-foreground text-[11px]">
             {selectedItem ? (
-              <span className="text-foreground font-medium truncate max-w-[240px] inline-block">
+              <span className="text-foreground inline-block max-w-[240px] truncate font-medium">
                 已选中：{selectedItem.name}
               </span>
             ) : (

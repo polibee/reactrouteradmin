@@ -1,16 +1,16 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import type { SitePage } from '../../types'
+import { ExternalLink, Eye, FileText } from 'lucide-react'
+import { useNavigate } from 'react-router'
 import {
-  DataTable,
   AdminBadge,
-  EditAction,
+  DataTable,
   DeleteAction,
+  EditAction,
   ViewAction,
   notify,
 } from '~/admin/ui'
-import { useNavigate } from 'react-router'
 import { siteService } from '../../service'
-import { FileText, Eye, ExternalLink } from 'lucide-react'
+import type { SitePage } from '../../types'
 
 export interface PageTableProps {
   data: SitePage[]
@@ -40,12 +40,12 @@ export function PageTable({ data, loading, onDataChange }: PageTableProps) {
         const page = row.original
         return (
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <div className="bg-primary/10 text-primary flex h-8 w-8 items-center justify-center rounded-lg">
               <FileText className="h-4 w-4" />
             </div>
             <div>
-              <div className="font-medium text-foreground">{page.title}</div>
-              <div className="text-xs text-muted-foreground font-mono flex items-center gap-1">
+              <div className="text-foreground font-medium">{page.title}</div>
+              <div className="text-muted-foreground flex items-center gap-1 font-mono text-xs">
                 <span>/{page.slug}</span>
                 <a
                   href={`/${page.slug}`}
@@ -53,7 +53,7 @@ export function PageTable({ data, loading, onDataChange }: PageTableProps) {
                   rel="noreferrer"
                   className="hover:text-primary inline-flex items-center"
                 >
-                  <ExternalLink className="size-3 ml-0.5" />
+                  <ExternalLink className="ml-0.5 size-3" />
                 </a>
               </div>
             </div>
@@ -77,7 +77,7 @@ export function PageTable({ data, loading, onDataChange }: PageTableProps) {
       accessorKey: 'views',
       header: '浏览量',
       cell: ({ row }) => (
-        <span className="text-xs text-muted-foreground flex items-center gap-1 font-mono">
+        <span className="text-muted-foreground flex items-center gap-1 font-mono text-xs">
           <Eye className="size-3" />
           {row.original.views.toLocaleString()}
         </span>
@@ -89,7 +89,7 @@ export function PageTable({ data, loading, onDataChange }: PageTableProps) {
       cell: ({ row }) => {
         const dateStr = row.getValue('updatedAt') as string
         return (
-          <span className="text-xs text-muted-foreground font-mono">
+          <span className="text-muted-foreground font-mono text-xs">
             {dateStr ? dateStr.slice(0, 10) : '-'}
           </span>
         )
@@ -108,7 +108,11 @@ export function PageTable({ data, loading, onDataChange }: PageTableProps) {
             />
             <EditAction
               permission="site.pages"
-              onClick={() => navigate(`/admin/pages/${page.slug || page.id.replace(/^page-/, '')}/edit`)}
+              onClick={() =>
+                navigate(
+                  `/admin/pages/${page.slug || page.id.replace(/^page-/, '')}/edit`,
+                )
+              }
             />
             <DeleteAction
               permission="site.pages"

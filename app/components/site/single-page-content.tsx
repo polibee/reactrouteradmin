@@ -1,13 +1,13 @@
+import { ArrowLeft, Clock, Eye, FileText, Home } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { PublicSiteLayout } from '~/components/layout/public-site-layout'
-import { WidgetRenderer } from '~/modules/site/widgets/components/widget-renderer'
+import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { siteService } from '~/modules/site/service'
 import type { SitePage, SiteWidgetGlobalSettings } from '~/modules/site/types'
-import { Card, CardHeader, CardTitle, CardContent } from '~/components/ui/card'
-import { Button } from '~/components/ui/button'
-import { Badge } from '~/components/ui/badge'
-import { FileText, Eye, Clock, ArrowLeft, Home } from 'lucide-react'
+import { WidgetRenderer } from '~/modules/site/widgets/components/widget-renderer'
 
 export interface SinglePageViewProps {
   slug?: string
@@ -16,9 +16,10 @@ export interface SinglePageViewProps {
 export function SinglePageView({ slug }: SinglePageViewProps) {
   const [page, setPage] = useState<SitePage | null>(null)
   const [loading, setLoading] = useState(true)
-  const [globalSettings, setGlobalSettings] = useState<SiteWidgetGlobalSettings>(() =>
-    siteService.getWidgetGlobalSettings()
-  )
+  const [globalSettings, setGlobalSettings] =
+    useState<SiteWidgetGlobalSettings>(() =>
+      siteService.getWidgetGlobalSettings(),
+    )
 
   useEffect(() => {
     if (!slug) return
@@ -41,17 +42,23 @@ export function SinglePageView({ slug }: SinglePageViewProps) {
         setGlobalSettings(customEvent.detail)
       }
     }
-    window.addEventListener('site_widget_settings_changed', handleSettingsChange)
+    window.addEventListener(
+      'site_widget_settings_changed',
+      handleSettingsChange,
+    )
     return () => {
-      window.removeEventListener('site_widget_settings_changed', handleSettingsChange)
+      window.removeEventListener(
+        'site_widget_settings_changed',
+        handleSettingsChange,
+      )
     }
   }, [])
 
   if (loading) {
     return (
       <PublicSiteLayout>
-        <div className="flex flex-col items-center justify-center py-24 text-muted-foreground text-xs">
-          <div className="size-6 border-2 border-primary border-t-transparent rounded-full animate-spin mb-3" />
+        <div className="text-muted-foreground flex flex-col items-center justify-center py-24 text-xs">
+          <div className="border-primary mb-3 size-6 animate-spin rounded-full border-2 border-t-transparent" />
           <span>正在加载页面内容...</span>
         </div>
       </PublicSiteLayout>
@@ -61,25 +68,23 @@ export function SinglePageView({ slug }: SinglePageViewProps) {
   if (!page || page.status === 'draft') {
     return (
       <PublicSiteLayout>
-        <div className="max-w-md mx-auto text-center py-20 space-y-4">
-          <div className="size-12 rounded-full bg-muted flex items-center justify-center mx-auto text-muted-foreground">
+        <div className="mx-auto max-w-md space-y-4 py-20 text-center">
+          <div className="bg-muted text-muted-foreground mx-auto flex size-12 items-center justify-center rounded-full">
             <FileText className="size-6" />
           </div>
           <h2 className="text-xl font-bold">404 - 页面未找到</h2>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             该单页面不存在或尚未对外公开上线，请核对访问路径。
           </p>
-          <div className="pt-2 flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center gap-3 pt-2">
             <Button asChild size="sm" variant="outline">
               <Link to="/">
-                <Home className="size-3.5 mr-1" />
+                <Home className="mr-1 size-3.5" />
                 返回平台首页
               </Link>
             </Button>
             <Button asChild size="sm">
-              <Link to="/admin/pages">
-                前往后台管理
-              </Link>
+              <Link to="/admin/pages">前往后台管理</Link>
             </Button>
           </div>
         </div>
@@ -95,8 +100,11 @@ export function SinglePageView({ slug }: SinglePageViewProps) {
     <PublicSiteLayout>
       <div className="space-y-4">
         {/* 面包屑导航 */}
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Link to="/" className="hover:text-foreground flex items-center gap-1">
+        <div className="text-muted-foreground flex items-center gap-2 text-xs">
+          <Link
+            to="/"
+            className="hover:text-foreground flex items-center gap-1"
+          >
             <Home className="size-3" />
             平台首页
           </Link>
@@ -105,34 +113,43 @@ export function SinglePageView({ slug }: SinglePageViewProps) {
         </div>
 
         {/* 主区 2 栏式布局：左侧单页正文 + 右侧固定悬浮侧边栏 (Sticky Sidebar) */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
           {/* 左侧 2 列：单页面核心内容 */}
-          <div className="lg:col-span-2 space-y-6">
-            <Card className="shadow-xs border">
-              <CardHeader className="p-5 sm:p-6 pb-4 border-b">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="space-y-6 lg:col-span-2">
+            <Card className="border shadow-xs">
+              <CardHeader className="border-b p-5 pb-4 sm:p-6">
+                <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
                   <div>
-                    <CardTitle className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+                    <CardTitle className="text-foreground text-xl font-bold tracking-tight sm:text-2xl">
                       {page.title}
                     </CardTitle>
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground mt-2 font-mono">
+                    <div className="text-muted-foreground mt-2 flex flex-wrap items-center gap-3 font-mono text-xs">
                       <span className="flex items-center gap-1">
                         <Clock className="size-3" />
-                        更新于 {page.updatedAt ? page.updatedAt.slice(0, 10) : '-'}
+                        更新于{' '}
+                        {page.updatedAt ? page.updatedAt.slice(0, 10) : '-'}
                       </span>
                       <span className="flex items-center gap-1">
                         <Eye className="size-3" />
                         {page.views} 次阅读
                       </span>
-                      <Badge variant="outline" className="text-[10px] font-normal">
+                      <Badge
+                        variant="outline"
+                        className="text-[10px] font-normal"
+                      >
                         别名: /{page.slug}
                       </Badge>
                     </div>
                   </div>
 
-                  <Button variant="outline" size="sm" asChild className="self-start sm:self-center text-xs h-8">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="h-8 self-start text-xs sm:self-center"
+                  >
                     <Link to="/">
-                      <ArrowLeft className="size-3.5 mr-1" />
+                      <ArrowLeft className="mr-1 size-3.5" />
                       返回首页
                     </Link>
                   </Button>
@@ -142,37 +159,49 @@ export function SinglePageView({ slug }: SinglePageViewProps) {
               <CardContent className="p-5 sm:p-6">
                 {isHtml ? (
                   <div
-                    className="prose dark:prose-invert max-w-none text-sm leading-relaxed text-foreground/90 rich-text-rendered"
+                    className="prose dark:prose-invert text-foreground/90 rich-text-rendered max-w-none text-sm leading-relaxed"
                     dangerouslySetInnerHTML={{ __html: page.content }}
                   />
                 ) : (
-                  <div className="prose dark:prose-invert max-w-none text-sm leading-relaxed space-y-4 text-foreground/90">
+                  <div className="prose dark:prose-invert text-foreground/90 max-w-none space-y-4 text-sm leading-relaxed">
                     {paragraphs.map((p, idx) => {
                       if (p.startsWith('## ')) {
                         return (
-                          <h2 key={idx} className="text-lg font-bold text-foreground pt-3 border-b pb-1">
+                          <h2
+                            key={idx}
+                            className="text-foreground border-b pt-3 pb-1 text-lg font-bold"
+                          >
                             {p.replace('## ', '')}
                           </h2>
                         )
                       }
                       if (p.startsWith('### ')) {
                         return (
-                          <h3 key={idx} className="text-base font-semibold text-foreground pt-2">
+                          <h3
+                            key={idx}
+                            className="text-foreground pt-2 text-base font-semibold"
+                          >
                             {p.replace('### ', '')}
                           </h3>
                         )
                       }
                       if (p.startsWith('- ')) {
-                        const items = p.split('\n').map((line) => line.replace('- ', ''))
+                        const items = p
+                          .split('\n')
+                          .map((line) => line.replace('- ', ''))
                         return (
-                          <ul key={idx} className="list-disc pl-5 space-y-1">
+                          <ul key={idx} className="list-disc space-y-1 pl-5">
                             {items.map((item, itemIdx) => (
                               <li key={itemIdx}>{item}</li>
                             ))}
                           </ul>
                         )
                       }
-                      return <p key={idx} className="whitespace-pre-line">{p}</p>
+                      return (
+                        <p key={idx} className="whitespace-pre-line">
+                          {p}
+                        </p>
+                      )
                     })}
                   </div>
                 )}
@@ -181,7 +210,9 @@ export function SinglePageView({ slug }: SinglePageViewProps) {
           </div>
 
           {/* 右侧 1 列：单页侧边栏 (由全局设置控制是否 Sticky 吸顶) */}
-          <div className={`lg:col-span-1 ${globalSettings.sidebarSticky ? 'sticky top-20' : ''}`}>
+          <div
+            className={`lg:col-span-1 ${globalSettings.sidebarSticky ? 'sticky top-20' : ''}`}
+          >
             {/* 紧凑版单页内容侧边栏小工具集合 (由后台统一纳管) */}
             <WidgetRenderer placement="page_sidebar" />
           </div>

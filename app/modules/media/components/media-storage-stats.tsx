@@ -1,15 +1,24 @@
+import {
+  Archive,
+  FileText,
+  Film,
+  HardDrive,
+  Image as ImageIcon,
+} from 'lucide-react'
 import type { MediaStorageStats } from '../types'
-import { HardDrive, Image as ImageIcon, FileText, Film, Archive } from 'lucide-react'
 
 export interface MediaStorageStatsCardProps {
   stats: MediaStorageStats | null
   loading?: boolean
 }
 
-export function MediaStorageStatsCard({ stats, loading }: MediaStorageStatsCardProps) {
+export function MediaStorageStatsCard({
+  stats,
+  loading,
+}: MediaStorageStatsCardProps) {
   if (loading || !stats) {
     return (
-      <div className="h-24 w-full rounded-xl border bg-card/60 p-4 animate-pulse" />
+      <div className="bg-card/60 h-24 w-full animate-pulse rounded-xl border p-4" />
     )
   }
 
@@ -18,41 +27,43 @@ export function MediaStorageStatsCard({ stats, loading }: MediaStorageStatsCardP
     const k = 1024
     const sizes = ['B', 'KB', 'MB', 'GB']
     const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return `${(bytes / Math.pow(k, i)).toFixed(1)} ${sizes[i]}`
+    return `${(bytes / k ** i).toFixed(1)} ${sizes[i]}`
   }
 
   const percentUsed = Math.min(
     100,
-    Math.max(1, Math.round((stats.totalBytes / stats.maxBytes) * 100))
+    Math.max(1, Math.round((stats.totalBytes / stats.maxBytes) * 100)),
   )
 
   const imagePct = (stats.byType.image.bytes / (stats.totalBytes || 1)) * 100
   const docPct = (stats.byType.document.bytes / (stats.totalBytes || 1)) * 100
   const videoPct = (stats.byType.video.bytes / (stats.totalBytes || 1)) * 100
-  const archivePct = (stats.byType.archive.bytes / (stats.totalBytes || 1)) * 100
+  const archivePct =
+    (stats.byType.archive.bytes / (stats.totalBytes || 1)) * 100
 
   return (
-    <div className="rounded-xl border bg-card p-4 shadow-xs space-y-3">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <div className="bg-card space-y-3 rounded-xl border p-4 shadow-xs">
+      <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
         <div className="flex items-center gap-2">
-          <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+          <div className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-lg">
             <HardDrive className="size-4" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+            <div className="text-foreground flex items-center gap-1.5 text-xs font-semibold">
               <span>媒体存储空间配额</span>
-              <span className="text-[10px] text-muted-foreground font-normal">
+              <span className="text-muted-foreground text-[10px] font-normal">
                 (已用 {percentUsed}%)
               </span>
             </div>
-            <div className="text-xs text-muted-foreground font-mono">
-              {formatSize(stats.totalBytes)} / {formatSize(stats.maxBytes)} · 共 {stats.totalCount} 个文件
+            <div className="text-muted-foreground font-mono text-xs">
+              {formatSize(stats.totalBytes)} / {formatSize(stats.maxBytes)} · 共{' '}
+              {stats.totalCount} 个文件
             </div>
           </div>
         </div>
 
         {/* 分类小徽标 */}
-        <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+        <div className="text-muted-foreground flex flex-wrap items-center gap-3 text-xs">
           <div className="flex items-center gap-1">
             <span className="size-2 rounded-full bg-blue-500" />
             <ImageIcon className="size-3 text-blue-500" />
@@ -77,7 +88,7 @@ export function MediaStorageStatsCard({ stats, loading }: MediaStorageStatsCardP
       </div>
 
       {/* 彩色多段进度条 */}
-      <div className="h-2 w-full rounded-full bg-muted/60 overflow-hidden flex">
+      <div className="bg-muted/60 flex h-2 w-full overflow-hidden rounded-full">
         <div
           style={{ width: `${(imagePct * percentUsed) / 100}%` }}
           className="h-full bg-blue-500 transition-all"

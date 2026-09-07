@@ -1,22 +1,26 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  ActionButton,
+  SelectField,
+  SmartForm,
+  SwitchField,
+  TextField,
+  TextareaField,
+} from '~/admin/ui'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '~/components/ui/dialog'
 import {
-  SmartForm,
-  TextField,
-  TextareaField,
-  SelectField,
-  SwitchField,
-  ActionButton,
-} from '~/admin/ui'
-import { siteAdSlotSchema, type SiteAdSlotFormValues, type SiteAdSlot } from '../../types'
+  siteAdSlotSchema,
+  type SiteAdSlot,
+  type SiteAdSlotFormValues,
+} from '../../types'
 
 export interface AdSlotDialogProps {
   open: boolean
@@ -51,6 +55,7 @@ export function AdSlotDialog({
 
   const adType = form.watch('adType')
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reset form when the edited slot changes
   useEffect(() => {
     if (slot) {
       form.reset({
@@ -83,7 +88,8 @@ export function AdSlotDialog({
         <DialogHeader>
           <DialogTitle>{isEditing ? '编辑广告位' : '新增广告位'}</DialogTitle>
           <DialogDescription>
-            配置前台预留槽位、推广形式（纯文本链接、海报图片或三方广告 HTML 脚本）。
+            配置前台预留槽位、推广形式（纯文本链接、海报图片或三方广告 HTML
+            脚本）。
           </DialogDescription>
         </DialogHeader>
 
@@ -107,7 +113,7 @@ export function AdSlotDialog({
             </div>
           }
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <TextField
               name="title"
               label="广告位名称"
@@ -123,7 +129,7 @@ export function AdSlotDialog({
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <SelectField
               name="adType"
               label="广告呈现形态"
@@ -135,10 +141,7 @@ export function AdSlotDialog({
               required
             />
             <div className="pt-6">
-              <SwitchField
-                name="enabled"
-                label="立即启用投放"
-              />
+              <SwitchField name="enabled" label="立即启用投放" />
             </div>
           </div>
 

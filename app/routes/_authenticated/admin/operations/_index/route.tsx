@@ -1,12 +1,12 @@
+import { Megaphone, MonitorPlay } from 'lucide-react'
 import {
   DashboardPage,
-  DashboardPageHeader,
   DashboardPageContent,
+  DashboardPageHeader,
 } from '~/admin/ui'
-import { AnnouncementManager } from '~/modules/site/operations/components/announcement-manager'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { AdSlotManager } from '~/modules/site/operations/components/ad-slot-manager'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '~/components/ui/tabs'
-import { Megaphone, MonitorPlay } from 'lucide-react'
+import { AnnouncementManager } from '~/modules/site/operations/components/announcement-manager'
 
 export const meta = () => {
   return [{ title: '运营通告与广告管理 - Admin Framework' }]

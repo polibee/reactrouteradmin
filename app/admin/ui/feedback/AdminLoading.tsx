@@ -12,15 +12,17 @@ export function AdminLoading({
   fullPage = false,
 }: AdminLoadingProps) {
   const content = (
-    <div className={`flex flex-col items-center justify-center gap-3 p-8 ${className}`}>
-      <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      {text && <p className="text-sm text-muted-foreground">{text}</p>}
+    <div
+      className={`flex flex-col items-center justify-center gap-3 p-8 ${className}`}
+    >
+      <Loader2 className="text-primary h-8 w-8 animate-spin" />
+      {text && <p className="text-muted-foreground text-sm">{text}</p>}
     </div>
   )
 
   if (fullPage) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-xs">
+      <div className="bg-background/80 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xs">
         {content}
       </div>
     )

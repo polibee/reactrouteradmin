@@ -53,7 +53,7 @@ function ChartContainer({
         data-slot="chart"
         data-chart={chartId}
         className={cn(
-          "flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted/20 [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-sector]:outline-hidden [&_.recharts-surface]:outline-hidden",
+          "[&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted/20 [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border flex aspect-video justify-center text-xs [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden",
           className,
         )}
         {...props}
@@ -135,7 +135,10 @@ function ChartTooltipContent({
   hideLabel?: boolean
   hideIndicator?: boolean
   label?: React.ReactNode
-  labelFormatter?: (label: React.ReactNode, payload: TooltipPayloadItem[]) => React.ReactNode
+  labelFormatter?: (
+    label: React.ReactNode,
+    payload: TooltipPayloadItem[],
+  ) => React.ReactNode
   labelClassName?: string
   formatter?: (
     value: unknown,
@@ -211,7 +214,7 @@ function ChartTooltipContent({
             <div
               key={item.dataKey || index}
               className={cn(
-                'flex w-full flex-wrap items-stretch gap-2 [&>[data-slot=icon]]:size-2.5 [&>[data-slot=icon]]:text-muted-foreground',
+                '[&>[data-slot=icon]]:text-muted-foreground flex w-full flex-wrap items-stretch gap-2 [&>[data-slot=icon]]:size-2.5',
                 indicator === 'dot' && 'items-center',
               )}
             >
@@ -315,7 +318,7 @@ function ChartLegendContent({
           <div
             key={item.value?.toString() || index}
             className={cn(
-              'flex items-center gap-1.5 [&>[data-slot=icon]]:size-3 [&>[data-slot=icon]]:text-muted-foreground',
+              '[&>[data-slot=icon]]:text-muted-foreground flex items-center gap-1.5 [&>[data-slot=icon]]:size-3',
             )}
           >
             {itemConfig?.icon && !hideIcon ? (
@@ -374,9 +377,9 @@ function getPayloadConfigFromPayload(
 
 export {
   ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
   ChartStyle,
+  ChartTooltip,
+  ChartTooltipContent,
 }

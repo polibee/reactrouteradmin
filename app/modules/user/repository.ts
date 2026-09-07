@@ -1,3 +1,4 @@
+// biome-ignore-all lint/suspicious/useAwait: async signatures reserved for a future HTTP data source
 import type { User, UserFormData } from './types'
 
 export interface IUserRepository {
@@ -16,7 +17,8 @@ const initialMockUsers: User[] = [
     email: 'zhangsan@example.com',
     role: 'super_admin',
     status: 'active',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+    avatar:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
     bio: '平台超级管理员',
     createdAt: '2025-01-10 09:30',
     updatedAt: '2025-02-15 14:20',
@@ -27,7 +29,8 @@ const initialMockUsers: User[] = [
     email: 'lisi@example.com',
     role: 'admin',
     status: 'active',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80',
+    avatar:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80',
     bio: '业务系统主管',
     createdAt: '2025-01-12 11:00',
     updatedAt: '2025-02-10 16:45',
@@ -38,7 +41,8 @@ const initialMockUsers: User[] = [
     email: 'wangwu@example.com',
     role: 'manager',
     status: 'inactive',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80',
+    avatar:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80',
     bio: '内容运营团队经理',
     createdAt: '2025-01-18 15:20',
     updatedAt: '2025-01-20 18:00',
@@ -49,7 +53,8 @@ const initialMockUsers: User[] = [
     email: 'zhaoliu@example.com',
     role: 'user',
     status: 'active',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80',
+    avatar:
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80',
     bio: '普通平台用户',
     createdAt: '2025-02-01 10:15',
     updatedAt: '2025-02-01 10:15',
@@ -60,7 +65,8 @@ const initialMockUsers: User[] = [
     email: 'qianqi@example.com',
     role: 'user',
     status: 'suspended',
-    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&auto=format&fit=crop&q=80',
+    avatar:
+      'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&auto=format&fit=crop&q=80',
     bio: '违规账号已封禁',
     createdAt: '2025-02-05 13:40',
     updatedAt: '2025-02-12 09:10',

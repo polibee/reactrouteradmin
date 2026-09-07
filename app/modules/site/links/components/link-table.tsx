@@ -1,44 +1,54 @@
-import { useState, useEffect, useMemo } from 'react'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/components/ui/card'
-import { Button } from '~/components/ui/button'
+import {
+  AlertCircle,
+  BookOpen,
+  CheckCircle2,
+  Clock,
+  Edit2,
+  ExternalLink,
+  Globe,
+  Link2,
+  Mail,
+  Plus,
+  RefreshCw,
+  ShieldCheck,
+  Trash2,
+  XCircle,
+} from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { ConfirmDialog, notify } from '~/admin/ui'
 import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '~/components/ui/card'
 import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { siteService } from '../../service'
 import type {
   FriendLink,
   FriendLinkFormValues,
-  FriendLinkStatus,
   FriendLinkGuidelines,
   FriendLinkGuidelinesFormValues,
+  FriendLinkStatus,
 } from '../../types'
-import { notify, ConfirmDialog } from '~/admin/ui'
-import {
-  Link2,
-  CheckCircle2,
-  XCircle,
-  ExternalLink,
-  Plus,
-  Edit2,
-  Trash2,
-  Clock,
-  Globe,
-  Mail,
-  BookOpen,
-  ShieldCheck,
-  AlertCircle,
-  RefreshCw,
-} from 'lucide-react'
+import { GuidelinesDialog } from './guidelines-dialog'
 import { LinkDialog } from './link-dialog'
 import { RejectDialog } from './reject-dialog'
-import { GuidelinesDialog } from './guidelines-dialog'
 
 export function LinkTable() {
   const [links, setLinks] = useState<FriendLink[]>([])
   const [loading, setLoading] = useState(true)
-  const [tab, setTab] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all')
+  const [tab, setTab] = useState<'all' | 'pending' | 'approved' | 'rejected'>(
+    'all',
+  )
 
   // Guidelines state
-  const [guidelines, setGuidelines] = useState<FriendLinkGuidelines | null>(null)
+  const [guidelines, setGuidelines] = useState<FriendLinkGuidelines | null>(
+    null,
+  )
   const [guidelinesOpen, setGuidelinesOpen] = useState(false)
   const [guidelinesLoading, setGuidelinesLoading] = useState(false)
 
@@ -58,7 +68,10 @@ export function LinkTable() {
   // Backlink verification states
   const [checkingMap, setCheckingMap] = useState<Record<string, boolean>>({})
   const [batchChecking, setBatchChecking] = useState(false)
-  const [weeklyStatus, setWeeklyStatus] = useState<{ needsCheck: boolean; lastCheckedAt: string | null }>({
+  const [weeklyStatus, setWeeklyStatus] = useState<{
+    needsCheck: boolean
+    lastCheckedAt: string | null
+  }>({
     needsCheck: false,
     lastCheckedAt: null,
   })
@@ -83,7 +96,9 @@ export function LinkTable() {
     try {
       const res = await siteService.verifyFriendLink(link.id)
       if (res.backlinkStatus === 'verified') {
-        notify.success(`「${link.name}」反链检测通过：${res.backlinkDetails || '已检测到本站链接'}`)
+        notify.success(
+          `「${link.name}」反链检测通过：${res.backlinkDetails || '已检测到本站链接'}`,
+        )
       } else if (res.backlinkStatus === 'missing') {
         notify.warning(`「${link.name}」暂未检测到反链：${res.backlinkDetails}`)
       } else {
@@ -104,7 +119,7 @@ export function LinkTable() {
     try {
       const stats = await siteService.verifyAllFriendLinks()
       notify.success(
-        `友链反向巡检完成！共核验 ${stats.total} 个站点：正常互换 ${stats.verified} 个，未发现反链 ${stats.missing} 个，检测异常 ${stats.failed} 个`
+        `友链反向巡检完成！共核验 ${stats.total} 个站点：正常互换 ${stats.verified} 个，未发现反链 ${stats.missing} 个，检测异常 ${stats.failed} 个`,
       )
       await loadData()
     } catch {
@@ -114,7 +129,9 @@ export function LinkTable() {
     }
   }
 
-  const handleSaveGuidelines = async (values: FriendLinkGuidelinesFormValues) => {
+  const handleSaveGuidelines = async (
+    values: FriendLinkGuidelinesFormValues,
+  ) => {
     setGuidelinesLoading(true)
     try {
       const updated = await siteService.updateFriendLinkGuidelines(values)
@@ -128,6 +145,7 @@ export function LinkTable() {
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only initial load
   useEffect(() => {
     loadData()
   }, [])
@@ -137,9 +155,18 @@ export function LinkTable() {
     return links.filter((l) => l.status === tab)
   }, [links, tab])
 
-  const pendingCount = useMemo(() => links.filter((l) => l.status === 'pending').length, [links])
-  const approvedCount = useMemo(() => links.filter((l) => l.status === 'approved').length, [links])
-  const rejectedCount = useMemo(() => links.filter((l) => l.status === 'rejected').length, [links])
+  const pendingCount = useMemo(
+    () => links.filter((l) => l.status === 'pending').length,
+    [links],
+  )
+  const approvedCount = useMemo(
+    () => links.filter((l) => l.status === 'approved').length,
+    [links],
+  )
+  const rejectedCount = useMemo(
+    () => links.filter((l) => l.status === 'rejected').length,
+    [links],
+  )
 
   const handleApprove = async (link: FriendLink) => {
     try {
@@ -205,14 +232,20 @@ export function LinkTable() {
     switch (status) {
       case 'approved':
         return (
-          <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-xs gap-1">
+          <Badge
+            variant="outline"
+            className="gap-1 border-emerald-500/20 bg-emerald-500/10 text-xs text-emerald-600"
+          >
             <CheckCircle2 className="size-3" />
             已通过
           </Badge>
         )
       case 'pending':
         return (
-          <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-500/20 text-xs gap-1">
+          <Badge
+            variant="outline"
+            className="gap-1 border-amber-500/20 bg-amber-500/10 text-xs text-amber-600"
+          >
             <Clock className="size-3" />
             待审核
           </Badge>
@@ -220,12 +253,18 @@ export function LinkTable() {
       case 'rejected':
         return (
           <div className="flex items-center gap-1">
-            <Badge variant="outline" className="bg-rose-500/10 text-rose-600 border-rose-500/20 text-xs gap-1">
+            <Badge
+              variant="outline"
+              className="gap-1 border-rose-500/20 bg-rose-500/10 text-xs text-rose-600"
+            >
               <XCircle className="size-3" />
               已驳回
             </Badge>
             {reason && (
-              <span className="text-[11px] text-muted-foreground" title={reason}>
+              <span
+                className="text-muted-foreground text-[11px]"
+                title={reason}
+              >
                 ({reason})
               </span>
             )}
@@ -237,7 +276,10 @@ export function LinkTable() {
   const getBacklinkBadge = (item: FriendLink) => {
     if (checkingMap[item.id]) {
       return (
-        <Badge variant="outline" className="bg-blue-500/10 text-blue-600 border-blue-500/20 text-xs gap-1 animate-pulse">
+        <Badge
+          variant="outline"
+          className="animate-pulse gap-1 border-blue-500/20 bg-blue-500/10 text-xs text-blue-600"
+        >
           <RefreshCw className="size-3 animate-spin" />
           检测中...
         </Badge>
@@ -250,14 +292,14 @@ export function LinkTable() {
           <div className="space-y-0.5">
             <Badge
               variant="outline"
-              className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-xs gap-1"
+              className="gap-1 border-emerald-500/20 bg-emerald-500/10 text-xs text-emerald-600"
               title={item.backlinkDetails || '反链正常'}
             >
               <ShieldCheck className="size-3" />
               已互换
             </Badge>
             {item.lastCheckedAt && (
-              <div className="text-[10px] text-muted-foreground font-mono">
+              <div className="text-muted-foreground font-mono text-[10px]">
                 {item.lastCheckedAt.slice(0, 10)}
               </div>
             )}
@@ -268,14 +310,14 @@ export function LinkTable() {
           <div className="space-y-0.5">
             <Badge
               variant="outline"
-              className="bg-amber-500/10 text-amber-600 border-amber-500/20 text-xs gap-1"
+              className="gap-1 border-amber-500/20 bg-amber-500/10 text-xs text-amber-600"
               title={item.backlinkDetails || '未检测到反链'}
             >
               <AlertCircle className="size-3" />
               未检测到反链
             </Badge>
             {item.lastCheckedAt && (
-              <div className="text-[10px] text-muted-foreground font-mono">
+              <div className="text-muted-foreground font-mono text-[10px]">
                 {item.lastCheckedAt.slice(0, 10)}
               </div>
             )}
@@ -285,7 +327,7 @@ export function LinkTable() {
         return (
           <Badge
             variant="outline"
-            className="bg-rose-500/10 text-rose-600 border-rose-500/20 text-xs gap-1"
+            className="gap-1 border-rose-500/20 bg-rose-500/10 text-xs text-rose-600"
             title={item.backlinkDetails || '检测超时或不可达'}
           >
             <XCircle className="size-3" />
@@ -294,7 +336,10 @@ export function LinkTable() {
         )
       default:
         return (
-          <Badge variant="outline" className="text-muted-foreground text-xs gap-1">
+          <Badge
+            variant="outline"
+            className="text-muted-foreground gap-1 text-xs"
+          >
             未检测
           </Badge>
         )
@@ -304,14 +349,14 @@ export function LinkTable() {
   return (
     <div className="space-y-4">
       <Card>
-        <CardHeader className="p-4 pb-3 border-b">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <CardHeader className="border-b p-4 pb-3">
+          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
             <div>
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                <Link2 className="size-4 text-primary" />
+              <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+                <Link2 className="text-primary size-4" />
                 友情链接与互换管理
               </CardTitle>
-              <CardDescription className="text-xs mt-0.5">
+              <CardDescription className="mt-0.5 text-xs">
                 审核前台访客提交的友链互换申请，管理已收录站点，自动定时每周巡检友站反向链接
               </CardDescription>
             </div>
@@ -321,24 +366,28 @@ export function LinkTable() {
                 variant="outline"
                 onClick={handleBatchVerify}
                 disabled={batchChecking}
-                className="h-8 text-xs gap-1.5 text-blue-600 border-blue-200 hover:bg-blue-50 dark:border-blue-900/40 dark:hover:bg-blue-950/40"
+                className="h-8 gap-1.5 border-blue-200 text-xs text-blue-600 hover:bg-blue-50 dark:border-blue-900/40 dark:hover:bg-blue-950/40"
                 title={
                   weeklyStatus.lastCheckedAt
                     ? `上次每周巡检时间：${weeklyStatus.lastCheckedAt.slice(0, 10)}`
                     : '尚未执行全站巡检，点击立即执行'
                 }
               >
-                <RefreshCw className={`size-3.5 ${batchChecking ? 'animate-spin' : ''}`} />
-                <span>{batchChecking ? '全站巡检中...' : '每周巡检 (一键全站检测)'}</span>
+                <RefreshCw
+                  className={`size-3.5 ${batchChecking ? 'animate-spin' : ''}`}
+                />
+                <span>
+                  {batchChecking ? '全站巡检中...' : '每周巡检 (一键全站检测)'}
+                </span>
                 {weeklyStatus.needsCheck && (
-                  <span className="size-1.5 rounded-full bg-amber-500 animate-ping" />
+                  <span className="size-1.5 animate-ping rounded-full bg-amber-500" />
                 )}
               </Button>
               <Button
                 size="sm"
                 variant="outline"
                 onClick={() => setGuidelinesOpen(true)}
-                className="h-8 text-xs gap-1.5"
+                className="h-8 gap-1.5 text-xs"
               >
                 <BookOpen className="size-3.5" />
                 编辑互换准则
@@ -349,7 +398,7 @@ export function LinkTable() {
                   setEditingLink(null)
                   setDialogOpen(true)
                 }}
-                className="h-8 text-xs gap-1.5"
+                className="h-8 gap-1.5 text-xs"
               >
                 <Plus className="size-3.5" />
                 新增友情链接
@@ -358,23 +407,29 @@ export function LinkTable() {
           </div>
 
           <div className="pt-3">
-            <Tabs value={tab} onValueChange={(val) => setTab(val as typeof tab)}>
+            <Tabs
+              value={tab}
+              onValueChange={(val) => setTab(val as typeof tab)}
+            >
               <TabsList className="h-8">
-                <TabsTrigger value="all" className="text-xs px-3">
+                <TabsTrigger value="all" className="px-3 text-xs">
                   全部 ({links.length})
                 </TabsTrigger>
-                <TabsTrigger value="pending" className="text-xs px-3">
+                <TabsTrigger value="pending" className="px-3 text-xs">
                   待审核
                   {pendingCount > 0 && (
-                    <Badge variant="secondary" className="ml-1.5 px-1.5 py-0 text-[10px] bg-amber-500/20 text-amber-700 dark:text-amber-400">
+                    <Badge
+                      variant="secondary"
+                      className="ml-1.5 bg-amber-500/20 px-1.5 py-0 text-[10px] text-amber-700 dark:text-amber-400"
+                    >
                       {pendingCount}
                     </Badge>
                   )}
                 </TabsTrigger>
-                <TabsTrigger value="approved" className="text-xs px-3">
+                <TabsTrigger value="approved" className="px-3 text-xs">
                   已收录 ({approvedCount})
                 </TabsTrigger>
-                <TabsTrigger value="rejected" className="text-xs px-3">
+                <TabsTrigger value="rejected" className="px-3 text-xs">
                   已驳回 ({rejectedCount})
                 </TabsTrigger>
               </TabsList>
@@ -384,15 +439,19 @@ export function LinkTable() {
 
         <CardContent className="p-0">
           {loading ? (
-            <div className="text-center py-10 text-xs text-muted-foreground">加载友链数据中...</div>
+            <div className="text-muted-foreground py-10 text-center text-xs">
+              加载友链数据中...
+            </div>
           ) : filteredLinks.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-xs text-muted-foreground">当前分类下暂无友情链接记录</p>
+            <div className="py-12 text-center">
+              <p className="text-muted-foreground text-xs">
+                当前分类下暂无友情链接记录
+              </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left">
-                <thead className="bg-muted/40 text-muted-foreground border-b text-[11px] uppercase tracking-wider font-medium">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-muted/40 text-muted-foreground border-b text-[11px] font-medium tracking-wider uppercase">
                   <tr>
                     <th className="px-4 py-3">站点名称 / Logo</th>
                     <th className="px-4 py-3">链接网址</th>
@@ -406,10 +465,13 @@ export function LinkTable() {
                 </thead>
                 <tbody className="divide-y">
                   {filteredLinks.map((item) => (
-                    <tr key={item.id} className="hover:bg-muted/30 transition-colors">
+                    <tr
+                      key={item.id}
+                      className="hover:bg-muted/30 transition-colors"
+                    >
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2.5">
-                          <div className="size-7 rounded-md bg-muted flex items-center justify-center overflow-hidden shrink-0 border">
+                          <div className="bg-muted flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-md border">
                             {item.logo ? (
                               <img
                                 src={item.logo}
@@ -421,11 +483,13 @@ export function LinkTable() {
                                 }}
                               />
                             ) : (
-                              <Globe className="size-3.5 text-muted-foreground" />
+                              <Globe className="text-muted-foreground size-3.5" />
                             )}
                           </div>
                           <div>
-                            <div className="font-semibold text-foreground">{item.name}</div>
+                            <div className="text-foreground font-semibold">
+                              {item.name}
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -435,36 +499,39 @@ export function LinkTable() {
                           href={item.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-primary hover:underline inline-flex items-center gap-1"
+                          className="text-primary inline-flex items-center gap-1 hover:underline"
                         >
                           {item.url}
                           <ExternalLink className="size-3" />
                         </a>
                       </td>
 
-                      <td className="px-4 py-3 max-w-xs">
-                        <div className="truncate text-muted-foreground" title={item.description}>
+                      <td className="max-w-xs px-4 py-3">
+                        <div
+                          className="text-muted-foreground truncate"
+                          title={item.description}
+                        >
                           {item.description || '-'}
                         </div>
                         {item.email && (
-                          <div className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
+                          <div className="text-muted-foreground mt-0.5 flex items-center gap-1 text-[11px]">
                             <Mail className="size-3" />
                             <span>{item.email}</span>
                           </div>
                         )}
                       </td>
 
-                      <td className="px-4 py-3 text-center font-mono">{item.sort}</td>
+                      <td className="px-4 py-3 text-center font-mono">
+                        {item.sort}
+                      </td>
 
                       <td className="px-4 py-3">
                         {getStatusBadge(item.status, item.rejectReason)}
                       </td>
 
-                      <td className="px-4 py-3">
-                        {getBacklinkBadge(item)}
-                      </td>
+                      <td className="px-4 py-3">{getBacklinkBadge(item)}</td>
 
-                      <td className="px-4 py-3 text-muted-foreground text-[11px]">
+                      <td className="text-muted-foreground px-4 py-3 text-[11px]">
                         {new Date(item.createdAt).toLocaleDateString()}
                       </td>
 
@@ -475,7 +542,7 @@ export function LinkTable() {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="h-7 text-xs px-2 text-emerald-600 border-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
+                                className="h-7 border-emerald-300 px-2 text-xs text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
                                 onClick={() => handleApprove(item)}
                               >
                                 通过
@@ -483,7 +550,7 @@ export function LinkTable() {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="h-7 text-xs px-2 text-rose-600 border-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/40"
+                                className="h-7 border-rose-300 px-2 text-xs text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40"
                                 onClick={() => setRejectTarget(item)}
                               >
                                 驳回
@@ -494,19 +561,23 @@ export function LinkTable() {
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-7 px-1.5 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950/40 gap-1"
+                            className="h-7 gap-1 px-1.5 text-xs text-blue-600 hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-950/40"
                             title="即时检测该站点反链"
                             disabled={checkingMap[item.id]}
                             onClick={() => handleVerifySingle(item)}
                           >
-                            <ShieldCheck className={`size-3.5 ${checkingMap[item.id] ? 'animate-spin' : ''}`} />
-                            <span className="hidden xl:inline text-[11px]">检测</span>
+                            <ShieldCheck
+                              className={`size-3.5 ${checkingMap[item.id] ? 'animate-spin' : ''}`}
+                            />
+                            <span className="hidden text-[11px] xl:inline">
+                              检测
+                            </span>
                           </Button>
 
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
+                            className="text-muted-foreground hover:text-foreground h-7 w-7 p-0"
                             title="编辑"
                             onClick={() => {
                               setEditingLink(item)
@@ -519,7 +590,7 @@ export function LinkTable() {
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-7 w-7 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10 h-7 w-7 p-0"
                             title="删除"
                             onClick={() => setDeleteTarget(item)}
                           >

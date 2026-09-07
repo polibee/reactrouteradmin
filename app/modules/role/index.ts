@@ -2,14 +2,14 @@ import { defineModule } from '../../admin/core/module/module'
 import { moduleRegistry } from '../../admin/core/module/registry'
 import { RoleResource } from './resource'
 
-export * from './types'
+export * from './components/permission-matrix'
+export * from './components/role-form'
+export * from './components/role-table'
 export * from './permissions'
+export * from './repository'
 export * from './resource'
 export * from './service'
-export * from './repository'
-export * from './components/role-table'
-export * from './components/role-form'
-export * from './components/permission-matrix'
+export * from './types'
 
 export const RoleModule = defineModule({
   name: 'role',

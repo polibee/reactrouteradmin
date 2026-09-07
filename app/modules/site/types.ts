@@ -39,11 +39,11 @@ export type NavLocation = 'header' | 'footer'
 
 export interface SiteNavGroup {
   id: string
-  name: string                 // 分类/分组名字 (如 "核心产品", "法律合规", "产品服务")
-  location: NavLocation        // 'header' | 'footer'
-  sort: number                 // 排序权重
-  enabled: boolean             // 启用状态
-  description?: string         // 分组描述
+  name: string // 分类/分组名字 (如 "核心产品", "法律合规", "产品服务")
+  location: NavLocation // 'header' | 'footer'
+  sort: number // 排序权重
+  enabled: boolean // 启用状态
+  description?: string // 分组描述
 }
 
 export const siteNavGroupSchema = z.object({
@@ -64,11 +64,11 @@ export interface SiteNavItem {
   target: '_self' | '_blank'
   sort: number
   enabled: boolean
-  groupId?: string             // 所属分组 ID
-  group?: string               // 兼容历史分组名称
-  parentId?: string            // 父级菜单 ID (支持多级子菜单)
-  description?: string         // 描述/副标题 (富文本下拉菜单展现)
-  children?: SiteNavItem[]     // 树状展示时的子菜单列表
+  groupId?: string // 所属分组 ID
+  group?: string // 兼容历史分组名称
+  parentId?: string // 父级菜单 ID (支持多级子菜单)
+  description?: string // 描述/副标题 (富文本下拉菜单展现)
+  children?: SiteNavItem[] // 树状展示时的子菜单列表
 }
 
 export const siteNavItemSchema = z.object({
@@ -132,7 +132,14 @@ export const siteWidgetFormSchema = z.object({
     .enum(['dashboard', 'home_sidebar', 'page_sidebar', 'site_sidebar', 'both'])
     .default('both'),
   cardType: z
-    .enum(['preset', 'image_banner', 'link_list', 'custom_html', 'custom_js', 'custom_text'])
+    .enum([
+      'preset',
+      'image_banner',
+      'link_list',
+      'custom_html',
+      'custom_js',
+      'custom_text',
+    ])
     .default('preset'),
   customContent: z.string().optional(),
   imageUrl: z.string().optional(),
@@ -148,8 +155,8 @@ export type SiteWidgetFormValues = z.infer<typeof siteWidgetFormSchema>
 
 export interface SiteWidgetGlobalSettings {
   density: 'compact' | 'standard' // 侧边栏卡片密度: compact(紧凑微排版，推荐) | standard(标准)
-  sidebarSticky: boolean          // 侧边栏是否吸顶浮动
-  showCardDividers: boolean       // 卡片内部是否显示分割线
+  sidebarSticky: boolean // 侧边栏是否吸顶浮动
+  showCardDividers: boolean // 卡片内部是否显示分割线
 }
 
 // ==========================================
@@ -221,7 +228,12 @@ export type SiteAdSlotFormValues = z.infer<typeof siteAdSlotSchema>
 // 6. 友情链接 (FriendLink)
 // ==========================================
 export type FriendLinkStatus = 'pending' | 'approved' | 'rejected'
-export type BacklinkStatus = 'verified' | 'missing' | 'checking' | 'failed' | 'unverified'
+export type BacklinkStatus =
+  | 'verified'
+  | 'missing'
+  | 'checking'
+  | 'failed'
+  | 'unverified'
 
 export interface FriendLink {
   id: string
@@ -243,7 +255,11 @@ export interface FriendLink {
 export const friendLinkFormSchema = z.object({
   name: z.string().min(2, '网站名称至少 2 个字符'),
   url: z.string().url('请输入有效的网址 (包含 http:// 或 https://)'),
-  logo: z.string().url('请输入有效的 Logo 图标网址').optional().or(z.literal('')),
+  logo: z
+    .string()
+    .url('请输入有效的 Logo 图标网址')
+    .optional()
+    .or(z.literal('')),
   description: z.string().max(200, '网站描述在 200 字以内').optional(),
   email: z.string().email('请输入有效的通知邮箱').optional().or(z.literal('')),
   sort: z.coerce.number().default(10),
@@ -279,4 +295,6 @@ export const friendLinkGuidelinesSchema = z.object({
   customNotice: z.string().optional(),
 })
 
-export type FriendLinkGuidelinesFormValues = z.infer<typeof friendLinkGuidelinesSchema>
+export type FriendLinkGuidelinesFormValues = z.infer<
+  typeof friendLinkGuidelinesSchema
+>

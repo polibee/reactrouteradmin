@@ -1,25 +1,25 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  ActionButton,
+  SelectField,
+  SmartForm,
+  SwitchField,
+  TextField,
+  TextareaField,
+} from '~/admin/ui'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '~/components/ui/dialog'
 import {
-  SmartForm,
-  TextField,
-  TextareaField,
-  SelectField,
-  SwitchField,
-  ActionButton,
-} from '~/admin/ui'
-import {
   siteAnnouncementSchema,
-  type SiteAnnouncementFormValues,
   type SiteAnnouncement,
+  type SiteAnnouncementFormValues,
 } from '../../types'
 
 export interface AnnouncementDialogProps {
@@ -53,6 +53,7 @@ export function AnnouncementDialog({
     },
   })
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reset form when the edited announcement changes
   useEffect(() => {
     if (item) {
       form.reset({
@@ -83,9 +84,12 @@ export function AnnouncementDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{isEditing ? '编辑运营通知' : '新增运营通知'}</DialogTitle>
+          <DialogTitle>
+            {isEditing ? '编辑运营通知' : '新增运营通知'}
+          </DialogTitle>
           <DialogDescription>
-            配置前台各类视觉公告形态（顶部 Banner、居中弹窗、右下角浮窗或底部走马灯）。
+            配置前台各类视觉公告形态（顶部
+            Banner、居中弹窗、右下角浮窗或底部走马灯）。
           </DialogDescription>
         </DialogHeader>
 
@@ -109,7 +113,7 @@ export function AnnouncementDialog({
             </div>
           }
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <SelectField
               name="type"
               label="通知形态类型"
@@ -149,7 +153,7 @@ export function AnnouncementDialog({
             required
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <TextField
               name="linkText"
               label="跳转按钮文案 (可选)"
@@ -162,11 +166,8 @@ export function AnnouncementDialog({
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-            <SwitchField
-              name="enabled"
-              label="立即启用生效"
-            />
+          <div className="grid grid-cols-1 gap-3 pt-2 sm:grid-cols-2">
+            <SwitchField name="enabled" label="立即启用生效" />
             <SwitchField
               name="showOnce"
               label="同一会话内仅提示一次 (防打扰)"

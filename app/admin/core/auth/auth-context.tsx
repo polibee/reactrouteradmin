@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from 'react'
-import type { AuthUser, AuthState } from './types'
+import type React from 'react'
+import { createContext, useContext, useState } from 'react'
+import type { AuthState, AuthUser } from './types'
 
 interface AuthContextValue extends AuthState {
   login: (user: AuthUser) => void
@@ -12,7 +13,8 @@ const defaultAdminUser: AuthUser = {
   id: 'usr_admin_1',
   name: 'Admin User',
   email: 'admin@antigravity.dev',
-  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+  avatar:
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
   roles: ['super_admin', 'admin'],
   permissions: ['*'], // Super admin has all permissions
 }
@@ -41,7 +43,7 @@ export function AuthProvider({
     if (!user) return false
     if (user.permissions.includes('*')) return true
     if (user.permissions.includes(permission)) return true
-    
+
     // Support wildcard matching e.g. "users.*"
     const [resource] = permission.split('.')
     if (user.permissions.includes(`${resource}.*`)) return true

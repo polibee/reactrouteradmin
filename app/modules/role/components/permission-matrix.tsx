@@ -1,10 +1,16 @@
-import { Checkbox } from '~/components/ui/checkbox'
-import { Label } from '~/components/ui/label'
+import { CheckCheck, XCircle } from 'lucide-react'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/components/ui/card'
-import { SYSTEM_PERMISSION_GROUPS, ALL_PERMISSION_CODES } from '../permissions'
-import { CheckCheck, XCircle } from 'lucide-react'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '~/components/ui/card'
+import { Checkbox } from '~/components/ui/checkbox'
+import { Label } from '~/components/ui/label'
+import { ALL_PERMISSION_CODES, SYSTEM_PERMISSION_GROUPS } from '../permissions'
 
 export interface PermissionMatrixProps {
   selectedPermissions: string[]
@@ -41,8 +47,12 @@ export function PermissionMatrix({
     if (!group) return
 
     const groupCodes = group.permissions.map((p) => p.code)
-    const currentCodes = isSuperAdmin ? [...ALL_PERMISSION_CODES] : [...selectedPermissions]
-    const allGroupSelected = groupCodes.every((code) => currentCodes.includes(code))
+    const currentCodes = isSuperAdmin
+      ? [...ALL_PERMISSION_CODES]
+      : [...selectedPermissions]
+    const allGroupSelected = groupCodes.every((code) =>
+      currentCodes.includes(code),
+    )
 
     if (allGroupSelected) {
       // 反选本组
@@ -64,20 +74,28 @@ export function PermissionMatrix({
     onChange([])
   }
 
-  const effectivePermissions = isSuperAdmin ? ALL_PERMISSION_CODES : selectedPermissions
+  const effectivePermissions = isSuperAdmin
+    ? ALL_PERMISSION_CODES
+    : selectedPermissions
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 bg-muted/50 rounded-lg border">
+      <div className="bg-muted/50 flex flex-col justify-between gap-2 rounded-lg border p-3 sm:flex-row sm:items-center">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-foreground">权限分配矩阵</span>
+          <span className="text-foreground text-sm font-medium">
+            权限分配矩阵
+          </span>
           {isSuperAdmin ? (
-            <Badge variant="default" className="bg-amber-600 text-white hover:bg-amber-700">
+            <Badge
+              variant="default"
+              className="bg-amber-600 text-white hover:bg-amber-700"
+            >
               超级特权 (*)
             </Badge>
           ) : (
             <Badge variant="secondary">
-              已选 {effectivePermissions.length} / {ALL_PERMISSION_CODES.length} 项
+              已选 {effectivePermissions.length} / {ALL_PERMISSION_CODES.length}{' '}
+              项
             </Badge>
           )}
         </div>
@@ -91,7 +109,7 @@ export function PermissionMatrix({
               onClick={selectAll}
               className="h-8 text-xs"
             >
-              <CheckCheck className="size-3.5 mr-1" />
+              <CheckCheck className="mr-1 size-3.5" />
               全部勾选
             </Button>
             <Button
@@ -99,16 +117,16 @@ export function PermissionMatrix({
               variant="ghost"
               size="sm"
               onClick={clearAll}
-              className="h-8 text-xs text-muted-foreground hover:text-destructive"
+              className="text-muted-foreground hover:text-destructive h-8 text-xs"
             >
-              <XCircle className="size-3.5 mr-1" />
+              <XCircle className="mr-1 size-3.5" />
               清空重置
             </Button>
           </div>
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {SYSTEM_PERMISSION_GROUPS.map((group) => {
           const groupCodes = group.permissions.map((p) => p.code)
           const allSelected =
@@ -117,11 +135,13 @@ export function PermissionMatrix({
 
           return (
             <Card key={group.module} className="shadow-xs">
-              <CardHeader className="p-4 pb-3 border-b flex flex-row items-center justify-between space-y-0">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 border-b p-4 pb-3">
                 <div>
-                  <CardTitle className="text-sm font-semibold">{group.title}</CardTitle>
+                  <CardTitle className="text-sm font-semibold">
+                    {group.title}
+                  </CardTitle>
                   {group.description && (
-                    <CardDescription className="text-xs mt-0.5">
+                    <CardDescription className="mt-0.5 text-xs">
                       {group.description}
                     </CardDescription>
                   )}
@@ -133,14 +153,14 @@ export function PermissionMatrix({
                     variant="ghost"
                     size="sm"
                     onClick={() => toggleGroup(group.module)}
-                    className="h-7 px-2 text-xs text-primary font-normal"
+                    className="text-primary h-7 px-2 text-xs font-normal"
                   >
                     {allSelected ? '取消全选' : '全选本组'}
                   </Button>
                 )}
               </CardHeader>
 
-              <CardContent className="p-4 space-y-3">
+              <CardContent className="space-y-3 p-4">
                 {group.permissions.map((perm) => {
                   const isChecked =
                     isSuperAdmin || selectedPermissions.includes(perm.code)
@@ -148,7 +168,7 @@ export function PermissionMatrix({
                   return (
                     <div
                       key={perm.code}
-                      className="flex items-start space-x-2.5 rounded-md p-1.5 transition-colors hover:bg-accent/40"
+                      className="hover:bg-accent/40 flex items-start space-x-2.5 rounded-md p-1.5 transition-colors"
                     >
                       <Checkbox
                         id={`perm-${perm.code}`}
@@ -160,15 +180,15 @@ export function PermissionMatrix({
                       <div className="grid gap-0.5 leading-none">
                         <Label
                           htmlFor={`perm-${perm.code}`}
-                          className="text-xs font-medium cursor-pointer"
+                          className="cursor-pointer text-xs font-medium"
                         >
                           {perm.name}
-                          <span className="ml-1.5 font-mono text-[11px] text-muted-foreground font-normal">
+                          <span className="text-muted-foreground ml-1.5 font-mono text-[11px] font-normal">
                             ({perm.code})
                           </span>
                         </Label>
                         {perm.description && (
-                          <p className="text-[11px] text-muted-foreground line-clamp-1">
+                          <p className="text-muted-foreground line-clamp-1 text-[11px]">
                             {perm.description}
                           </p>
                         )}

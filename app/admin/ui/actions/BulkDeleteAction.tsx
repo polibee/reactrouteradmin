@@ -1,6 +1,6 @@
 import { Trash2 } from 'lucide-react'
-import { AdminConfirmDialog } from '../overlay/AdminConfirmDialog'
 import { Button } from '~/components/ui/button'
+import { AdminConfirmDialog } from '../overlay/AdminConfirmDialog'
 
 export interface BulkDeleteActionProps {
   selectedCount: number

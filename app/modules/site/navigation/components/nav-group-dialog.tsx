@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react'
+import { Layers } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Button } from '~/components/ui/button'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
-  DialogDescription,
 } from '~/components/ui/dialog'
-import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
-import { Textarea } from '~/components/ui/textarea'
 import {
   Select,
   SelectContent,
@@ -19,8 +19,12 @@ import {
   SelectValue,
 } from '~/components/ui/select'
 import { Switch } from '~/components/ui/switch'
-import type { SiteNavGroup, SiteNavGroupFormValues, NavLocation } from '../../types'
-import { Layers } from 'lucide-react'
+import { Textarea } from '~/components/ui/textarea'
+import type {
+  NavLocation,
+  SiteNavGroup,
+  SiteNavGroupFormValues,
+} from '../../types'
 
 export interface NavGroupDialogProps {
   open: boolean
@@ -45,6 +49,7 @@ export function NavGroupDialog({
   const [description, setDescription] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: sync state when the edited group changes
   useEffect(() => {
     if (group) {
       setName(group.name)
@@ -86,7 +91,7 @@ export function NavGroupDialog({
       <DialogContent className="sm:max-w-[420px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-base">
-            <Layers className="size-4 text-primary" />
+            <Layers className="text-primary size-4" />
             {isEditing ? '修改导航分类名字' : '新增导航分类/分组'}
           </DialogTitle>
           <DialogDescription className="text-xs">
@@ -157,14 +162,14 @@ export function NavGroupDialog({
             />
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t">
+          <div className="flex items-center justify-between border-t pt-2">
             <div className="flex items-center space-x-2">
               <Switch
                 id="group-enabled"
                 checked={enabled}
                 onCheckedChange={setEnabled}
               />
-              <Label htmlFor="group-enabled" className="text-xs cursor-pointer">
+              <Label htmlFor="group-enabled" className="cursor-pointer text-xs">
                 在前台启用此分类
               </Label>
             </div>
@@ -184,7 +189,7 @@ export function NavGroupDialog({
             <Button
               type="submit"
               size="sm"
-              className="h-8 text-xs gap-1"
+              className="h-8 gap-1 text-xs"
               disabled={submitting || !name.trim()}
             >
               {submitting ? '保存中...' : '确定保存'}

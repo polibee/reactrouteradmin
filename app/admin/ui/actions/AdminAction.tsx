@@ -1,5 +1,5 @@
-import { AdminButton, type AdminButtonProps } from '../primitives/AdminButton'
 import { AdminConfirmDialog } from '../overlay/AdminConfirmDialog'
+import { AdminButton, type AdminButtonProps } from '../primitives/AdminButton'
 
 export interface AdminActionProps extends AdminButtonProps {
   confirm?: boolean

@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router'
 import {
-  AdminPage,
-  AdminPageHeader,
-  AdminPageContent,
   AdminCard,
-  AdminLoading,
   AdminEmpty,
+  AdminLoading,
+  AdminPage,
+  AdminPageContent,
+  AdminPageHeader,
   notify,
 } from '~/admin/ui'
 import { UserForm } from '~/modules/user/components/user-form'
 import { userService } from '~/modules/user/service'
 import type { User, UserFormData } from '~/modules/user/types'
-import { useNavigate, useParams } from 'react-router'
 
 export const meta = () => {
   return [{ title: '编辑用户 - Admin Framework' }]
@@ -49,8 +49,8 @@ export default function UserEditPage() {
       await userService.updateUser(id, data)
       notify.success('用户信息已成功更新！')
       navigate('/admin/users')
-    } catch (e: any) {
-      notify.error(e?.message || '更新用户信息失败')
+    } catch (e) {
+      notify.error(e instanceof Error ? e.message : '更新用户信息失败')
     } finally {
       setSaving(false)
     }
@@ -72,6 +72,7 @@ export default function UserEditPage() {
           description="该用户可能已被删除或 ID 无效"
           action={
             <button
+              type="button"
               onClick={() => navigate('/admin/users')}
               className="text-primary text-sm underline"
             >

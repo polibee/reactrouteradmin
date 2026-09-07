@@ -1,25 +1,25 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from '~/components/ui/dialog'
-import {
+  ActionButton,
+  NumberField,
+  SelectField,
   SmartForm,
   TextField,
   TextareaField,
-  SelectField,
-  NumberField,
-  ActionButton,
 } from '~/admin/ui'
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '~/components/ui/dialog'
+import {
   friendLinkFormSchema,
-  type FriendLinkFormValues,
   type FriendLink,
+  type FriendLinkFormValues,
 } from '../../types'
 
 export interface LinkDialogProps {
@@ -52,6 +52,7 @@ export function LinkDialog({
     },
   })
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reset form when the edited link changes
   useEffect(() => {
     if (link) {
       form.reset({
@@ -80,7 +81,9 @@ export function LinkDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{isEditing ? '编辑友情链接' : '新增友情链接'}</DialogTitle>
+          <DialogTitle>
+            {isEditing ? '编辑友情链接' : '新增友情链接'}
+          </DialogTitle>
           <DialogDescription>
             配置站点名称、外部跳转网址、Logo 图标以及审核状态。
           </DialogDescription>
@@ -106,7 +109,7 @@ export function LinkDialog({
             </div>
           }
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <TextField
               name="name"
               label="网站名称"
@@ -121,7 +124,7 @@ export function LinkDialog({
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <TextField
               name="logo"
               label="Logo 图标网址 (可选)"
@@ -134,7 +137,7 @@ export function LinkDialog({
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <SelectField
               name="status"
               label="审核状态"
@@ -145,11 +148,7 @@ export function LinkDialog({
               ]}
               required
             />
-            <NumberField
-              name="sort"
-              label="展示排序 (越小越靠前)"
-              required
-            />
+            <NumberField name="sort" label="展示排序 (越小越靠前)" required />
           </div>
 
           <TextareaField

@@ -24,7 +24,9 @@ export interface PanelConfig {
   defaultTheme?: 'shadcn' | 'semi' | 'filament' | 'compact'
 }
 
-export function definePanel(config: Partial<PanelConfig> & { id: string; name: string }): PanelConfig {
+export function definePanel(
+  config: Partial<PanelConfig> & { id: string; name: string },
+): PanelConfig {
   return {
     path: '/admin',
     branding: {

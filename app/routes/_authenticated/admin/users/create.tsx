@@ -1,15 +1,15 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 import {
-  AdminPage,
-  AdminPageHeader,
-  AdminPageContent,
   AdminCard,
+  AdminPage,
+  AdminPageContent,
+  AdminPageHeader,
   notify,
 } from '~/admin/ui'
 import { UserForm } from '~/modules/user/components/user-form'
 import { userService } from '~/modules/user/service'
 import type { UserFormData } from '~/modules/user/types'
-import { useNavigate } from 'react-router'
 
 export const meta = () => {
   return [{ title: '新增用户 - Admin Framework' }]
@@ -29,8 +29,8 @@ export default function UserCreatePage() {
       const created = await userService.createUser(data)
       notify.success(`用户“${created.name}”创建成功！`)
       navigate('/admin/users')
-    } catch (e: any) {
-      notify.error(e?.message || '创建用户失败，请检查输入')
+    } catch (e) {
+      notify.error(e instanceof Error ? e.message : '创建用户失败，请检查输入')
     } finally {
       setLoading(false)
     }

@@ -1,15 +1,15 @@
-import React from 'react'
+import type React from 'react'
 import { Outlet, useMatches } from 'react-router'
+import { Main } from '~/components/layout/main'
 import { SidebarProvider } from '~/components/ui/sidebar'
 import { SearchProvider } from '~/context/search-context'
-import { Main } from '~/components/layout/main'
 import { useBreadcrumbs } from '~/hooks/use-breadcrumbs'
 import { cn } from '~/lib/utils'
-import { AdminSidebar } from './AdminSidebar'
-import { AdminHeader } from './AdminHeader'
-import { ThemePresetProvider } from '../themes/theme-context'
-import { PanelProvider } from '../../core/panel/panel-provider'
 import { AuthProvider } from '../../core/auth/auth-context'
+import { PanelProvider } from '../../core/panel/panel-provider'
+import { ThemePresetProvider } from '../themes/theme-context'
+import { AdminHeader } from './AdminHeader'
+import { AdminSidebar } from './AdminSidebar'
 
 export interface AdminLayoutProps {
   children?: React.ReactNode
@@ -44,9 +44,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
               >
                 <AdminHeader fixed={handle.headerFixed} />
                 <Breadcrumbs />
-                <Main fixed={handle.mainFixed}>
-                  {children || <Outlet />}
-                </Main>
+                <Main fixed={handle.mainFixed}>{children || <Outlet />}</Main>
               </div>
             </SidebarProvider>
           </SearchProvider>

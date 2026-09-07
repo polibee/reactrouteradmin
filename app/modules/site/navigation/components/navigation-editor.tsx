@@ -1,31 +1,37 @@
-import { useState, useEffect } from 'react'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '~/components/ui/tabs'
-import { Button } from '~/components/ui/button'
-import { Switch } from '~/components/ui/switch'
-import { Badge } from '~/components/ui/badge'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/components/ui/card'
-import { NavItemDialog } from './nav-item-dialog'
-import { NavGroupDialog } from './nav-group-dialog'
-import { siteService } from '../../service'
-import type {
-  SiteNavItem,
-  SiteNavItemFormValues,
-  SiteNavGroup,
-  SiteNavGroupFormValues,
-  NavLocation,
-} from '../../types'
-import { notify } from '~/admin/ui'
 import {
-  Plus,
-  Edit2,
-  Trash2,
-  ExternalLink,
   ArrowUpDown,
+  CornerDownRight,
+  Edit2,
+  ExternalLink,
+  Folder,
   FolderPlus,
   Layers,
-  CornerDownRight,
-  Folder,
+  Plus,
+  Trash2,
 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { notify } from '~/admin/ui'
+import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '~/components/ui/card'
+import { Switch } from '~/components/ui/switch'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
+import { siteService } from '../../service'
+import type {
+  NavLocation,
+  SiteNavGroup,
+  SiteNavGroupFormValues,
+  SiteNavItem,
+  SiteNavItemFormValues,
+} from '../../types'
+import { NavGroupDialog } from './nav-group-dialog'
+import { NavItemDialog } from './nav-item-dialog'
 
 export function NavigationEditor() {
   const [items, setItems] = useState<SiteNavItem[]>([])
@@ -35,14 +41,20 @@ export function NavigationEditor() {
   // Item Dialog states
   const [itemDialogOpen, setItemDialogOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<SiteNavItem | null>(null)
-  const [itemLocationPreset, setItemLocationPreset] = useState<NavLocation>('header')
-  const [parentPresetId, setParentPresetId] = useState<string | undefined>(undefined)
-  const [groupPresetId, setGroupPresetId] = useState<string | undefined>(undefined)
+  const [itemLocationPreset, setItemLocationPreset] =
+    useState<NavLocation>('header')
+  const [parentPresetId, setParentPresetId] = useState<string | undefined>(
+    undefined,
+  )
+  const [groupPresetId, setGroupPresetId] = useState<string | undefined>(
+    undefined,
+  )
 
   // Group Dialog states
   const [groupDialogOpen, setGroupDialogOpen] = useState(false)
   const [editingGroup, setEditingGroup] = useState<SiteNavGroup | null>(null)
-  const [groupLocationPreset, setGroupLocationPreset] = useState<NavLocation>('footer')
+  const [groupLocationPreset, setGroupLocationPreset] =
+    useState<NavLocation>('footer')
 
   const loadData = async () => {
     try {
@@ -58,6 +70,7 @@ export function NavigationEditor() {
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only initial load
   useEffect(() => {
     loadData()
   }, [])
@@ -93,7 +106,9 @@ export function NavigationEditor() {
     setGroupDialogOpen(true)
   }
 
-  const handleSaveGroup = async (values: SiteNavGroupFormValues & { id?: string }) => {
+  const handleSaveGroup = async (
+    values: SiteNavGroupFormValues & { id?: string },
+  ) => {
     try {
       await siteService.saveNavGroup(values)
       notify.success(values.id ? '分类名字已更新' : '分类已新建成功')
@@ -105,7 +120,11 @@ export function NavigationEditor() {
   }
 
   const handleDeleteGroup = async (group: SiteNavGroup) => {
-    if (!confirm(`确定要删除分类「${group.name}」吗？组内关联的菜单项将变更为未归类状态。`)) {
+    if (
+      !confirm(
+        `确定要删除分类「${group.name}」吗？组内关联的菜单项将变更为未归类状态。`,
+      )
+    ) {
       return
     }
     try {
@@ -119,7 +138,11 @@ export function NavigationEditor() {
   }
 
   // --- Item Actions ---
-  const handleOpenCreateItem = (loc: NavLocation, parentId?: string, groupId?: string) => {
+  const handleOpenCreateItem = (
+    loc: NavLocation,
+    parentId?: string,
+    groupId?: string,
+  ) => {
     setEditingItem(null)
     setItemLocationPreset(loc)
     setParentPresetId(parentId)
@@ -134,7 +157,9 @@ export function NavigationEditor() {
     setItemDialogOpen(true)
   }
 
-  const handleSaveItem = async (values: SiteNavItemFormValues & { id?: string }) => {
+  const handleSaveItem = async (
+    values: SiteNavItemFormValues & { id?: string },
+  ) => {
     try {
       await siteService.saveNavItem(values)
       notify.success(values.parentId ? '子菜单项已保存' : '主菜单项已保存')
@@ -186,13 +211,13 @@ export function NavigationEditor() {
   return (
     <div className="space-y-4">
       {/* 顶部总控栏 */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-muted/40 p-3 rounded-lg border">
+      <div className="bg-muted/40 flex flex-col justify-between gap-3 rounded-lg border p-3 sm:flex-row sm:items-center">
         <div>
-          <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
-            <Layers className="size-4 text-primary" />
+          <h3 className="text-foreground flex items-center gap-2 text-sm font-semibold">
+            <Layers className="text-primary size-4" />
             导航链路与分类子菜单工作台
           </h3>
-          <p className="text-xs text-muted-foreground mt-0.5">
+          <p className="text-muted-foreground mt-0.5 text-xs">
             可视化管理页眉/页脚分类名字、添加多级子菜单树、定制下拉展示与链接跳转规则
           </p>
         </div>
@@ -202,7 +227,7 @@ export function NavigationEditor() {
             onClick={() => handleOpenCreateGroup(activeTab)}
             variant="outline"
             size="sm"
-            className="h-8 text-xs gap-1"
+            className="h-8 gap-1 text-xs"
           >
             <FolderPlus className="size-3.5" />
             新建分类名字
@@ -211,7 +236,7 @@ export function NavigationEditor() {
           <Button
             onClick={() => handleOpenCreateItem(activeTab)}
             size="sm"
-            className="h-8 text-xs gap-1"
+            className="h-8 gap-1 text-xs"
           >
             <Plus className="size-3.5" />
             新增菜单项
@@ -226,10 +251,12 @@ export function NavigationEditor() {
       >
         <TabsList className="grid w-full max-w-[400px] grid-cols-2">
           <TabsTrigger value="header" className="text-xs">
-            页眉导航 (Header · {headerTopLevel.length} 顶级 / {headerItems.length} 总项)
+            页眉导航 (Header · {headerTopLevel.length} 顶级 /{' '}
+            {headerItems.length} 总项)
           </TabsTrigger>
           <TabsTrigger value="footer" className="text-xs">
-            页脚分组 (Footer · {footerGroups.length} 分类 / {footerItems.length} 链接)
+            页脚分组 (Footer · {footerGroups.length} 分类 / {footerItems.length}{' '}
+            链接)
           </TabsTrigger>
         </TabsList>
 
@@ -237,9 +264,11 @@ export function NavigationEditor() {
         {/* 1. 页眉导航 TAB (Header：树形顶级 + 子菜单下拉结构) */}
         {/* ---------------------------------------------------- */}
         <TabsContent value="header" className="space-y-4">
-          <div className="flex items-center justify-between bg-card p-3 rounded-lg border text-xs">
+          <div className="bg-card flex items-center justify-between rounded-lg border p-3 text-xs">
             <div className="space-y-0.5">
-              <span className="font-medium text-foreground">页眉分类名字库：</span>
+              <span className="text-foreground font-medium">
+                页眉分类名字库：
+              </span>
               <span className="text-muted-foreground ml-1">
                 {headerGroups.length === 0
                   ? '暂未创建页眉分类'
@@ -250,7 +279,7 @@ export function NavigationEditor() {
               variant="ghost"
               size="sm"
               onClick={() => handleOpenCreateGroup('header')}
-              className="h-7 text-xs text-primary gap-1"
+              className="text-primary h-7 gap-1 text-xs"
             >
               <FolderPlus className="size-3" />
               管理页眉分类
@@ -258,18 +287,21 @@ export function NavigationEditor() {
           </div>
 
           <Card>
-            <CardHeader className="p-4 pb-3 border-b">
+            <CardHeader className="border-b p-4 pb-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-sm font-semibold">前台顶部主导航栏结构树</CardTitle>
+                  <CardTitle className="text-sm font-semibold">
+                    前台顶部主导航栏结构树
+                  </CardTitle>
                   <CardDescription className="text-xs">
-                    包含直接跳转项与带子菜单的下拉项（Dropdown Menu）。在前台页面顶部按排序权重自左向右排列。
+                    包含直接跳转项与带子菜单的下拉项（Dropdown
+                    Menu）。在前台页面顶部按排序权重自左向右排列。
                   </CardDescription>
                 </div>
                 <Button
                   size="sm"
                   variant="outline"
-                  className="h-7 text-xs gap-1"
+                  className="h-7 gap-1 text-xs"
                   onClick={() => handleOpenCreateItem('header')}
                 >
                   <Plus className="size-3" />
@@ -278,9 +310,9 @@ export function NavigationEditor() {
               </div>
             </CardHeader>
 
-            <CardContent className="p-4 space-y-3">
+            <CardContent className="space-y-3 p-4">
               {headerTopLevel.length === 0 ? (
-                <div className="text-center py-10 text-xs text-muted-foreground space-y-2">
+                <div className="text-muted-foreground space-y-2 py-10 text-center text-xs">
                   <p>暂无页眉菜单项</p>
                   <Button
                     size="sm"
@@ -300,37 +332,43 @@ export function NavigationEditor() {
                     return (
                       <div
                         key={parent.id}
-                        className="rounded-lg border bg-card/80 shadow-2xs overflow-hidden transition-all hover:border-primary/40"
+                        className="bg-card/80 hover:border-primary/40 overflow-hidden rounded-lg border shadow-2xs transition-all"
                       >
                         {/* 顶级菜单行 */}
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 gap-2 bg-muted/20">
+                        <div className="bg-muted/20 flex flex-col justify-between gap-2 p-3 sm:flex-row sm:items-center">
                           <div className="flex items-center gap-3">
-                            <span className="flex items-center gap-1 text-[11px] text-muted-foreground font-mono bg-background border px-1.5 py-0.5 rounded">
+                            <span className="text-muted-foreground bg-background flex items-center gap-1 rounded border px-1.5 py-0.5 font-mono text-[11px]">
                               <ArrowUpDown className="size-3" />
                               {parent.sort}
                             </span>
                             <div>
-                              <div className="text-sm font-medium text-foreground flex items-center gap-2">
+                              <div className="text-foreground flex items-center gap-2 text-sm font-medium">
                                 <span>{parent.title}</span>
                                 {childItems.length > 0 ? (
-                                  <Badge variant="default" className="text-[10px] h-4 py-0 px-1.5 font-normal">
+                                  <Badge
+                                    variant="default"
+                                    className="h-4 px-1.5 py-0 text-[10px] font-normal"
+                                  >
                                     包含 {childItems.length} 个子菜单 (下拉)
                                   </Badge>
                                 ) : (
-                                  <Badge variant="outline" className="text-[10px] h-4 py-0 px-1 font-normal text-muted-foreground">
+                                  <Badge
+                                    variant="outline"
+                                    className="text-muted-foreground h-4 px-1 py-0 text-[10px] font-normal"
+                                  >
                                     直链页面
                                   </Badge>
                                 )}
                                 {parent.group && (
-                                  <span className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                                  <span className="text-muted-foreground bg-muted rounded px-1.5 py-0.5 text-[10px]">
                                     分类: {parent.group}
                                   </span>
                                 )}
                               </div>
-                              <div className="text-xs text-muted-foreground font-mono mt-0.5 flex items-center gap-2">
+                              <div className="text-muted-foreground mt-0.5 flex items-center gap-2 font-mono text-xs">
                                 <span>{parent.url}</span>
                                 {parent.description && (
-                                  <span className="text-[11px] text-muted-foreground/80 italic">
+                                  <span className="text-muted-foreground/80 text-[11px] italic">
                                     · {parent.description}
                                   </span>
                                 )}
@@ -343,17 +381,25 @@ export function NavigationEditor() {
                             <Button
                               variant="outline"
                               size="sm"
-                              className="h-7 text-xs gap-1 border-primary/30 text-primary hover:bg-primary/5"
-                              onClick={() => handleOpenCreateItem('header', parent.id, parent.groupId)}
+                              className="border-primary/30 text-primary hover:bg-primary/5 h-7 gap-1 text-xs"
+                              onClick={() =>
+                                handleOpenCreateItem(
+                                  'header',
+                                  parent.id,
+                                  parent.groupId,
+                                )
+                              }
                             >
                               <Plus className="size-3" />
                               添加子菜单
                             </Button>
 
-                            <div className="flex items-center gap-1.5 ml-2">
+                            <div className="ml-2 flex items-center gap-1.5">
                               <Switch
                                 checked={parent.enabled}
-                                onCheckedChange={(checked) => handleToggleItem(parent, checked)}
+                                onCheckedChange={(checked) =>
+                                  handleToggleItem(parent, checked)
+                                }
                               />
                             </div>
 
@@ -361,7 +407,7 @@ export function NavigationEditor() {
                               variant="ghost"
                               size="icon"
                               onClick={() => handleEditItem(parent)}
-                              className="size-7 text-muted-foreground hover:text-foreground"
+                              className="text-muted-foreground hover:text-foreground size-7"
                               title="编辑此项"
                             >
                               <Edit2 className="size-3.5" />
@@ -371,7 +417,7 @@ export function NavigationEditor() {
                               variant="ghost"
                               size="icon"
                               onClick={() => handleDeleteItem(parent)}
-                              className="size-7 text-muted-foreground hover:text-destructive"
+                              className="text-muted-foreground hover:text-destructive size-7"
                               title="删除此项"
                             >
                               <Trash2 className="size-3.5" />
@@ -381,28 +427,31 @@ export function NavigationEditor() {
 
                         {/* 展开呈现的子菜单列表 */}
                         {childItems.length > 0 && (
-                          <div className="border-t divide-y bg-background/50 pl-6 sm:pl-8 pr-3 py-1">
+                          <div className="bg-background/50 divide-y border-t py-1 pr-3 pl-6 sm:pl-8">
                             {childItems.map((child) => (
                               <div
                                 key={child.id}
-                                className="flex items-center justify-between py-2 transition-colors hover:bg-muted/20"
+                                className="hover:bg-muted/20 flex items-center justify-between py-2 transition-colors"
                               >
                                 <div className="flex items-center gap-2.5">
-                                  <CornerDownRight className="size-3.5 text-muted-foreground/60 shrink-0" />
-                                  <span className="text-[10px] font-mono text-muted-foreground bg-muted px-1 py-0.2 rounded">
+                                  <CornerDownRight className="text-muted-foreground/60 size-3.5 shrink-0" />
+                                  <span className="text-muted-foreground bg-muted py-0.2 rounded px-1 font-mono text-[10px]">
                                     {child.sort}
                                   </span>
                                   <div>
-                                    <div className="text-xs font-medium text-foreground flex items-center gap-1.5">
+                                    <div className="text-foreground flex items-center gap-1.5 text-xs font-medium">
                                       {child.title}
                                       {child.target === '_blank' && (
-                                        <Badge variant="outline" className="text-[9px] h-3.5 py-0 px-1 font-normal">
-                                          <ExternalLink className="size-2.5 mr-0.5" />
+                                        <Badge
+                                          variant="outline"
+                                          className="h-3.5 px-1 py-0 text-[9px] font-normal"
+                                        >
+                                          <ExternalLink className="mr-0.5 size-2.5" />
                                           新窗口
                                         </Badge>
                                       )}
                                     </div>
-                                    <div className="text-[11px] text-muted-foreground font-mono flex items-center gap-2">
+                                    <div className="text-muted-foreground flex items-center gap-2 font-mono text-[11px]">
                                       <span>{child.url}</span>
                                       {child.description && (
                                         <span className="text-muted-foreground/70">
@@ -416,14 +465,16 @@ export function NavigationEditor() {
                                 <div className="flex items-center gap-1">
                                   <Switch
                                     checked={child.enabled}
-                                    onCheckedChange={(checked) => handleToggleItem(child, checked)}
+                                    onCheckedChange={(checked) =>
+                                      handleToggleItem(child, checked)
+                                    }
                                     className="scale-90"
                                   />
                                   <Button
                                     variant="ghost"
                                     size="icon"
                                     onClick={() => handleEditItem(child)}
-                                    className="size-7 text-muted-foreground hover:text-foreground"
+                                    className="text-muted-foreground hover:text-foreground size-7"
                                   >
                                     <Edit2 className="size-3" />
                                   </Button>
@@ -431,7 +482,7 @@ export function NavigationEditor() {
                                     variant="ghost"
                                     size="icon"
                                     onClick={() => handleDeleteItem(child)}
-                                    className="size-7 text-muted-foreground hover:text-destructive"
+                                    className="text-muted-foreground hover:text-destructive size-7"
                                   >
                                     <Trash2 className="size-3" />
                                   </Button>
@@ -453,17 +504,19 @@ export function NavigationEditor() {
         {/* 2. 页脚导航 TAB (Footer：按分类名分列渲染与管理) */}
         {/* ---------------------------------------------------- */}
         <TabsContent value="footer" className="space-y-4">
-          <div className="flex items-center justify-between bg-card p-3 rounded-lg border text-xs">
+          <div className="bg-card flex items-center justify-between rounded-lg border p-3 text-xs">
             <div>
-              <span className="font-semibold text-foreground">页脚导航分类与列控制中心</span>
-              <p className="text-[11px] text-muted-foreground mt-0.5">
+              <span className="text-foreground font-semibold">
+                页脚导航分类与列控制中心
+              </span>
+              <p className="text-muted-foreground mt-0.5 text-[11px]">
                 在前台页脚以现代化多列形式呈现。可在此自由【添加新分类】、【重命名/修改分类名】或【删除分类】
               </p>
             </div>
             <Button
               size="sm"
               onClick={() => handleOpenCreateGroup('footer')}
-              className="h-7 text-xs gap-1"
+              className="h-7 gap-1 text-xs"
             >
               <FolderPlus className="size-3" />
               添加新页脚分类
@@ -471,7 +524,7 @@ export function NavigationEditor() {
           </div>
 
           {/* 渲染各分类卡片 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {footerGroups.map((group) => {
               const groupItems = footerItems
                 .filter((i) => i.groupId === group.id || i.group === group.name)
@@ -480,14 +533,16 @@ export function NavigationEditor() {
               return (
                 <Card
                   key={group.id}
-                  className="flex flex-col border transition-all hover:border-primary/40 shadow-xs"
+                  className="hover:border-primary/40 flex flex-col border shadow-xs transition-all"
                 >
-                  <CardHeader className="p-3.5 pb-2.5 border-b bg-muted/20">
+                  <CardHeader className="bg-muted/20 border-b p-3.5 pb-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <Folder className="size-4 text-primary" />
-                        <CardTitle className="text-sm font-semibold">{group.name}</CardTitle>
-                        <span className="text-[10px] font-mono text-muted-foreground bg-background border px-1 rounded">
+                        <Folder className="text-primary size-4" />
+                        <CardTitle className="text-sm font-semibold">
+                          {group.name}
+                        </CardTitle>
+                        <span className="text-muted-foreground bg-background rounded border px-1 font-mono text-[10px]">
                           排序: {group.sort}
                         </span>
                       </div>
@@ -495,14 +550,16 @@ export function NavigationEditor() {
                       <div className="flex items-center gap-1">
                         <Switch
                           checked={group.enabled}
-                          onCheckedChange={(checked) => handleToggleGroup(group, checked)}
+                          onCheckedChange={(checked) =>
+                            handleToggleGroup(group, checked)
+                          }
                           title="在前台显隐该分类"
                         />
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => handleEditGroup(group)}
-                          className="size-7 text-muted-foreground hover:text-foreground"
+                          className="text-muted-foreground hover:text-foreground size-7"
                           title="修改分类名字与排序"
                         >
                           <Edit2 className="size-3.5" />
@@ -511,7 +568,7 @@ export function NavigationEditor() {
                           variant="ghost"
                           size="icon"
                           onClick={() => handleDeleteGroup(group)}
-                          className="size-7 text-muted-foreground hover:text-destructive"
+                          className="text-muted-foreground hover:text-destructive size-7"
                           title="删除此分类"
                         >
                           <Trash2 className="size-3.5" />
@@ -519,16 +576,16 @@ export function NavigationEditor() {
                       </div>
                     </div>
                     {group.description && (
-                      <CardDescription className="text-[11px] line-clamp-1 pt-0.5">
+                      <CardDescription className="line-clamp-1 pt-0.5 text-[11px]">
                         {group.description}
                       </CardDescription>
                     )}
                   </CardHeader>
 
-                  <CardContent className="p-3 flex-1 flex flex-col justify-between space-y-3">
-                    <div className="space-y-1.5 divide-y divide-border/60">
+                  <CardContent className="flex flex-1 flex-col justify-between space-y-3 p-3">
+                    <div className="divide-border/60 space-y-1.5 divide-y">
                       {groupItems.length === 0 ? (
-                        <div className="text-center py-6 text-[11px] text-muted-foreground">
+                        <div className="text-muted-foreground py-6 text-center text-[11px]">
                           该分类下暂无链接
                         </div>
                       ) : (
@@ -537,14 +594,14 @@ export function NavigationEditor() {
                             key={item.id}
                             className="flex items-center justify-between pt-1.5 first:pt-0"
                           >
-                            <div className="space-y-0.5 max-w-[200px]">
-                              <div className="text-xs font-medium text-foreground flex items-center gap-1 truncate">
+                            <div className="max-w-[200px] space-y-0.5">
+                              <div className="text-foreground flex items-center gap-1 truncate text-xs font-medium">
                                 <span>{item.title}</span>
                                 {item.target === '_blank' && (
-                                  <ExternalLink className="size-2.5 opacity-60 shrink-0" />
+                                  <ExternalLink className="size-2.5 shrink-0 opacity-60" />
                                 )}
                               </div>
-                              <div className="text-[10px] text-muted-foreground font-mono truncate">
+                              <div className="text-muted-foreground truncate font-mono text-[10px]">
                                 {item.url}
                               </div>
                             </div>
@@ -552,14 +609,16 @@ export function NavigationEditor() {
                             <div className="flex items-center gap-1">
                               <Switch
                                 checked={item.enabled}
-                                onCheckedChange={(checked) => handleToggleItem(item, checked)}
+                                onCheckedChange={(checked) =>
+                                  handleToggleItem(item, checked)
+                                }
                                 className="scale-75"
                               />
                               <Button
                                 variant="ghost"
                                 size="icon"
                                 onClick={() => handleEditItem(item)}
-                                className="size-6 text-muted-foreground hover:text-foreground"
+                                className="text-muted-foreground hover:text-foreground size-6"
                               >
                                 <Edit2 className="size-3" />
                               </Button>
@@ -567,7 +626,7 @@ export function NavigationEditor() {
                                 variant="ghost"
                                 size="icon"
                                 onClick={() => handleDeleteItem(item)}
-                                className="size-6 text-muted-foreground hover:text-destructive"
+                                className="text-muted-foreground hover:text-destructive size-6"
                               >
                                 <Trash2 className="size-3" />
                               </Button>
@@ -580,8 +639,10 @@ export function NavigationEditor() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleOpenCreateItem('footer', undefined, group.id)}
-                      className="w-full h-7 text-xs border-dashed gap-1 text-primary hover:bg-primary/5 mt-2"
+                      onClick={() =>
+                        handleOpenCreateItem('footer', undefined, group.id)
+                      }
+                      className="text-primary hover:bg-primary/5 mt-2 h-7 w-full gap-1 border-dashed text-xs"
                     >
                       <Plus className="size-3" />
                       添加「{group.name}」内链接
@@ -593,22 +654,35 @@ export function NavigationEditor() {
           </div>
 
           {/* 检查是否有未分组的页脚链接 */}
-          {footerItems.filter((i) => !i.groupId && !footerGroups.some((g) => g.name === i.group)).length > 0 && (
-            <Card className="border-dashed bg-muted/20">
+          {footerItems.filter(
+            (i) => !i.groupId && !footerGroups.some((g) => g.name === i.group),
+          ).length > 0 && (
+            <Card className="bg-muted/20 border-dashed">
               <CardHeader className="p-3">
-                <CardTitle className="text-xs font-medium text-muted-foreground">
+                <CardTitle className="text-muted-foreground text-xs font-medium">
                   未归类页脚链接
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-3 pt-0">
                 <div className="divide-y text-xs">
                   {footerItems
-                    .filter((i) => !i.groupId && !footerGroups.some((g) => g.name === i.group))
+                    .filter(
+                      (i) =>
+                        !i.groupId &&
+                        !footerGroups.some((g) => g.name === i.group),
+                    )
                     .map((item) => (
-                      <div key={item.id} className="py-2 flex items-center justify-between">
+                      <div
+                        key={item.id}
+                        className="flex items-center justify-between py-2"
+                      >
                         <div>
-                          <div className="font-medium text-foreground">{item.title}</div>
-                          <div className="text-[11px] text-muted-foreground font-mono">{item.url}</div>
+                          <div className="text-foreground font-medium">
+                            {item.title}
+                          </div>
+                          <div className="text-muted-foreground font-mono text-[11px]">
+                            {item.url}
+                          </div>
                         </div>
                         <Button
                           variant="ghost"
@@ -632,7 +706,9 @@ export function NavigationEditor() {
         open={itemDialogOpen}
         onOpenChange={setItemDialogOpen}
         initialData={editingItem}
-        defaultLocation={editingItem ? editingItem.location : itemLocationPreset}
+        defaultLocation={
+          editingItem ? editingItem.location : itemLocationPreset
+        }
         defaultParentId={parentPresetId}
         defaultGroupId={groupPresetId}
         groups={groups}

@@ -1,3 +1,5 @@
+import { Check, Palette } from 'lucide-react'
+import { Button } from '~/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,10 +8,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
-import { Button } from '~/components/ui/button'
-import { Palette, Check } from 'lucide-react'
-import { useThemePreset } from './theme-context'
 import { themePresets, type ThemePreset } from './presets'
+import { useThemePreset } from './theme-context'
 
 export function PresetSelector() {
   const { preset, setPreset } = useThemePreset()
@@ -37,15 +37,15 @@ export function PresetSelector() {
             <DropdownMenuItem
               key={key}
               onClick={() => setPreset(key)}
-              className="flex items-center justify-between cursor-pointer"
+              className="flex cursor-pointer items-center justify-between"
             >
               <div>
-                <div className="font-medium text-xs">{item.name}</div>
-                <div className="text-[10px] text-muted-foreground">
+                <div className="text-xs font-medium">{item.name}</div>
+                <div className="text-muted-foreground text-[10px]">
                   {item.density === 'compact' ? '紧凑密度' : '适中密度'}
                 </div>
               </div>
-              {isSelected && <Check className="h-4 w-4 text-primary" />}
+              {isSelected && <Check className="text-primary h-4 w-4" />}
             </DropdownMenuItem>
           )
         })}

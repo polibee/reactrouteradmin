@@ -1,6 +1,6 @@
-import { Card, CardHeader, CardTitle, CardContent } from '~/components/ui/card'
-import { Bell, Sparkles, ArrowRight } from 'lucide-react'
+import { ArrowRight, Bell, Sparkles } from 'lucide-react'
 import { Link } from 'react-router'
+import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { useWidgetContext } from '../widget-context'
 
 export function AnnouncementCard() {
@@ -23,30 +23,41 @@ export function AnnouncementCard() {
   ]
 
   return (
-    <Card className="shadow-xs border">
-      <CardHeader className={`${isCompact ? 'p-2 px-2.5 pb-1' : 'p-3 pb-2'} ${showCardDividers ? 'border-b' : ''}`}>
-        <CardTitle className="text-xs font-semibold flex items-center justify-between">
+    <Card className="border shadow-xs">
+      <CardHeader
+        className={`${isCompact ? 'p-2 px-2.5 pb-1' : 'p-3 pb-2'} ${showCardDividers ? 'border-b' : ''}`}
+      >
+        <CardTitle className="flex items-center justify-between text-xs font-semibold">
           <span className="flex items-center gap-1.5">
-            <Bell className="size-3 text-primary" />
+            <Bell className="text-primary size-3" />
             最新动态通告
           </span>
           <Sparkles className="size-2.5 text-amber-500" />
         </CardTitle>
       </CardHeader>
-      <CardContent className={isCompact ? 'p-2 px-2.5 space-y-1.5' : 'p-2.5 space-y-2'}>
+      <CardContent
+        className={isCompact ? 'space-y-1.5 p-2 px-2.5' : 'space-y-2 p-2.5'}
+      >
         {notices.map((n) => (
-          <div key={n.title} className="text-xs space-y-0.5 pb-1 border-b border-border/50 last:border-b-0 last:pb-0">
-            <div className="flex items-center justify-between font-medium text-foreground">
-              <span className="text-[11px] font-semibold truncate pr-1">{n.title}</span>
-              <span className="text-[9px] text-muted-foreground font-mono shrink-0">{n.date}</span>
+          <div
+            key={n.title}
+            className="border-border/50 space-y-0.5 border-b pb-1 text-xs last:border-b-0 last:pb-0"
+          >
+            <div className="text-foreground flex items-center justify-between font-medium">
+              <span className="truncate pr-1 text-[11px] font-semibold">
+                {n.title}
+              </span>
+              <span className="text-muted-foreground shrink-0 font-mono text-[9px]">
+                {n.date}
+              </span>
             </div>
-            <p className="text-muted-foreground text-[10px] line-clamp-1 leading-snug">
+            <p className="text-muted-foreground line-clamp-1 text-[10px] leading-snug">
               {n.summary}
             </p>
             <div className="pt-0.2">
               <Link
                 to={n.link}
-                className="text-primary hover:underline text-[9px] sm:text-[10px] inline-flex items-center gap-0.5 font-medium"
+                className="text-primary inline-flex items-center gap-0.5 text-[9px] font-medium hover:underline sm:text-[10px]"
               >
                 阅读详情 <ArrowRight className="size-2" />
               </Link>

@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 import {
-  DashboardPage,
-  DashboardPageHeader,
-  DashboardPageContent,
   CreateAction,
+  DashboardPage,
+  DashboardPageContent,
+  DashboardPageHeader,
 } from '~/admin/ui'
 import { PageTable } from '~/modules/site/pages/components/page-table'
 import { siteService } from '~/modules/site/service'
 import type { SitePage } from '~/modules/site/types'
-import { useNavigate } from 'react-router'
 
 export const meta = () => {
   return [{ title: '单页面管理 - Admin Framework' }]
@@ -33,6 +33,7 @@ export default function SitePagesIndexPage() {
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only initial load
   useEffect(() => {
     loadData()
   }, [])
@@ -52,11 +53,7 @@ export default function SitePagesIndexPage() {
       />
 
       <DashboardPageContent>
-        <PageTable
-          data={pages}
-          loading={loading}
-          onDataChange={loadData}
-        />
+        <PageTable data={pages} loading={loading} onDataChange={loadData} />
       </DashboardPageContent>
     </DashboardPage>
   )

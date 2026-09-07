@@ -1,4 +1,10 @@
 import type { Table } from '@tanstack/react-table'
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from 'lucide-react'
 import { Button } from '~/components/ui/button'
 import {
   Select,
@@ -7,12 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/components/ui/select'
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-} from 'lucide-react'
 
 export interface AdminTablePaginationProps<TData> {
   table: Table<TData>
@@ -24,8 +24,8 @@ export function AdminTablePagination<TData>({
   pageSizeOptions = [10, 20, 30, 50, 100],
 }: AdminTablePaginationProps<TData>) {
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2 py-4">
-      <div className="flex-1 text-sm text-muted-foreground">
+    <div className="flex flex-col items-center justify-between gap-4 px-2 py-4 sm:flex-row">
+      <div className="text-muted-foreground flex-1 text-sm">
         {table.getFilteredSelectedRowModel().rows.length > 0 ? (
           <span>
             已选择 {table.getFilteredSelectedRowModel().rows.length} /{' '}

@@ -1,15 +1,15 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import type { Role } from '../types'
+import { KeyRound, ShieldAlert, ShieldCheck } from 'lucide-react'
+import { useNavigate } from 'react-router'
 import {
-  DataTable,
   AdminBadge,
-  EditAction,
+  DataTable,
   DeleteAction,
+  EditAction,
   notify,
 } from '~/admin/ui'
-import { useNavigate } from 'react-router'
 import { roleService } from '../service'
-import { ShieldCheck, ShieldAlert, KeyRound } from 'lucide-react'
+import type { Role } from '../types'
 
 export interface RoleTableProps {
   data: Role[]
@@ -55,7 +55,7 @@ export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
         const role = row.original
         return (
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <div className="bg-primary/10 text-primary flex h-8 w-8 items-center justify-center rounded-lg">
               {role.isSystem ? (
                 <ShieldAlert className="h-4 w-4 text-amber-600" />
               ) : (
@@ -63,15 +63,15 @@ export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
               )}
             </div>
             <div>
-              <div className="font-medium text-foreground flex items-center gap-1.5">
+              <div className="text-foreground flex items-center gap-1.5 font-medium">
                 {role.name}
                 {role.isSystem && (
-                  <span className="text-[10px] bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 px-1.5 py-0.5 rounded-xs font-semibold">
+                  <span className="rounded-xs bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-800 dark:bg-amber-950 dark:text-amber-300">
                     系统内置
                   </span>
                 )}
               </div>
-              <div className="text-xs text-muted-foreground font-mono">
+              <div className="text-muted-foreground font-mono text-xs">
                 {role.code}
               </div>
             </div>
@@ -83,7 +83,7 @@ export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
       accessorKey: 'description',
       header: '功能定位与描述',
       cell: ({ row }) => (
-        <span className="text-xs text-muted-foreground line-clamp-2 max-w-[320px]">
+        <span className="text-muted-foreground line-clamp-2 max-w-[320px] text-xs">
           {row.getValue('description') || '-'}
         </span>
       ),
@@ -98,7 +98,7 @@ export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
         if (isSuper) {
           return (
             <AdminBadge status="warning">
-              <KeyRound className="h-3 w-3 mr-1" />
+              <KeyRound className="mr-1 h-3 w-3" />
               全部特权 (*)
             </AdminBadge>
           )
@@ -117,7 +117,7 @@ export function RoleTable({ data, loading, onDataChange }: RoleTableProps) {
       cell: ({ row }) => {
         const dateStr = row.getValue('updatedAt') as string
         return (
-          <span className="text-xs text-muted-foreground font-mono">
+          <span className="text-muted-foreground font-mono text-xs">
             {dateStr ? dateStr.slice(0, 10) : '-'}
           </span>
         )

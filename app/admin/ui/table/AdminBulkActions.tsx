@@ -1,6 +1,6 @@
+import { Trash2 } from 'lucide-react'
 import type React from 'react'
 import { Button } from '~/components/ui/button'
-import { Trash2 } from 'lucide-react'
 import { AdminConfirmDialog } from '../overlay/AdminConfirmDialog'
 
 export interface AdminBulkActionsProps {
@@ -20,9 +20,9 @@ export function AdminBulkActions({
   if (selectedCount === 0) return null
 
   return (
-    <div className="flex items-center justify-between rounded-lg border bg-muted/60 px-4 py-2.5 my-2">
+    <div className="bg-muted/60 my-2 flex items-center justify-between rounded-lg border px-4 py-2.5">
       <div className="flex items-center space-x-2">
-        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+        <span className="bg-primary text-primary-foreground flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold">
           {selectedCount}
         </span>
         <span className="text-sm font-medium">项已选择</span>
@@ -30,7 +30,7 @@ export function AdminBulkActions({
           variant="ghost"
           size="sm"
           onClick={onClearSelection}
-          className="h-7 text-xs text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground h-7 text-xs"
         >
           取消选择
         </Button>

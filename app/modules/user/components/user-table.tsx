@@ -1,15 +1,15 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import type { User, UserRole, UserStatus } from '../types'
+import { useNavigate } from 'react-router'
 import {
-  AdminTable,
   AdminBadge,
-  EditAction,
+  AdminTable,
   DeleteAction,
+  EditAction,
   ViewAction,
   notify,
 } from '~/admin/ui'
-import { useNavigate } from 'react-router'
 import { userService } from '../service'
+import type { User, UserRole, UserStatus } from '../types'
 
 export interface UserTableProps {
   data: User[]
@@ -17,14 +17,23 @@ export interface UserTableProps {
   onDataChange?: () => void
 }
 
-const roleBadgeMap: Record<UserRole, { label: string; status: 'default' | 'info' | 'warning' | 'success' }> = {
-  super_admin: { label: '超级管理员', status: 'error' as any },
+const roleBadgeMap: Record<
+  UserRole,
+  {
+    label: string
+    status: 'default' | 'info' | 'warning' | 'success' | 'error'
+  }
+> = {
+  super_admin: { label: '超级管理员', status: 'error' },
   admin: { label: '管理员', status: 'warning' },
   manager: { label: '团队经理', status: 'info' },
   user: { label: '普通用户', status: 'default' },
 }
 
-const statusBadgeMap: Record<UserStatus, { label: string; status: 'success' | 'warning' | 'error' }> = {
+const statusBadgeMap: Record<
+  UserStatus,
+  { label: string; status: 'success' | 'warning' | 'error' }
+> = {
   active: { label: '正常', status: 'success' },
   inactive: { label: '未激活', status: 'warning' },
   suspended: { label: '已停用', status: 'error' },
@@ -38,8 +47,8 @@ export function UserTable({ data, loading, onDataChange }: UserTableProps) {
       await userService.deleteUser(user.id)
       notify.success(`用户“${user.name}”删除成功`)
       if (onDataChange) onDataChange()
-    } catch (e: any) {
-      notify.error(e?.message || '删除失败')
+    } catch (e) {
+      notify.error(e instanceof Error ? e.message : '删除失败')
     }
   }
 
@@ -48,8 +57,8 @@ export function UserTable({ data, loading, onDataChange }: UserTableProps) {
       const count = await userService.bulkDeleteUsers(selected.map((u) => u.id))
       notify.success(`成功批量删除 ${count} 名用户`)
       if (onDataChange) onDataChange()
-    } catch (e: any) {
-      notify.error(e?.message || '批量删除失败')
+    } catch (e) {
+      notify.error(e instanceof Error ? e.message : '批量删除失败')
     }
   }
 
@@ -63,16 +72,20 @@ export function UserTable({ data, loading, onDataChange }: UserTableProps) {
             <img
               src={row.original.avatar}
               alt={row.original.name}
-              className="h-8 w-8 rounded-full object-cover border"
+              className="h-8 w-8 rounded-full border object-cover"
             />
           ) : (
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted font-bold text-xs">
+            <div className="bg-muted flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold">
               {row.original.name.charAt(0)}
             </div>
           )}
           <div>
-            <div className="font-medium text-foreground">{row.original.name}</div>
-            <div className="text-xs text-muted-foreground">{row.original.email}</div>
+            <div className="text-foreground font-medium">
+              {row.original.name}
+            </div>
+            <div className="text-muted-foreground text-xs">
+              {row.original.email}
+            </div>
           </div>
         </div>
       ),
@@ -81,7 +94,10 @@ export function UserTable({ data, loading, onDataChange }: UserTableProps) {
       accessorKey: 'role',
       header: '系统角色',
       cell: ({ row }) => {
-        const item = roleBadgeMap[row.original.role] || { label: row.original.role, status: 'default' }
+        const item = roleBadgeMap[row.original.role] || {
+          label: row.original.role,
+          status: 'default',
+        }
         return <AdminBadge status={item.status}>{item.label}</AdminBadge>
       },
     },
@@ -89,7 +105,10 @@ export function UserTable({ data, loading, onDataChange }: UserTableProps) {
       accessorKey: 'status',
       header: '账号状态',
       cell: ({ row }) => {
-        const item = statusBadgeMap[row.original.status] || { label: row.original.status, status: 'default' }
+        const item = statusBadgeMap[row.original.status] || {
+          label: row.original.status,
+          status: 'default',
+        }
         return <AdminBadge status={item.status}>{item.label}</AdminBadge>
       },
     },
@@ -97,7 +116,9 @@ export function UserTable({ data, loading, onDataChange }: UserTableProps) {
       accessorKey: 'createdAt',
       header: '创建时间',
       cell: ({ row }) => (
-        <span className="text-xs text-muted-foreground">{row.original.createdAt}</span>
+        <span className="text-muted-foreground text-xs">
+          {row.original.createdAt}
+        </span>
       ),
     },
     {

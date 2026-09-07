@@ -1,7 +1,7 @@
 import {
   DashboardPage,
-  DashboardPageHeader,
   DashboardPageContent,
+  DashboardPageHeader,
 } from '~/admin/ui'
 import { LinkTable } from '~/modules/site/links'
 

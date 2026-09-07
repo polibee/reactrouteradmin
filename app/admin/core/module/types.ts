@@ -1,5 +1,5 @@
-import type { AdminResource } from '../resource/types'
 import type { NavGroup } from '../navigation/types'
+import type { AdminResource } from '../resource/types'
 
 export interface AdminModule {
   name: string

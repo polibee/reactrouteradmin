@@ -25,5 +25,33 @@
         "noSvgWithoutTitle": "off"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["app/components/ui/**"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useSemanticElements": "off",
+            "noRedundantRoles": "off",
+            "noStaticElementInteractions": "off",
+            "useKeyWithClickEvents": "off"
+          },
+          "security": {
+            "noDangerouslySetInnerHtml": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["app/components/site/**"],
+      "linter": {
+        "rules": {
+          "security": {
+            "noDangerouslySetInnerHtml": "off"
+          }
+        }
+      }
+    }
+  ]
 }

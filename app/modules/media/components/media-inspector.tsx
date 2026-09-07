@@ -1,22 +1,22 @@
-import type { MediaItem } from '../types'
-import { Button } from '~/components/ui/button'
-import { Input } from '~/components/ui/input'
 import {
-  X,
-  Copy,
+  Archive,
+  Calendar,
   Check,
+  Copy,
   ExternalLink,
-  Trash2,
+  File,
   FileText,
   Film,
-  Archive,
-  File,
-  Calendar,
-  Layers,
   HardDrive,
+  Layers,
   Maximize2,
+  Trash2,
+  X,
 } from 'lucide-react'
 import { useState } from 'react'
+import { Button } from '~/components/ui/button'
+import { Input } from '~/components/ui/input'
+import type { MediaItem } from '../types'
 
 export interface MediaInspectorProps {
   item: MediaItem | null
@@ -46,7 +46,7 @@ export function MediaInspector({
     const k = 1024
     const sizes = ['B', 'KB', 'MB', 'GB']
     const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return `${(bytes / Math.pow(k, i)).toFixed(1)} ${sizes[i]}`
+    return `${(bytes / k ** i).toFixed(1)} ${sizes[i]}`
   }
 
   const handleCopy = () => {
@@ -68,19 +68,21 @@ export function MediaInspector({
   }
 
   return (
-    <div className="fixed inset-y-0 right-0 z-50 w-full max-w-sm sm:max-w-md bg-background/95 backdrop-blur-md border-l shadow-2xl flex flex-col animate-in slide-in-from-right duration-200">
+    <div className="bg-background/95 animate-in slide-in-from-right fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col border-l shadow-2xl backdrop-blur-md duration-200 sm:max-w-md">
       {/* 头部标题与关闭 */}
-      <div className="flex items-center justify-between p-4 border-b">
+      <div className="flex items-center justify-between border-b p-4">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-sm text-foreground">资产详情检视</span>
-          <span className="text-[10px] bg-muted px-2 py-0.5 rounded font-mono text-muted-foreground uppercase">
+          <span className="text-foreground text-sm font-semibold">
+            资产详情检视
+          </span>
+          <span className="bg-muted text-muted-foreground rounded px-2 py-0.5 font-mono text-[10px] uppercase">
             {item.type}
           </span>
         </div>
         <button
           type="button"
           onClick={onClose}
-          className="size-7 rounded-md flex items-center justify-center hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+          className="hover:bg-muted text-muted-foreground hover:text-foreground flex size-7 cursor-pointer items-center justify-center rounded-md transition-colors"
           title="关闭"
         >
           <X className="size-4" />
@@ -88,47 +90,47 @@ export function MediaInspector({
       </div>
 
       {/* 资产高清预览区 */}
-      <div className="p-4 bg-muted/20 border-b flex items-center justify-center min-h-[200px] max-h-[260px] overflow-hidden">
+      <div className="bg-muted/20 flex max-h-[260px] min-h-[200px] items-center justify-center overflow-hidden border-b p-4">
         {item.type === 'image' ? (
           <img
             src={item.url}
             alt={item.name}
-            className="max-h-[220px] max-w-full rounded-lg object-contain shadow-xs border bg-background"
+            className="bg-background max-h-[220px] max-w-full rounded-lg border object-contain shadow-xs"
           />
         ) : item.type === 'document' ? (
-          <div className="flex flex-col items-center gap-2 text-emerald-600 dark:text-emerald-400 py-6">
+          <div className="flex flex-col items-center gap-2 py-6 text-emerald-600 dark:text-emerald-400">
             <FileText className="size-16" />
-            <span className="text-xs font-mono font-semibold">文档资产</span>
+            <span className="font-mono text-xs font-semibold">文档资产</span>
           </div>
         ) : item.type === 'video' ? (
-          <div className="flex flex-col items-center gap-2 text-purple-600 dark:text-purple-400 py-6">
+          <div className="flex flex-col items-center gap-2 py-6 text-purple-600 dark:text-purple-400">
             <Film className="size-16" />
-            <span className="text-xs font-mono font-semibold">音视频媒体</span>
+            <span className="font-mono text-xs font-semibold">音视频媒体</span>
           </div>
         ) : item.type === 'archive' ? (
-          <div className="flex flex-col items-center gap-2 text-amber-600 dark:text-amber-400 py-6">
+          <div className="flex flex-col items-center gap-2 py-6 text-amber-600 dark:text-amber-400">
             <Archive className="size-16" />
-            <span className="text-xs font-mono font-semibold">压缩包附件</span>
+            <span className="font-mono text-xs font-semibold">压缩包附件</span>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-2 text-muted-foreground py-6">
+          <div className="text-muted-foreground flex flex-col items-center gap-2 py-6">
             <File className="size-16" />
-            <span className="text-xs font-mono">通用文件</span>
+            <span className="font-mono text-xs">通用文件</span>
           </div>
         )}
       </div>
 
       {/* 详细元数据列表 */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
+      <div className="flex-1 space-y-4 overflow-y-auto p-4 text-xs">
         {/* 文件名（支持就地修改） */}
         <div className="space-y-1">
-          <div className="text-muted-foreground font-medium flex items-center justify-between">
+          <div className="text-muted-foreground flex items-center justify-between font-medium">
             <span>文件名称</span>
             {!editingName && (
               <button
                 type="button"
                 onClick={handleStartRename}
-                className="text-primary hover:underline text-[11px] cursor-pointer"
+                className="text-primary cursor-pointer text-[11px] hover:underline"
               >
                 重命名
               </button>
@@ -143,45 +145,59 @@ export function MediaInspector({
                 className="h-8 text-xs"
                 autoFocus
               />
-              <Button size="sm" className="h-8 px-2.5 text-xs" onClick={handleSaveRename}>
+              <Button
+                size="sm"
+                className="h-8 px-2.5 text-xs"
+                onClick={handleSaveRename}
+              >
                 <Check className="size-3.5" />
               </Button>
             </div>
           ) : (
-            <div className="font-semibold text-foreground break-all">{item.name}</div>
+            <div className="text-foreground font-semibold break-all">
+              {item.name}
+            </div>
           )}
         </div>
 
         {/* 外链直达与快速复制 */}
         <div className="space-y-1">
-          <div className="text-muted-foreground font-medium">资源外链 (URL)</div>
+          <div className="text-muted-foreground font-medium">
+            资源外链 (URL)
+          </div>
           <div className="flex items-center gap-1">
             <Input
               value={item.url}
               readOnly
-              className="h-8 text-xs font-mono bg-muted/40 select-all truncate"
+              className="bg-muted/40 h-8 truncate font-mono text-xs select-all"
             />
             <Button
               type="button"
               variant="outline"
               size="sm"
-              className="h-8 px-2.5 shrink-0"
+              className="h-8 shrink-0 px-2.5"
               onClick={handleCopy}
               title="复制直链"
             >
-              {copied ? <Check className="size-3.5 text-emerald-500" /> : <Copy className="size-3.5" />}
+              {copied ? (
+                <Check className="size-3.5 text-emerald-500" />
+              ) : (
+                <Copy className="size-3.5" />
+              )}
             </Button>
           </div>
         </div>
 
         {/* 属性元信息网格 */}
-        <div className="grid grid-cols-2 gap-3 pt-2 border-t text-muted-foreground">
+        <div className="text-muted-foreground grid grid-cols-2 gap-3 border-t pt-2">
           <div className="space-y-0.5">
             <div className="flex items-center gap-1 text-[11px]">
               <HardDrive className="size-3" />
               <span>文件大小</span>
             </div>
-            <div className="font-mono text-foreground font-medium">{formatSize(item.size)}</div>
+            <div className="text-foreground font-mono font-medium">
+              {formatSize(item.size)}
+            </div>
           </div>
 
           <div className="space-y-0.5">
@@ -189,7 +205,10 @@ export function MediaInspector({
               <Layers className="size-3" />
               <span>MIME 类型</span>
             </div>
-            <div className="font-mono text-foreground font-medium truncate" title={item.mimeType}>
+            <div
+              className="text-foreground truncate font-mono font-medium"
+              title={item.mimeType}
+            >
               {item.mimeType}
             </div>
           </div>
@@ -200,7 +219,7 @@ export function MediaInspector({
                 <Maximize2 className="size-3" />
                 <span>分辨率尺寸</span>
               </div>
-              <div className="font-mono text-foreground font-medium">
+              <div className="text-foreground font-mono font-medium">
                 {item.dimensions.width} × {item.dimensions.height} px
               </div>
             </div>
@@ -211,7 +230,7 @@ export function MediaInspector({
               <Calendar className="size-3" />
               <span>上传日期</span>
             </div>
-            <div className="font-mono text-foreground font-medium">
+            <div className="text-foreground font-mono font-medium">
               {item.createdAt.slice(0, 10)}
             </div>
           </div>
@@ -219,13 +238,13 @@ export function MediaInspector({
 
         {/* 标签 */}
         {item.tags && item.tags.length > 0 && (
-          <div className="space-y-1.5 pt-2 border-t">
+          <div className="space-y-1.5 border-t pt-2">
             <div className="text-muted-foreground font-medium">分类标签</div>
             <div className="flex flex-wrap gap-1.5">
               {item.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium"
+                  className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-[10px] font-medium"
                 >
                   #{tag}
                 </span>
@@ -236,12 +255,12 @@ export function MediaInspector({
       </div>
 
       {/* 底部操作工具栏 */}
-      <div className="p-4 border-t bg-muted/20 flex items-center justify-between gap-2">
+      <div className="bg-muted/20 flex items-center justify-between gap-2 border-t p-4">
         <Button
           type="button"
           variant="destructive"
           size="sm"
-          className="h-8 text-xs gap-1 cursor-pointer"
+          className="h-8 cursor-pointer gap-1 text-xs"
           onClick={() => {
             onDelete(item)
             onClose()
@@ -256,10 +275,15 @@ export function MediaInspector({
             type="button"
             variant="outline"
             size="sm"
-            className="h-8 text-xs gap-1"
+            className="h-8 gap-1 text-xs"
             asChild
           >
-            <a href={item.url} target="_blank" rel="noreferrer" download={item.name}>
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noreferrer"
+              download={item.name}
+            >
               <ExternalLink className="size-3.5" />
               <span>新窗口打开</span>
             </a>

@@ -1,23 +1,18 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { ActionButton, SmartForm, TextField, TextareaField } from '~/admin/ui'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '~/components/ui/dialog'
 import {
-  SmartForm,
-  TextField,
-  TextareaField,
-  ActionButton,
-} from '~/admin/ui'
-import {
   friendLinkGuidelinesSchema,
-  type FriendLinkGuidelinesFormValues,
   type FriendLinkGuidelines,
+  type FriendLinkGuidelinesFormValues,
 } from '../../types'
 
 export interface GuidelinesDialogProps {
@@ -74,7 +69,7 @@ export function GuidelinesDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>编辑友情链接互换准则</DialogTitle>
           <DialogDescription>
@@ -87,7 +82,7 @@ export function GuidelinesDialog({
           onSubmit={onSubmit}
           loading={loading}
           actions={
-            <div className="flex items-center justify-end gap-2 pt-3 border-t">
+            <div className="flex items-center justify-end gap-2 border-t pt-3">
               <ActionButton
                 type="button"
                 variant="outline"
@@ -111,7 +106,7 @@ export function GuidelinesDialog({
             />
 
             {/* 规则 1 */}
-            <div className="p-3 bg-muted/40 rounded-lg border space-y-2">
+            <div className="bg-muted/40 space-y-2 rounded-lg border p-3">
               <TextField
                 name="rule1Title"
                 label="规则一标题"
@@ -128,7 +123,7 @@ export function GuidelinesDialog({
             </div>
 
             {/* 规则 2 */}
-            <div className="p-3 bg-muted/40 rounded-lg border space-y-2">
+            <div className="bg-muted/40 space-y-2 rounded-lg border p-3">
               <TextField
                 name="rule2Title"
                 label="规则二标题"
@@ -145,7 +140,7 @@ export function GuidelinesDialog({
             </div>
 
             {/* 规则 3 */}
-            <div className="p-3 bg-muted/40 rounded-lg border space-y-2">
+            <div className="bg-muted/40 space-y-2 rounded-lg border p-3">
               <TextField
                 name="rule3Title"
                 label="规则三标题"

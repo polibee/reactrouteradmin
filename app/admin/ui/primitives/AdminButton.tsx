@@ -1,6 +1,6 @@
+import { Loader2 } from 'lucide-react'
 import * as React from 'react'
 import { Button } from '~/components/ui/button'
-import { Loader2 } from 'lucide-react'
 import { useAuth } from '../../core/auth/auth-context'
 import { hasPermission } from '../../core/permissions/permission'
 
@@ -11,7 +11,10 @@ export type AdminButtonProps = React.ComponentProps<typeof Button> & {
   permission?: string
 }
 
-export const AdminButton = React.forwardRef<HTMLButtonElement, AdminButtonProps>(
+export const AdminButton = React.forwardRef<
+  HTMLButtonElement,
+  AdminButtonProps
+>(
   (
     {
       loading = false,

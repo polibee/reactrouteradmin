@@ -5,7 +5,11 @@ export type AdminBadgeProps = React.ComponentProps<typeof Badge> & {
   status?: 'success' | 'warning' | 'error' | 'info' | 'default'
 }
 
-export function AdminBadge({ status = 'default', className = '', ...props }: AdminBadgeProps) {
+export function AdminBadge({
+  status = 'default',
+  className = '',
+  ...props
+}: AdminBadgeProps) {
   const getStatusClass = () => {
     switch (status) {
       case 'success':

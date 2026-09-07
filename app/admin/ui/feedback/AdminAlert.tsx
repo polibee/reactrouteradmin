@@ -1,6 +1,6 @@
-import React from 'react'
+import { AlertCircle, AlertTriangle, CheckCircle2, Info } from 'lucide-react'
+import type React from 'react'
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
-import { AlertCircle, CheckCircle2, Info, AlertTriangle } from 'lucide-react'
 
 export interface AdminAlertProps {
   type?: 'info' | 'success' | 'warning' | 'error'
@@ -22,9 +22,9 @@ export function AdminAlert({
       case 'warning':
         return <AlertTriangle className="h-4 w-4 text-amber-600" />
       case 'error':
-        return <AlertCircle className="h-4 w-4 text-destructive" />
+        return <AlertCircle className="text-destructive h-4 w-4" />
       default:
-        return <Info className="h-4 w-4 text-primary" />
+        return <Info className="text-primary h-4 w-4" />
     }
   }
 

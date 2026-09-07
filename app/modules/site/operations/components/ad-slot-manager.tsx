@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
-import { Card, CardHeader, CardTitle, CardContent } from '~/components/ui/card'
-import { Switch } from '~/components/ui/switch'
+import { Edit2, LayoutTemplate, MonitorPlay, Plus, Trash2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ConfirmDialog, notify } from '~/admin/ui'
 import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
-import { Button } from '~/components/ui/button'
 import {
   Select,
   SelectContent,
@@ -12,10 +13,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/components/ui/select'
+import { Switch } from '~/components/ui/switch'
 import { siteService } from '../../service'
-import type { SiteAdSlot, AdType, SiteAdSlotFormValues } from '../../types'
-import { notify, ConfirmDialog } from '~/admin/ui'
-import { MonitorPlay, LayoutTemplate, Plus, Edit2, Trash2 } from 'lucide-react'
+import type { AdType, SiteAdSlot, SiteAdSlotFormValues } from '../../types'
 import { AdSlotDialog } from './ad-slot-dialog'
 
 export function AdSlotManager() {
@@ -42,6 +42,7 @@ export function AdSlotManager() {
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only initial load
   useEffect(() => {
     loadData()
   }, [])
@@ -115,24 +116,32 @@ export function AdSlotManager() {
   }
 
   if (loading) {
-    return <div className="text-center py-8 text-xs text-muted-foreground">加载广告位配置中...</div>
+    return (
+      <div className="text-muted-foreground py-8 text-center text-xs">
+        加载广告位配置中...
+      </div>
+    )
   }
 
   return (
     <div className="space-y-4">
-      <div className="bg-muted/40 p-3.5 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-muted/40 flex flex-col justify-between gap-3 rounded-lg border p-3.5 sm:flex-row sm:items-center">
         <div>
-          <h4 className="text-sm font-semibold flex items-center gap-1.5">
-            <MonitorPlay className="size-4 text-primary" />
+          <h4 className="flex items-center gap-1.5 text-sm font-semibold">
+            <MonitorPlay className="text-primary size-4" />
             前台广告位与推广内容管理
           </h4>
-          <p className="text-xs text-muted-foreground mt-0.5">
+          <p className="text-muted-foreground mt-0.5 text-xs">
             支持新增、编辑、删除预留槽位，投放文字推广、海报图片或联盟代码
           </p>
         </div>
         <div className="flex items-center gap-2 self-end sm:self-center">
           <Badge variant="secondary">共 {adSlots.length} 个广告位</Badge>
-          <Button size="sm" onClick={handleOpenCreate} className="h-8 text-xs gap-1.5">
+          <Button
+            size="sm"
+            onClick={handleOpenCreate}
+            className="h-8 gap-1.5 text-xs"
+          >
             <Plus className="size-3.5" />
             新增广告位
           </Button>
@@ -141,24 +150,29 @@ export function AdSlotManager() {
 
       <div className="grid grid-cols-1 gap-4">
         {adSlots.length === 0 ? (
-          <div className="text-center py-10 border rounded-lg border-dashed">
-            <p className="text-xs text-muted-foreground">暂无广告位配置</p>
-            <Button size="sm" variant="outline" onClick={handleOpenCreate} className="mt-3 text-xs">
+          <div className="rounded-lg border border-dashed py-10 text-center">
+            <p className="text-muted-foreground text-xs">暂无广告位配置</p>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleOpenCreate}
+              className="mt-3 text-xs"
+            >
               添加第一个广告位
             </Button>
           </div>
         ) : (
           adSlots.map((slot) => (
-            <Card key={slot.id} className="shadow-xs border">
-              <CardHeader className="p-4 pb-3 border-b flex flex-col sm:flex-row sm:items-center justify-between gap-3 space-y-0">
+            <Card key={slot.id} className="border shadow-xs">
+              <CardHeader className="flex flex-col justify-between gap-3 space-y-0 border-b p-4 pb-3 sm:flex-row sm:items-center">
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+                  <div className="bg-primary/10 text-primary shrink-0 rounded-lg p-2">
                     <LayoutTemplate className="size-4" />
                   </div>
                   <div>
-                    <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2 text-sm font-semibold">
                       {slot.title}
-                      <span className="font-mono text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                      <span className="text-muted-foreground bg-muted rounded px-1.5 py-0.5 font-mono text-xs">
                         slot: {slot.slotKey}
                       </span>
                     </CardTitle>
@@ -172,7 +186,10 @@ export function AdSlotManager() {
                       checked={slot.enabled}
                       onCheckedChange={(checked) => handleToggle(slot, checked)}
                     />
-                    <Label htmlFor={`ad-switch-${slot.id}`} className="text-xs cursor-pointer font-medium">
+                    <Label
+                      htmlFor={`ad-switch-${slot.id}`}
+                      className="cursor-pointer text-xs font-medium"
+                    >
                       {slot.enabled ? '投放中' : '已暂停'}
                     </Label>
                   </div>
@@ -188,7 +205,7 @@ export function AdSlotManager() {
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+                    className="text-muted-foreground hover:text-foreground h-8 w-8 p-0"
                     title="详细编辑"
                     onClick={() => handleOpenEdit(slot)}
                   >
@@ -197,7 +214,7 @@ export function AdSlotManager() {
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="h-8 w-8 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
+                    className="text-destructive hover:text-destructive hover:bg-destructive/10 h-8 w-8 p-0"
                     title="删除广告位"
                     onClick={() => setDeleteTarget(slot)}
                   >
@@ -206,8 +223,8 @@ export function AdSlotManager() {
                 </div>
               </CardHeader>
 
-              <CardContent className="p-4 space-y-3">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <CardContent className="space-y-3 p-4">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                   <div className="space-y-1">
                     <Label className="text-xs">广告形式类型</Label>
                     <Select
@@ -215,7 +232,9 @@ export function AdSlotManager() {
                       onValueChange={(val) =>
                         setAdSlots(
                           adSlots.map((s) =>
-                            s.id === slot.id ? { ...s, adType: val as AdType } : s,
+                            s.id === slot.id
+                              ? { ...s, adType: val as AdType }
+                              : s,
                           ),
                         )
                       }
@@ -224,25 +243,35 @@ export function AdSlotManager() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="text" className="text-xs">纯文字链接 (Text)</SelectItem>
-                        <SelectItem value="image" className="text-xs">图片海报 (Image)</SelectItem>
-                        <SelectItem value="html" className="text-xs">第三方 HTML 代码</SelectItem>
+                        <SelectItem value="text" className="text-xs">
+                          纯文字链接 (Text)
+                        </SelectItem>
+                        <SelectItem value="image" className="text-xs">
+                          图片海报 (Image)
+                        </SelectItem>
+                        <SelectItem value="html" className="text-xs">
+                          第三方 HTML 代码
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="space-y-1 md:col-span-2">
-                    <Label className="text-xs">目标点击跳转链接 (Target URL)</Label>
+                    <Label className="text-xs">
+                      目标点击跳转链接 (Target URL)
+                    </Label>
                     <Input
                       value={slot.targetUrl || ''}
                       onChange={(e) =>
                         setAdSlots(
                           adSlots.map((s) =>
-                            s.id === slot.id ? { ...s, targetUrl: e.target.value } : s,
+                            s.id === slot.id
+                              ? { ...s, targetUrl: e.target.value }
+                              : s,
                           ),
                         )
                       }
-                      className="h-8 text-xs font-mono"
+                      className="h-8 font-mono text-xs"
                       placeholder="https://... 或 /portal"
                       disabled={slot.adType === 'html'}
                     />
@@ -257,7 +286,9 @@ export function AdSlotManager() {
                       onChange={(e) =>
                         setAdSlots(
                           adSlots.map((s) =>
-                            s.id === slot.id ? { ...s, text: e.target.value } : s,
+                            s.id === slot.id
+                              ? { ...s, text: e.target.value }
+                              : s,
                           ),
                         )
                       }
@@ -275,11 +306,13 @@ export function AdSlotManager() {
                       onChange={(e) =>
                         setAdSlots(
                           adSlots.map((s) =>
-                            s.id === slot.id ? { ...s, imageUrl: e.target.value } : s,
+                            s.id === slot.id
+                              ? { ...s, imageUrl: e.target.value }
+                              : s,
                           ),
                         )
                       }
-                      className="h-8 text-xs font-mono"
+                      className="h-8 font-mono text-xs"
                       placeholder="https://example.com/banner.jpg"
                     />
                   </div>
@@ -293,11 +326,13 @@ export function AdSlotManager() {
                       onChange={(e) =>
                         setAdSlots(
                           adSlots.map((s) =>
-                            s.id === slot.id ? { ...s, htmlContent: e.target.value } : s,
+                            s.id === slot.id
+                              ? { ...s, htmlContent: e.target.value }
+                              : s,
                           ),
                         )
                       }
-                      className="h-8 text-xs font-mono"
+                      className="h-8 font-mono text-xs"
                       placeholder="<script>...</script>"
                     />
                   </div>

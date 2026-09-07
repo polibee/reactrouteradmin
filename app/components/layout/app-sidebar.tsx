@@ -1,3 +1,7 @@
+import { useAuth } from '~/admin/core/auth/auth-context'
+import { buildNavigation } from '~/admin/core/navigation/navigation-builder'
+import { navigationRegistry } from '~/admin/core/navigation/registry'
+import type { NavItem as RegistryNavItem } from '~/admin/core/navigation/types'
 import {
   Sidebar,
   SidebarContent,
@@ -6,20 +10,17 @@ import {
   SidebarRail,
 } from '~/components/ui/sidebar'
 import { sidebarData } from '~/data/sidebar-data'
+import '~/modules'
 import { NavGroup } from './nav-group'
 import { NavUser } from './nav-user'
 import { TeamSwitcher } from './team-switcher'
-import { useAuth } from '~/admin/core/auth/auth-context'
-import { buildNavigation } from '~/admin/core/navigation/navigation-builder'
-import { navigationRegistry } from '~/admin/core/navigation/registry'
-import '~/modules'
 
 // Seed static groups from sidebarData if not yet initialized
 if (navigationRegistry.getGroups().length === 0) {
   for (const group of sidebarData.navGroups) {
     navigationRegistry.registerGroup({
       title: group.title,
-      items: group.items as any,
+      items: group.items as unknown as RegistryNavItem[],
     })
   }
 }
@@ -35,7 +36,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         {navGroups.map((group) => (
-          <NavGroup key={group.title} {...(group as any)} />
+          <NavGroup
+            key={group.title}
+            {...(group as unknown as React.ComponentProps<typeof NavGroup>)}
+          />
         ))}
       </SidebarContent>
       <SidebarFooter>

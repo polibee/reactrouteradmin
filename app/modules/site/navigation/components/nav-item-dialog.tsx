@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react'
+import { CornerDownRight, Plus } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Button } from '~/components/ui/button'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
-  DialogDescription,
 } from '~/components/ui/dialog'
-import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import {
@@ -19,12 +20,11 @@ import {
 } from '~/components/ui/select'
 import { Switch } from '~/components/ui/switch'
 import type {
+  NavLocation,
+  SiteNavGroup,
   SiteNavItem,
   SiteNavItemFormValues,
-  SiteNavGroup,
-  NavLocation,
 } from '../../types'
-import { Plus, CornerDownRight } from 'lucide-react'
 
 export interface NavItemDialogProps {
   open: boolean
@@ -68,9 +68,13 @@ export function NavItemDialog({
 
   // Filter valid parents: must match location, cannot be itself, and cannot already have a parent (keep 2 levels clean)
   const validParents = parentCandidates.filter(
-    (p) => p.location === location && (!initialData || p.id !== initialData.id) && !p.parentId
+    (p) =>
+      p.location === location &&
+      (!initialData || p.id !== initialData.id) &&
+      !p.parentId,
   )
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: sync state when the edited item changes
   useEffect(() => {
     if (initialData) {
       setTitle(initialData.title)
@@ -87,7 +91,7 @@ export function NavItemDialog({
       setUrl('')
       setLocation(defaultLocation)
       setTarget('_self')
-      setGroupId(defaultGroupId || (locationGroups[0]?.id || ''))
+      setGroupId(defaultGroupId || locationGroups[0]?.id || '')
       setParentId(defaultParentId || 'none')
       setDescription('')
       setSort(10)
@@ -135,8 +139,10 @@ export function NavItemDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle className="text-base flex items-center gap-2">
-            {parentId !== 'none' && <CornerDownRight className="size-4 text-primary" />}
+          <DialogTitle className="flex items-center gap-2 text-base">
+            {parentId !== 'none' && (
+              <CornerDownRight className="text-primary size-4" />
+            )}
             {isEditing
               ? parentId !== 'none'
                 ? '编辑子菜单项'
@@ -163,7 +169,9 @@ export function NavItemDialog({
                   const nextLoc = val as NavLocation
                   setLocation(nextLoc)
                   setParentId('none')
-                  const nextGroups = groups.filter((g) => g.location === nextLoc)
+                  const nextGroups = groups.filter(
+                    (g) => g.location === nextLoc,
+                  )
                   setGroupId(nextGroups[0]?.id || '')
                 }}
               >
@@ -179,10 +187,7 @@ export function NavItemDialog({
 
             <div className="space-y-1">
               <Label className="text-xs">上级父菜单 (实现子菜单)</Label>
-              <Select
-                value={parentId}
-                onValueChange={setParentId}
-              >
+              <Select value={parentId} onValueChange={setParentId}>
                 <SelectTrigger className="h-8 text-xs">
                   <SelectValue />
                 </SelectTrigger>
@@ -206,17 +211,14 @@ export function NavItemDialog({
                 <button
                   type="button"
                   onClick={() => onOpenCreateGroup(location)}
-                  className="text-[11px] text-primary hover:underline flex items-center gap-0.5"
+                  className="text-primary flex items-center gap-0.5 text-[11px] hover:underline"
                 >
                   <Plus className="size-3" />
                   新建分类名字
                 </button>
               )}
             </div>
-            <Select
-              value={groupId}
-              onValueChange={setGroupId}
-            >
+            <Select value={groupId} onValueChange={setGroupId}>
               <SelectTrigger className="h-8 text-xs">
                 <SelectValue placeholder="选择所属分类名字..." />
               </SelectTrigger>
@@ -237,7 +239,7 @@ export function NavItemDialog({
           </div>
 
           {/* 3. 菜单名称与描述 */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-1">
               <Label htmlFor="nav-title" className="text-xs">
                 菜单名称 *
@@ -272,7 +274,7 @@ export function NavItemDialog({
               <Label htmlFor="nav-url" className="text-xs">
                 跳转目标链接 (URL) *
               </Label>
-              <span className="text-[10px] text-muted-foreground">
+              <span className="text-muted-foreground text-[10px]">
                 若仅作为纯下拉容器可填 #
               </span>
             </div>
@@ -285,7 +287,9 @@ export function NavItemDialog({
               required
             />
             <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-              <span className="text-[10px] text-muted-foreground">快捷填入:</span>
+              <span className="text-muted-foreground text-[10px]">
+                快捷填入:
+              </span>
               {QUICK_URLS.map((q) => (
                 <button
                   key={q.url}
@@ -294,7 +298,7 @@ export function NavItemDialog({
                     setUrl(q.url)
                     if (!title) setTitle(q.label)
                   }}
-                  className="text-[10px] px-1.5 py-0.5 rounded bg-muted hover:bg-muted/80 text-foreground transition-colors"
+                  className="bg-muted hover:bg-muted/80 text-foreground rounded px-1.5 py-0.5 text-[10px] transition-colors"
                 >
                   {q.label}
                 </button>
@@ -336,14 +340,14 @@ export function NavItemDialog({
           </div>
 
           {/* 6. 启用开关 */}
-          <div className="flex items-center justify-between pt-2 border-t">
+          <div className="flex items-center justify-between border-t pt-2">
             <div className="flex items-center space-x-2">
               <Switch
                 id="nav-enabled"
                 checked={enabled}
                 onCheckedChange={setEnabled}
               />
-              <Label htmlFor="nav-enabled" className="text-xs cursor-pointer">
+              <Label htmlFor="nav-enabled" className="cursor-pointer text-xs">
                 启用该菜单项并在前台展示
               </Label>
             </div>

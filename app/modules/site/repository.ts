@@ -1,15 +1,16 @@
+// biome-ignore-all lint/suspicious/useAwait: async signatures reserved for a future HTTP data source
 import type {
-  SitePage,
-  SiteNavItem,
+  FriendLink,
+  FriendLinkGuidelines,
+  FriendLinkStatus,
+  SiteAdSlot,
+  SiteAnnouncement,
   SiteNavGroup,
   SiteNavGroupFormValues,
+  SiteNavItem,
+  SitePage,
   SiteWidgetConfig,
   SiteWidgetGlobalSettings,
-  SiteAnnouncement,
-  SiteAdSlot,
-  FriendLink,
-  FriendLinkStatus,
-  FriendLinkGuidelines,
 } from './types'
 
 const SEED_PAGES: SitePage[] = [
@@ -417,7 +418,8 @@ const SEED_ANNOUNCEMENTS: SiteAnnouncement[] = [
     id: 'ann-banner',
     type: 'banner',
     title: '全栈架构升级通知',
-    content: '🎉 本系统已平滑升级至 React Router 8.3 + React 19 最新架构，全套 47 个 shadcn 组件全部自研落地！',
+    content:
+      '🎉 本系统已平滑升级至 React Router 8.3 + React 19 最新架构，全套 47 个 shadcn 组件全部自研落地！',
     linkText: '查看技术报告',
     linkUrl: '/about',
     enabled: true,
@@ -428,7 +430,8 @@ const SEED_ANNOUNCEMENTS: SiteAnnouncement[] = [
     id: 'ann-modal',
     type: 'modal',
     title: '欢迎体验通用门户与站点系统',
-    content: '我们现已正式上线通用的“单页面管理、页眉页脚导航编辑、卡片小工具及运营通知系统”。您可以在后台随意配置并在前台实时查看！',
+    content:
+      '我们现已正式上线通用的“单页面管理、页眉页脚导航编辑、卡片小工具及运营通知系统”。您可以在后台随意配置并在前台实时查看！',
     linkText: '了解更多',
     linkUrl: '/about',
     enabled: true,
@@ -451,7 +454,8 @@ const SEED_ANNOUNCEMENTS: SiteAnnouncement[] = [
     id: 'ann-marquee',
     type: 'marquee',
     title: '动态速递',
-    content: '🚀 React Router 8 Admin 全新发布 · 支持 RBAC 权限矩阵 · 具备卡片小工具低代码装配 · 运营通知弹窗已上线',
+    content:
+      '🚀 React Router 8 Admin 全新发布 · 支持 RBAC 权限矩阵 · 具备卡片小工具低代码装配 · 运营通知弹窗已上线',
     linkText: '立即查看',
     linkUrl: '/about',
     enabled: true,
@@ -561,12 +565,16 @@ const SEED_LINKS: FriendLink[] = [
 const SEED_FRIEND_LINK_GUIDELINES: FriendLinkGuidelines = {
   title: '友情链接互换说明与准则',
   rule1Title: '1. 优先提前添加本站',
-  rule1Desc: '提交申请前，请先在贵站友链区添加本站信息（名称：React Admin Framework，跳转至本站首页）。',
+  rule1Desc:
+    '提交申请前，请先在贵站友链区添加本站信息（名称：React Admin Framework，跳转至本站首页）。',
   rule2Title: '2. 内容健康稳定',
-  rule2Desc: '网站内容合法合规，定期维护更新，非纯广告、镜像或违法违规网站，具备独立域名。',
+  rule2Desc:
+    '网站内容合法合规，定期维护更新，非纯广告、镜像或违法违规网站，具备独立域名。',
   rule3Title: '3. 自动审核与巡检',
-  rule3Desc: '管理员将在 48 小时内核验。系统会不定期对收录的友链进行可访问性巡检，若长期失联将暂时下线。',
-  customNotice: '欢迎前沿全栈技术团队、开源软件项目与优秀开发者博客互换链接，携手构建开放的技术伙伴网络！',
+  rule3Desc:
+    '管理员将在 48 小时内核验。系统会不定期对收录的友链进行可访问性巡检，若长期失联将暂时下线。',
+  customNotice:
+    '欢迎前沿全栈技术团队、开源软件项目与优秀开发者博客互换链接，携手构建开放的技术伙伴网络！',
   updatedAt: new Date().toISOString(),
 }
 
@@ -661,7 +669,7 @@ export class SiteRepository {
           p.id === idOrSlug ||
           p.slug === idOrSlug ||
           p.id === `page-${idOrSlug}` ||
-          p.id.replace(/^page-/, '') === idOrSlug.replace(/^page-/, '')
+          p.id.replace(/^page-/, '') === idOrSlug.replace(/^page-/, ''),
       ) || null
     )
   }
@@ -671,7 +679,11 @@ export class SiteRepository {
     return pages.find((p) => p.slug === slug || p.id === slug) || null
   }
 
-  async savePage(data: Omit<SitePage, 'id' | 'createdAt' | 'updatedAt' | 'views'> & { id?: string }): Promise<SitePage> {
+  async savePage(
+    data: Omit<SitePage, 'id' | 'createdAt' | 'updatedAt' | 'views'> & {
+      id?: string
+    },
+  ): Promise<SitePage> {
     const pages = await this.getPages()
     const now = new Date().toISOString()
 
@@ -681,7 +693,7 @@ export class SiteRepository {
           p.id === data.id ||
           p.slug === data.id ||
           p.id === `page-${data.id}` ||
-          p.id.replace(/^page-/, '') === data.id?.replace(/^page-/, '')
+          p.id.replace(/^page-/, '') === data.id?.replace(/^page-/, ''),
       )
       if (!existing) throw new Error('页面不存在')
       const targetId = existing.id
@@ -691,10 +703,17 @@ export class SiteRepository {
         id: targetId,
         updatedAt: now,
       }
-      this.setStorage(STORAGE_KEYS.PAGES, pages.map((p) => (p.id === targetId ? updated : p)))
+      this.setStorage(
+        STORAGE_KEYS.PAGES,
+        pages.map((p) => (p.id === targetId ? updated : p)),
+      )
       return updated
     } else {
-      const cleanSlugId = data.slug?.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '') || String(Date.now())
+      const cleanSlugId =
+        data.slug
+          ?.trim()
+          .toLowerCase()
+          .replace(/[^a-z0-9_-]/g, '') || String(Date.now())
       const newPage: SitePage = {
         ...data,
         id: cleanSlugId,
@@ -725,7 +744,10 @@ export class SiteRepository {
 
   // --- Nav Groups (分类名字管理) ---
   async getNavGroups(location?: 'header' | 'footer'): Promise<SiteNavGroup[]> {
-    const rawGroups = this.getStorage<SiteNavGroup>(STORAGE_KEYS.NAV_GROUPS, SEED_NAV_GROUPS)
+    const rawGroups = this.getStorage<SiteNavGroup>(
+      STORAGE_KEYS.NAV_GROUPS,
+      SEED_NAV_GROUPS,
+    )
 
     // 自动兼容检查：如果 localStorage 中存在未录入分组的历史 items，自动补齐对应分组
     const allItems = this.getStorage<SiteNavItem>(STORAGE_KEYS.NAVS, SEED_NAVS)
@@ -751,12 +773,16 @@ export class SiteRepository {
     }
 
     if (location) {
-      return rawGroups.filter((g) => g.location === location).sort((a, b) => a.sort - b.sort)
+      return rawGroups
+        .filter((g) => g.location === location)
+        .sort((a, b) => a.sort - b.sort)
     }
     return rawGroups.sort((a, b) => a.sort - b.sort)
   }
 
-  async saveNavGroup(group: SiteNavGroupFormValues & { id?: string }): Promise<SiteNavGroup> {
+  async saveNavGroup(
+    group: SiteNavGroupFormValues & { id?: string },
+  ): Promise<SiteNavGroup> {
     const groups = await this.getNavGroups()
     if (group.id) {
       const existing = groups.find((g) => g.id === group.id)
@@ -769,7 +795,7 @@ export class SiteRepository {
       }
       this.setStorage(
         STORAGE_KEYS.NAV_GROUPS,
-        groups.map((g) => (g.id === group.id ? updated : g))
+        groups.map((g) => (g.id === group.id ? updated : g)),
       )
 
       // 如果重命名了分类名字，同步更新关联此分组的所有导航项
@@ -808,7 +834,7 @@ export class SiteRepository {
     const target = groups.find((g) => g.id === id)
     this.setStorage(
       STORAGE_KEYS.NAV_GROUPS,
-      groups.filter((g) => g.id !== id)
+      groups.filter((g) => g.id !== id),
     )
 
     // 解除属于此分组的导航项的分组绑定
@@ -843,7 +869,7 @@ export class SiteRepository {
     const rawItems = this.getStorage<SiteNavItem>(STORAGE_KEYS.NAVS, SEED_NAVS)
     let dirty = false
     const items = rawItems.map((item) => {
-      if (item.url && item.url.startsWith('/p/')) {
+      if (item.url?.startsWith('/p/')) {
         dirty = true
         return {
           ...item,
@@ -856,7 +882,9 @@ export class SiteRepository {
       this.setStorage(STORAGE_KEYS.NAVS, items)
     }
     if (location) {
-      return items.filter((i) => i.location === location).sort((a, b) => a.sort - b.sort)
+      return items
+        .filter((i) => i.location === location)
+        .sort((a, b) => a.sort - b.sort)
     }
     return items.sort((a, b) => a.sort - b.sort)
   }
@@ -876,11 +904,15 @@ export class SiteRepository {
 
     return topLevel.map((parent) => ({
       ...parent,
-      children: (childrenMap.get(parent.id) || []).sort((a, b) => a.sort - b.sort),
+      children: (childrenMap.get(parent.id) || []).sort(
+        (a, b) => a.sort - b.sort,
+      ),
     }))
   }
 
-  async saveNavItem(item: Omit<SiteNavItem, 'id'> & { id?: string }): Promise<SiteNavItem> {
+  async saveNavItem(
+    item: Omit<SiteNavItem, 'id'> & { id?: string },
+  ): Promise<SiteNavItem> {
     const items = await this.getNavItems()
 
     let finalGroupId = item.groupId
@@ -892,7 +924,9 @@ export class SiteRepository {
       if (found) finalGroupName = found.name
     } else if (finalGroupName && !finalGroupId) {
       const groups = await this.getNavGroups()
-      const found = groups.find((g) => g.name === finalGroupName && g.location === item.location)
+      const found = groups.find(
+        (g) => g.name === finalGroupName && g.location === item.location,
+      )
       if (found) finalGroupId = found.id
     }
 
@@ -903,7 +937,9 @@ export class SiteRepository {
     }
 
     if (item.id) {
-      const next = items.map((i) => (i.id === item.id ? { ...i, ...payload } : i))
+      const next = items.map((i) =>
+        i.id === item.id ? { ...i, ...payload } : i,
+      )
       this.setStorage(STORAGE_KEYS.NAVS, next)
       return { ...payload, id: item.id }
     } else {
@@ -930,7 +966,9 @@ export class SiteRepository {
     return widgets.sort((a, b) => a.sort - b.sort)
   }
 
-  async saveWidget(data: Omit<SiteWidgetConfig, 'id'> & { id?: string }): Promise<SiteWidgetConfig> {
+  async saveWidget(
+    data: Omit<SiteWidgetConfig, 'id'> & { id?: string },
+  ): Promise<SiteWidgetConfig> {
     const widgets = await this.getWidgets()
     if (data.id) {
       const existing = widgets.find((w) => w.id === data.id)
@@ -939,7 +977,10 @@ export class SiteRepository {
         ...existing,
         ...data,
       }
-      this.setStorage(STORAGE_KEYS.WIDGETS, widgets.map((w) => (w.id === data.id ? updated : w)))
+      this.setStorage(
+        STORAGE_KEYS.WIDGETS,
+        widgets.map((w) => (w.id === data.id ? updated : w)),
+      )
       return updated
     } else {
       const newWidget: SiteWidgetConfig = {
@@ -951,18 +992,27 @@ export class SiteRepository {
     }
   }
 
-  async updateWidget(id: string, data: Partial<SiteWidgetConfig>): Promise<SiteWidgetConfig> {
+  async updateWidget(
+    id: string,
+    data: Partial<SiteWidgetConfig>,
+  ): Promise<SiteWidgetConfig> {
     const widgets = await this.getWidgets()
     const target = widgets.find((w) => w.id === id)
     if (!target) throw new Error('Widget not found')
     const updated = { ...target, ...data }
-    this.setStorage(STORAGE_KEYS.WIDGETS, widgets.map((w) => (w.id === id ? updated : w)))
+    this.setStorage(
+      STORAGE_KEYS.WIDGETS,
+      widgets.map((w) => (w.id === id ? updated : w)),
+    )
     return updated
   }
 
   async deleteWidget(id: string): Promise<boolean> {
     const widgets = await this.getWidgets()
-    this.setStorage(STORAGE_KEYS.WIDGETS, widgets.filter((w) => w.id !== id))
+    this.setStorage(
+      STORAGE_KEYS.WIDGETS,
+      widgets.filter((w) => w.id !== id),
+    )
     return true
   }
 
@@ -971,7 +1021,10 @@ export class SiteRepository {
     try {
       const stored = localStorage.getItem(STORAGE_KEYS.WIDGET_GLOBAL_SETTINGS)
       if (!stored) {
-        localStorage.setItem(STORAGE_KEYS.WIDGET_GLOBAL_SETTINGS, JSON.stringify(DEFAULT_WIDGET_GLOBAL_SETTINGS))
+        localStorage.setItem(
+          STORAGE_KEYS.WIDGET_GLOBAL_SETTINGS,
+          JSON.stringify(DEFAULT_WIDGET_GLOBAL_SETTINGS),
+        )
         return DEFAULT_WIDGET_GLOBAL_SETTINGS
       }
       return { ...DEFAULT_WIDGET_GLOBAL_SETTINGS, ...JSON.parse(stored) }
@@ -980,12 +1033,19 @@ export class SiteRepository {
     }
   }
 
-  saveWidgetGlobalSettings(settings: Partial<SiteWidgetGlobalSettings>): SiteWidgetGlobalSettings {
+  saveWidgetGlobalSettings(
+    settings: Partial<SiteWidgetGlobalSettings>,
+  ): SiteWidgetGlobalSettings {
     const current = this.getWidgetGlobalSettings()
     const updated: SiteWidgetGlobalSettings = { ...current, ...settings }
     if (typeof window !== 'undefined') {
-      localStorage.setItem(STORAGE_KEYS.WIDGET_GLOBAL_SETTINGS, JSON.stringify(updated))
-      window.dispatchEvent(new CustomEvent('site_widget_settings_changed', { detail: updated }))
+      localStorage.setItem(
+        STORAGE_KEYS.WIDGET_GLOBAL_SETTINGS,
+        JSON.stringify(updated),
+      )
+      window.dispatchEvent(
+        new CustomEvent('site_widget_settings_changed', { detail: updated }),
+      )
     }
     return updated
   }
@@ -995,7 +1055,10 @@ export class SiteRepository {
     const list = this.getStorage(STORAGE_KEYS.ANNOUNCEMENTS, SEED_ANNOUNCEMENTS)
     let hasChanges = false
     const sanitized = list.map((a) => {
-      if (a.linkUrl && (a.linkUrl.includes('/p/') || a.linkUrl.includes('localhost:'))) {
+      if (
+        a.linkUrl &&
+        (a.linkUrl.includes('/p/') || a.linkUrl.includes('localhost:'))
+      ) {
         hasChanges = true
         let clean = a.linkUrl.replace(/https?:\/\/localhost(:\d+)?/, '')
         clean = clean.replace('/p/', '/')
@@ -1009,7 +1072,9 @@ export class SiteRepository {
     return sanitized
   }
 
-  async saveAnnouncement(data: Omit<SiteAnnouncement, 'id' | 'updatedAt'> & { id?: string }): Promise<SiteAnnouncement> {
+  async saveAnnouncement(
+    data: Omit<SiteAnnouncement, 'id' | 'updatedAt'> & { id?: string },
+  ): Promise<SiteAnnouncement> {
     const list = await this.getAnnouncements()
     const now = new Date().toISOString()
     if (data.id) {
@@ -1020,7 +1085,10 @@ export class SiteRepository {
         ...data,
         updatedAt: now,
       }
-      this.setStorage(STORAGE_KEYS.ANNOUNCEMENTS, list.map((a) => (a.id === data.id ? updated : a)))
+      this.setStorage(
+        STORAGE_KEYS.ANNOUNCEMENTS,
+        list.map((a) => (a.id === data.id ? updated : a)),
+      )
       return updated
     } else {
       const newAnn: SiteAnnouncement = {
@@ -1033,18 +1101,27 @@ export class SiteRepository {
     }
   }
 
-  async updateAnnouncement(id: string, data: Partial<SiteAnnouncement>): Promise<SiteAnnouncement> {
+  async updateAnnouncement(
+    id: string,
+    data: Partial<SiteAnnouncement>,
+  ): Promise<SiteAnnouncement> {
     const list = await this.getAnnouncements()
     const target = list.find((a) => a.id === id)
     if (!target) throw new Error('Announcement not found')
     const updated = { ...target, ...data, updatedAt: new Date().toISOString() }
-    this.setStorage(STORAGE_KEYS.ANNOUNCEMENTS, list.map((a) => (a.id === id ? updated : a)))
+    this.setStorage(
+      STORAGE_KEYS.ANNOUNCEMENTS,
+      list.map((a) => (a.id === id ? updated : a)),
+    )
     return updated
   }
 
   async deleteAnnouncement(id: string): Promise<boolean> {
     const list = await this.getAnnouncements()
-    this.setStorage(STORAGE_KEYS.ANNOUNCEMENTS, list.filter((a) => a.id !== id))
+    this.setStorage(
+      STORAGE_KEYS.ANNOUNCEMENTS,
+      list.filter((a) => a.id !== id),
+    )
     return true
   }
 
@@ -1053,7 +1130,9 @@ export class SiteRepository {
     return this.getStorage(STORAGE_KEYS.ADS, SEED_ADS)
   }
 
-  async saveAdSlot(data: Omit<SiteAdSlot, 'id' | 'updatedAt'> & { id?: string }): Promise<SiteAdSlot> {
+  async saveAdSlot(
+    data: Omit<SiteAdSlot, 'id' | 'updatedAt'> & { id?: string },
+  ): Promise<SiteAdSlot> {
     const ads = await this.getAdSlots()
     const now = new Date().toISOString()
     if (data.id) {
@@ -1064,7 +1143,10 @@ export class SiteRepository {
         ...data,
         updatedAt: now,
       }
-      this.setStorage(STORAGE_KEYS.ADS, ads.map((a) => (a.id === data.id ? updated : a)))
+      this.setStorage(
+        STORAGE_KEYS.ADS,
+        ads.map((a) => (a.id === data.id ? updated : a)),
+      )
       return updated
     } else {
       const newAd: SiteAdSlot = {
@@ -1077,18 +1159,27 @@ export class SiteRepository {
     }
   }
 
-  async updateAdSlot(id: string, data: Partial<SiteAdSlot>): Promise<SiteAdSlot> {
+  async updateAdSlot(
+    id: string,
+    data: Partial<SiteAdSlot>,
+  ): Promise<SiteAdSlot> {
     const ads = await this.getAdSlots()
     const target = ads.find((a) => a.id === id)
     if (!target) throw new Error('AdSlot not found')
     const updated = { ...target, ...data, updatedAt: new Date().toISOString() }
-    this.setStorage(STORAGE_KEYS.ADS, ads.map((a) => (a.id === id ? updated : a)))
+    this.setStorage(
+      STORAGE_KEYS.ADS,
+      ads.map((a) => (a.id === id ? updated : a)),
+    )
     return updated
   }
 
   async deleteAdSlot(id: string): Promise<boolean> {
     const ads = await this.getAdSlots()
-    this.setStorage(STORAGE_KEYS.ADS, ads.filter((a) => a.id !== id))
+    this.setStorage(
+      STORAGE_KEYS.ADS,
+      ads.filter((a) => a.id !== id),
+    )
     return true
   }
 
@@ -1096,7 +1187,9 @@ export class SiteRepository {
   async getFriendLinks(status?: FriendLinkStatus): Promise<FriendLink[]> {
     const links = this.getStorage(STORAGE_KEYS.LINKS, SEED_LINKS)
     if (status) {
-      return links.filter((l) => l.status === status).sort((a, b) => a.sort - b.sort)
+      return links
+        .filter((l) => l.status === status)
+        .sort((a, b) => a.sort - b.sort)
     }
     return links.sort((a, b) => a.sort - b.sort)
   }
@@ -1105,7 +1198,9 @@ export class SiteRepository {
     return this.getFriendLinks('approved')
   }
 
-  async saveFriendLink(data: Omit<FriendLink, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Promise<FriendLink> {
+  async saveFriendLink(
+    data: Omit<FriendLink, 'id' | 'createdAt' | 'updatedAt'> & { id?: string },
+  ): Promise<FriendLink> {
     const links = await this.getFriendLinks()
     const now = new Date().toISOString()
     if (data.id) {
@@ -1116,7 +1211,10 @@ export class SiteRepository {
         ...data,
         updatedAt: now,
       }
-      this.setStorage(STORAGE_KEYS.LINKS, links.map((l) => (l.id === data.id ? updated : l)))
+      this.setStorage(
+        STORAGE_KEYS.LINKS,
+        links.map((l) => (l.id === data.id ? updated : l)),
+      )
       return updated
     } else {
       const newLink: FriendLink = {
@@ -1130,7 +1228,11 @@ export class SiteRepository {
     }
   }
 
-  async updateFriendLinkStatus(id: string, status: FriendLinkStatus, rejectReason?: string): Promise<FriendLink> {
+  async updateFriendLinkStatus(
+    id: string,
+    status: FriendLinkStatus,
+    rejectReason?: string,
+  ): Promise<FriendLink> {
     const links = await this.getFriendLinks()
     const target = links.find((l) => l.id === id)
     if (!target) throw new Error('友情链接不存在')
@@ -1140,13 +1242,19 @@ export class SiteRepository {
       rejectReason: status === 'rejected' ? rejectReason : undefined,
       updatedAt: new Date().toISOString(),
     }
-    this.setStorage(STORAGE_KEYS.LINKS, links.map((l) => (l.id === id ? updated : l)))
+    this.setStorage(
+      STORAGE_KEYS.LINKS,
+      links.map((l) => (l.id === id ? updated : l)),
+    )
     return updated
   }
 
   async deleteFriendLink(id: string): Promise<boolean> {
     const links = await this.getFriendLinks()
-    this.setStorage(STORAGE_KEYS.LINKS, links.filter((l) => l.id !== id))
+    this.setStorage(
+      STORAGE_KEYS.LINKS,
+      links.filter((l) => l.id !== id),
+    )
     return true
   }
 
@@ -1166,27 +1274,36 @@ export class SiteRepository {
         try {
           const proxyRes = await fetch(
             `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
-            { signal: AbortSignal.timeout(6000) }
+            { signal: AbortSignal.timeout(6000) },
           ).catch(() => null)
 
-          if (proxyRes && proxyRes.ok) {
+          if (proxyRes?.ok) {
             html = await proxyRes.text()
           } else {
-            const direct = await fetch(targetUrl, { signal: AbortSignal.timeout(4000) }).catch(() => null)
-            if (direct && direct.ok) html = await direct.text()
+            const direct = await fetch(targetUrl, {
+              signal: AbortSignal.timeout(4000),
+            }).catch(() => null)
+            if (direct?.ok) html = await direct.text()
           }
         } catch {
           // network error
         }
       }
 
-      const ourKeywords = ['react admin', 'admin framework', 'reactrouteradmin', '全栈管理平台']
+      const ourKeywords = [
+        'react admin',
+        'admin framework',
+        'reactrouteradmin',
+        '全栈管理平台',
+      ]
       if (typeof window !== 'undefined') {
-        if (window.location.hostname) ourKeywords.push(window.location.hostname.toLowerCase())
+        if (window.location.hostname)
+          ourKeywords.push(window.location.hostname.toLowerCase())
       }
 
       const lowerHtml = (html || '').toLowerCase()
-      const hasBacklink = html && ourKeywords.some((kw) => lowerHtml.includes(kw))
+      const hasBacklink =
+        html && ourKeywords.some((kw) => lowerHtml.includes(kw))
 
       if (hasBacklink) {
         backlinkStatus = 'verified'
@@ -1220,11 +1337,19 @@ export class SiteRepository {
       updatedAt: now,
     }
 
-    this.setStorage(STORAGE_KEYS.LINKS, links.map((l) => (l.id === id ? updated : l)))
+    this.setStorage(
+      STORAGE_KEYS.LINKS,
+      links.map((l) => (l.id === id ? updated : l)),
+    )
     return updated
   }
 
-  async verifyAllFriendLinks(): Promise<{ total: number; verified: number; missing: number; failed: number }> {
+  async verifyAllFriendLinks(): Promise<{
+    total: number
+    verified: number
+    missing: number
+    failed: number
+  }> {
     const links = await this.getFriendLinks('approved')
     let verified = 0
     let missing = 0
@@ -1242,7 +1367,10 @@ export class SiteRepository {
     }
 
     if (typeof window !== 'undefined') {
-      localStorage.setItem('site_last_weekly_link_check', new Date().toISOString())
+      localStorage.setItem(
+        'site_last_weekly_link_check',
+        new Date().toISOString(),
+      )
     }
 
     return { total: links.length, verified, missing, failed }
@@ -1250,10 +1378,15 @@ export class SiteRepository {
 
   // --- Friend Link Guidelines (互换准则) ---
   async getFriendLinkGuidelines(): Promise<FriendLinkGuidelines> {
-    return this.getObjectStorage(STORAGE_KEYS.FRIEND_LINK_GUIDELINES, SEED_FRIEND_LINK_GUIDELINES)
+    return this.getObjectStorage(
+      STORAGE_KEYS.FRIEND_LINK_GUIDELINES,
+      SEED_FRIEND_LINK_GUIDELINES,
+    )
   }
 
-  async updateFriendLinkGuidelines(data: Partial<FriendLinkGuidelines>): Promise<FriendLinkGuidelines> {
+  async updateFriendLinkGuidelines(
+    data: Partial<FriendLinkGuidelines>,
+  ): Promise<FriendLinkGuidelines> {
     const current = await this.getFriendLinkGuidelines()
     const updated: FriendLinkGuidelines = {
       ...current,

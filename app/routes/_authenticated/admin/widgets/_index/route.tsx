@@ -1,7 +1,7 @@
 import {
   DashboardPage,
-  DashboardPageHeader,
   DashboardPageContent,
+  DashboardPageHeader,
 } from '~/admin/ui'
 import { WidgetManager } from '~/modules/site/widgets/components/widget-manager'
 

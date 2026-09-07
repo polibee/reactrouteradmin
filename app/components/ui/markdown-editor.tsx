@@ -1,22 +1,22 @@
-import { useState, useRef } from 'react'
-import { Button } from '~/components/ui/button'
-import { Textarea } from '~/components/ui/textarea'
-import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import {
   Bold,
-  Italic,
+  Code,
+  Columns2,
+  Edit3,
+  Eye,
   Heading1,
   Heading2,
   Heading3,
+  Italic,
   Link as LinkIcon,
-  Quote,
-  Code,
   List,
   Minus,
-  Eye,
-  Columns2,
-  Edit3,
+  Quote,
 } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { Button } from '~/components/ui/button'
+import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
+import { Textarea } from '~/components/ui/textarea'
 
 export interface MarkdownEditorProps {
   value: string
@@ -45,7 +45,8 @@ export function MarkdownEditor({
     const selected = value.substring(start, end) || defaultText
 
     const replacement = `${prefix}${selected}${suffix}`
-    const newValue = value.substring(0, start) + replacement + value.substring(end)
+    const newValue =
+      value.substring(0, start) + replacement + value.substring(end)
     onChange(newValue)
 
     setTimeout(() => {
@@ -60,7 +61,7 @@ export function MarkdownEditor({
   const renderPreview = (content: string) => {
     if (!content.trim()) {
       return (
-        <div className="text-xs text-muted-foreground italic py-8 text-center">
+        <div className="text-muted-foreground py-8 text-center text-xs italic">
           暂无预览内容，请在左侧编辑器中输入文本...
         </div>
       )
@@ -68,25 +69,34 @@ export function MarkdownEditor({
 
     const blocks = content.split('\n\n')
     return (
-      <div className="space-y-3 text-xs sm:text-sm text-foreground/90 leading-relaxed max-w-none">
+      <div className="text-foreground/90 max-w-none space-y-3 text-xs leading-relaxed sm:text-sm">
         {blocks.map((block, idx) => {
           if (block.startsWith('# ')) {
             return (
-              <h1 key={idx} className="text-xl font-bold border-b pb-1.5 pt-2 text-foreground">
+              <h1
+                key={idx}
+                className="text-foreground border-b pt-2 pb-1.5 text-xl font-bold"
+              >
                 {block.replace('# ', '')}
               </h1>
             )
           }
           if (block.startsWith('## ')) {
             return (
-              <h2 key={idx} className="text-lg font-bold border-b pb-1 pt-1.5 text-foreground">
+              <h2
+                key={idx}
+                className="text-foreground border-b pt-1.5 pb-1 text-lg font-bold"
+              >
                 {block.replace('## ', '')}
               </h2>
             )
           }
           if (block.startsWith('### ')) {
             return (
-              <h3 key={idx} className="text-base font-semibold pt-1 text-foreground">
+              <h3
+                key={idx}
+                className="text-foreground pt-1 text-base font-semibold"
+              >
                 {block.replace('### ', '')}
               </h3>
             )
@@ -95,7 +105,7 @@ export function MarkdownEditor({
             return (
               <blockquote
                 key={idx}
-                className="border-l-4 border-primary/40 pl-3 py-1 italic bg-muted/30 rounded-r text-muted-foreground"
+                className="border-primary/40 bg-muted/30 text-muted-foreground rounded-r border-l-4 py-1 pl-3 italic"
               >
                 {block.replace('> ', '')}
               </blockquote>
@@ -103,11 +113,12 @@ export function MarkdownEditor({
           }
           if (block.startsWith('```')) {
             const lines = block.split('\n')
-            const codeContent = lines.slice(1, -1).join('\n') || lines.slice(1).join('\n')
+            const codeContent =
+              lines.slice(1, -1).join('\n') || lines.slice(1).join('\n')
             return (
               <pre
                 key={idx}
-                className="bg-zinc-900 text-zinc-100 p-3 rounded-md font-mono text-xs overflow-x-auto border"
+                className="overflow-x-auto rounded-md border bg-zinc-900 p-3 font-mono text-xs text-zinc-100"
               >
                 <code>{codeContent}</code>
               </pre>
@@ -116,7 +127,7 @@ export function MarkdownEditor({
           if (block.startsWith('- ')) {
             const items = block.split('\n').map((l) => l.replace(/^- /, ''))
             return (
-              <ul key={idx} className="list-disc pl-5 space-y-1">
+              <ul key={idx} className="list-disc space-y-1 pl-5">
                 {items.map((it, itemIdx) => (
                   <li key={itemIdx}>{it}</li>
                 ))}
@@ -124,7 +135,7 @@ export function MarkdownEditor({
             )
           }
           if (block === '---') {
-            return <hr key={idx} className="my-3 border-border" />
+            return <hr key={idx} className="border-border my-3" />
           }
           return (
             <p key={idx} className="whitespace-pre-line">
@@ -137,9 +148,11 @@ export function MarkdownEditor({
   }
 
   return (
-    <div className={`rounded-lg border bg-card shadow-xs overflow-hidden ${className}`}>
+    <div
+      className={`bg-card overflow-hidden rounded-lg border shadow-xs ${className}`}
+    >
       {/* 顶部工具栏 */}
-      <div className="flex flex-wrap items-center justify-between border-b bg-muted/40 p-2 gap-1">
+      <div className="bg-muted/40 flex flex-wrap items-center justify-between gap-1 border-b p-2">
         <div className="flex flex-wrap items-center gap-0.5">
           <Button
             type="button"
@@ -161,7 +174,7 @@ export function MarkdownEditor({
           >
             <Italic className="size-3.5" />
           </Button>
-          <div className="h-4 w-px bg-border mx-1" />
+          <div className="bg-border mx-1 h-4 w-px" />
           <Button
             type="button"
             variant="ghost"
@@ -192,13 +205,15 @@ export function MarkdownEditor({
           >
             <Heading3 className="size-3.5" />
           </Button>
-          <div className="h-4 w-px bg-border mx-1" />
+          <div className="bg-border mx-1 h-4 w-px" />
           <Button
             type="button"
             variant="ghost"
             size="icon"
             className="size-7"
-            onClick={() => insertText('[', '](https://example.com)', '链接文本')}
+            onClick={() =>
+              insertText('[', '](https://example.com)', '链接文本')
+            }
             title="超链接"
           >
             <LinkIcon className="size-3.5" />
@@ -252,15 +267,15 @@ export function MarkdownEditor({
           className="h-7"
         >
           <TabsList className="h-7 p-0.5">
-            <TabsTrigger value="edit" className="h-6 px-2 text-[11px] gap-1">
+            <TabsTrigger value="edit" className="h-6 gap-1 px-2 text-[11px]">
               <Edit3 className="size-3" />
               编辑
             </TabsTrigger>
-            <TabsTrigger value="preview" className="h-6 px-2 text-[11px] gap-1">
+            <TabsTrigger value="preview" className="h-6 gap-1 px-2 text-[11px]">
               <Eye className="size-3" />
               预览
             </TabsTrigger>
-            <TabsTrigger value="split" className="h-6 px-2 text-[11px] gap-1">
+            <TabsTrigger value="split" className="h-6 gap-1 px-2 text-[11px]">
               <Columns2 className="size-3" />
               分屏
             </TabsTrigger>
@@ -271,19 +286,21 @@ export function MarkdownEditor({
       {/* 编辑与预览主体容器 */}
       <div
         className={`grid ${
-          mode === 'split' ? 'grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x' : 'grid-cols-1'
+          mode === 'split'
+            ? 'grid-cols-1 divide-y md:grid-cols-2 md:divide-x md:divide-y-0'
+            : 'grid-cols-1'
         }`}
         style={{ minHeight }}
       >
         {/* 编辑区 */}
         {(mode === 'edit' || mode === 'split') && (
-          <div className="h-full flex flex-col p-2">
+          <div className="flex h-full flex-col p-2">
             <Textarea
               ref={textareaRef}
               value={value}
               onChange={(e) => onChange(e.target.value)}
               placeholder={placeholder}
-              className="flex-1 w-full border-none shadow-none focus-visible:ring-0 resize-y font-mono text-xs sm:text-sm p-2"
+              className="w-full flex-1 resize-y border-none p-2 font-mono text-xs shadow-none focus-visible:ring-0 sm:text-sm"
               style={{ minHeight }}
             />
           </div>
@@ -291,7 +308,10 @@ export function MarkdownEditor({
 
         {/* 预览区 */}
         {(mode === 'preview' || mode === 'split') && (
-          <div className="h-full p-4 overflow-y-auto bg-muted/10" style={{ minHeight }}>
+          <div
+            className="bg-muted/10 h-full overflow-y-auto p-4"
+            style={{ minHeight }}
+          >
             {renderPreview(value)}
           </div>
         )}

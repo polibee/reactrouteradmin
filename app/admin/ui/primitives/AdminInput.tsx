@@ -9,12 +9,15 @@ export interface AdminInputProps extends React.ComponentProps<'input'> {
 }
 
 export const AdminInput = React.forwardRef<HTMLInputElement, AdminInputProps>(
-  ({ className, error, leftIcon: LeftIcon, rightIcon: RightIcon, ...props }, ref) => {
+  (
+    { className, error, leftIcon: LeftIcon, rightIcon: RightIcon, ...props },
+    ref,
+  ) => {
     if (LeftIcon || RightIcon) {
       return (
-        <div className="relative flex items-center w-full">
+        <div className="relative flex w-full items-center">
           {LeftIcon && (
-            <div className="absolute left-3 text-muted-foreground pointer-events-none">
+            <div className="text-muted-foreground pointer-events-none absolute left-3">
               <LeftIcon className="h-4 w-4" />
             </div>
           )}
@@ -29,7 +32,7 @@ export const AdminInput = React.forwardRef<HTMLInputElement, AdminInputProps>(
             {...props}
           />
           {RightIcon && (
-            <div className="absolute right-3 text-muted-foreground pointer-events-none">
+            <div className="text-muted-foreground pointer-events-none absolute right-3">
               <RightIcon className="h-4 w-4" />
             </div>
           )}

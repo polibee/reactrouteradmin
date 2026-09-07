@@ -1,4 +1,8 @@
 import { Outlet, useMatches } from 'react-router'
+import { AuthProvider } from '~/admin/core/auth/auth-context'
+import { PanelProvider } from '~/admin/core/panel/panel-provider'
+import { PresetSelector } from '~/admin/ui/themes/preset-selector'
+import { ThemePresetProvider } from '~/admin/ui/themes/theme-context'
 import { AppSidebar } from '~/components/layout/app-sidebar'
 import { Header } from '~/components/layout/header'
 import { Main } from '~/components/layout/main'
@@ -9,10 +13,6 @@ import { SidebarProvider } from '~/components/ui/sidebar'
 import { SearchProvider } from '~/context/search-context'
 import { useBreadcrumbs } from '~/hooks/use-breadcrumbs'
 import { cn } from '~/lib/utils'
-import { AuthProvider } from '~/admin/core/auth/auth-context'
-import { PanelProvider } from '~/admin/core/panel/panel-provider'
-import { ThemePresetProvider } from '~/admin/ui/themes/theme-context'
-import { PresetSelector } from '~/admin/ui/themes/preset-selector'
 
 export interface RouteHandle {
   breadcrumb?: (data?: unknown) => { label: string; to?: string }
