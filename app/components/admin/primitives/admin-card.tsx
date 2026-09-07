@@ -30,7 +30,7 @@ export function AdminCard({
   return (
     <Card className={className} {...props}>
       {(title || description || action) && (
-        <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-4">
+        <CardHeader className="flex flex-row items-start justify-between space-y-0">
           <div className="space-y-1">
             {title && (
               <CardTitle className="text-lg font-semibold">{title}</CardTitle>
@@ -41,7 +41,7 @@ export function AdminCard({
         </CardHeader>
       )}
       <CardContent>{children}</CardContent>
-      {footer && <CardFooter className="pt-2">{footer}</CardFooter>}
+      {footer && <CardFooter>{footer}</CardFooter>}
     </Card>
   )
 }

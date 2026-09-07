@@ -92,8 +92,8 @@ export default function Users({
           </Button>
         </PageHeaderActions>
       </PageHeader>
-      {/* Breakout: negate Main's px-4 so the table can use full width */}
-      <div className="-mx-4 flex-1 overflow-auto px-4 py-1">
+      {/* Breakout: negate Main's horizontal padding so the table can use full width */}
+      <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:-mx-6 lg:px-6">
         <UsersTable
           data={users}
           columns={columns}

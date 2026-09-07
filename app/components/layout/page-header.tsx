@@ -4,7 +4,7 @@ function PageHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       className={cn(
-        'mb-4 flex flex-wrap items-center justify-between gap-4',
+        'mb-6 flex flex-wrap items-center justify-between gap-4',
         className,
       )}
       {...props}

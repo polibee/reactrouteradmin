@@ -37,7 +37,7 @@ export function AdminTableToolbar<TData>({
   const isFiltered = table.getState().columnFilters.length > 0 || !!globalFilter
 
   return (
-    <div className="flex flex-col items-stretch justify-between gap-2 py-2 sm:flex-row sm:items-center">
+    <div className="flex flex-col items-stretch justify-between gap-2 sm:flex-row sm:items-center">
       <div className="flex flex-1 flex-wrap items-center gap-2">
         {searchKey ? (
           <div className="relative w-full sm:w-64 md:w-80">

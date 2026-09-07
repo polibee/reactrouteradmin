@@ -9,7 +9,7 @@ export const Main = ({ fixed, ...props }: MainProps) => {
   return (
     <main
       className={cn(
-        'px-4 py-6',
+        'flex flex-col px-4 py-4 md:py-6 lg:px-6',
         fixed && 'fixed-main flex grow flex-col overflow-hidden',
       )}
       {...props}

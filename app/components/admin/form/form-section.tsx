@@ -24,9 +24,9 @@ export function FormSection({
   className,
 }: FormSectionProps) {
   return (
-    <Card className={cn('py-4', className)}>
+    <Card className={cn(className)}>
       {(title || description || actions) && (
-        <CardHeader className="flex-row items-start justify-between space-y-0 pb-4">
+        <CardHeader className="flex-row items-start justify-between space-y-0">
           <div className="space-y-1">
             {title && <CardTitle className="text-base">{title}</CardTitle>}
             {description && <CardDescription>{description}</CardDescription>}

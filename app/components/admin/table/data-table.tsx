@@ -140,7 +140,7 @@ export function AdminTable<TData, TValue>({
     .rows.map((r) => r.original)
 
   return (
-    <div className="w-full space-y-3">
+    <div className="w-full space-y-4">
       <AdminTableToolbar
         table={table}
         searchKey={searchKey}
@@ -162,7 +162,7 @@ export function AdminTable<TData, TValue>({
         />
       )}
 
-      <div className="bg-card overflow-hidden rounded-md border">
+      <div className="bg-card overflow-hidden rounded-lg border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

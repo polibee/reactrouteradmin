@@ -70,8 +70,8 @@ export default function Tasks({
         </PageHeaderActions>
       </PageHeader>
 
-      {/* Breakout: negate Main's px-4 so the table can use full width */}
-      <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-y-0 lg:space-x-12">
+      {/* Breakout: negate Main's horizontal padding so the table can use full width */}
+      <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:-mx-6 lg:flex-row lg:space-y-0 lg:space-x-12 lg:px-6">
         <DataTable
           data={tasks}
           columns={columns}
