@@ -1,5 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import type React from 'react'
+import type { ResourceFieldConfig } from '../fields/field-builder'
 
 export interface ResourceNavigation {
   group?: string
@@ -63,6 +64,7 @@ export interface AdminResource<T = unknown> {
   permissions?: ResourcePermissions
   routes?: ResourceRouteConfig
   columns?: ColumnDef<T, unknown>[]
+  fields?: ResourceFieldConfig[]
   data?: ResourceDataAdapter<T>
   customPages?: ResourceCustomPage[]
   meta?: Record<string, unknown>
