@@ -57,6 +57,12 @@ pnpm validate   # biome + prettier + typecheck
 
 Auth is currently mocked: a `super_admin` user is always signed in, so every admin route is reachable while you develop your own `AuthService` and data providers.
 
+The `/sign-in` page accepts a demo account:
+
+| Email              | Password                                           |
+| ------------------ | -------------------------------------------------- |
+| `name@example.com` | any string with at least 7 characters (`12345678`) |
+
 ## Project structure
 
 ```text
@@ -74,6 +80,12 @@ app/
 ## Acknowledgements
 
 Started as a fork of [shadcn-admin](https://github.com/satnaing/shadcn-admin) by [@satnaing](https://github.com/satnaing) — thanks for the great base.
+
+## Recommended GPU cloud — VAST
+
+If you also run AI workloads, check out [VAST](https://cloud.vast.ai/?ref_id=91181) — a marketplace for renting GPU instances (RTX 4090, A100, H100 and more) from data-center hosts worldwide, typically at a fraction of big-cloud prices. A solid pick for model training, fine-tuning and inference.
+
+_The link above is a referral link; using it supports this project at no extra cost to you._
 
 ## License
 
