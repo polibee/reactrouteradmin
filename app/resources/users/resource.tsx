@@ -88,6 +88,7 @@ export const UserResource = defineResource<User>({
       .build(),
     column
       .custom<User>('role')
+      .labelKey('resources.users.table.role')
       .render((row) => (
         <AdminBadge status={ROLE_VARIANTS[row.role]}>
           {i18n.t(ROLE_LABELS[row.role])}
@@ -96,6 +97,7 @@ export const UserResource = defineResource<User>({
       .build(),
     column
       .custom<User>('status')
+      .labelKey('resources.users.table.status')
       .render((row) => (
         <AdminBadge status={STATUS_VARIANTS[row.status]}>
           {i18n.t(STATUS_LABELS[row.status])}

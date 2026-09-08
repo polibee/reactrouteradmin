@@ -37,6 +37,7 @@ export interface AdminTableProps<TData, TValue> {
   searchKey?: string
   searchPlaceholder?: string
   enableRowSelection?: boolean
+  getRowId?: (row: TData) => string
   onBulkDelete?: (selectedRows: TData[]) => void | Promise<void>
   toolbarActions?: React.ReactNode
   toolbarFilters?: React.ReactNode
@@ -82,6 +83,7 @@ export function AdminTable<TData, TValue>({
   searchKey,
   searchPlaceholder,
   enableRowSelection = false,
+  getRowId,
   onBulkDelete,
   toolbarActions,
   toolbarFilters,
@@ -120,6 +122,7 @@ export function AdminTable<TData, TValue>({
       globalFilter,
     },
     enableRowSelection,
+    ...(getRowId ? { getRowId } : {}),
     manualPagination,
     pageCount,
     onRowSelectionChange: setRowSelection,

@@ -149,6 +149,7 @@ export function ResourceListPage({ resource }: { resource: AnyAdminResource }) {
           loading={listQuery.isLoading}
           searchKey={searchKey}
           enableRowSelection={hasBulkActions}
+          getRowId={(row) => getRowId(row) ?? ''}
           onBulkDelete={
             hasBulkActions
               ? (rows) => {

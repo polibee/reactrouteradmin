@@ -109,6 +109,10 @@ export function AdminTableToolbar<TData>({
                   column.getCanHide(),
               )
               .map((column) => {
+                const { label, labelKey } = column.columnDef.meta ?? {}
+                const columnLabel = labelKey
+                  ? t(labelKey)
+                  : (label ?? column.id)
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
@@ -118,7 +122,7 @@ export function AdminTableToolbar<TData>({
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {(column.columnDef.header as string) || column.id}
+                    {columnLabel}
                   </DropdownMenuCheckboxItem>
                 )
               })}

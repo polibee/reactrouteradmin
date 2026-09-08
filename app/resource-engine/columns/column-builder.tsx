@@ -11,6 +11,8 @@ declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
     className?: string
     searchable?: boolean
+    label?: string
+    labelKey?: ParseKeys<'translation'>
   }
 }
 
@@ -117,7 +119,11 @@ export class ColumnBuilder<T> {
       ...(field ? { accessorKey: field } : {}),
       ...(this.accessorFn ? { accessorFn: this.accessorFn } : {}),
       enableSorting: state.sortable,
-      meta: { searchable: state.searchable },
+      meta: {
+        searchable: state.searchable,
+        ...(state.label !== undefined ? { label: state.label } : {}),
+        ...(state.labelKey !== undefined ? { labelKey: state.labelKey } : {}),
+      },
       header: (ctx) =>
         state.sortable ? (
           <DataTableColumnHeader
